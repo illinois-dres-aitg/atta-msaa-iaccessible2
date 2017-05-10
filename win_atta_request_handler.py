@@ -34,9 +34,11 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         return cls._running_tests
 
     def do_GET(self):
+        print("[REQUEST_HANDLER][do_GET]")
         self.dispatch()
 
     def do_POST(self):
+        print("[REQUEST_HANDLER][do_POST]")
         self.dispatch()
 
     def dispatch(self):
@@ -54,6 +56,8 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
             self.send_error(400, "UNHANDLED PATH: %s" % self.path)
 
     def send_error(self, code, message=None):
+        print("[REQUEST_HANDLER][send_error]")
+
         if message is None:
             message = "Error: bad request"
 
@@ -66,13 +70,16 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
 
     @staticmethod
     def dump_json(obj):
+
         return json.dumps(obj, indent=4, sort_keys=True)
 
     def add_aria_headers(self):
+
         self.send_header("Content-Type", "application/json")
         self.add_headers()
 
     def add_headers(self):
+
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.send_header("Access-Control-Allow-Methods", "POST")
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -81,6 +88,7 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def get_params(self, *params):
+
         submission = {}
         response = {}
         errors = []
@@ -110,6 +118,7 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         self._atta.log_message(format % args, self._atta.LOG_DEBUG)
 
     def _send_response(self, response, status_code=200):
+
         if response.get("statusText") is None:
             response["statusText"] = ""
 
@@ -125,6 +134,7 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
             self._atta.log_message(error, self._atta.LOG_ERROR)
 
     def _wait(self, start_time, method, response={}):
+
         if method.__call__():
             return False
 
@@ -139,7 +149,7 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
     def _wait_for_run_request(self):
         class Timer(threading.Thread):
             def __init__(self, timeout):
-                super().__init__(daemon=True)
+                super(AttaRequestHandler, self).__init__(daemon=True)
                 self.timeout = time.time() + timeout
 
             def run(self):
@@ -153,6 +163,7 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         thread.start()
 
     def start_test_run(self):
+
         AttaRequestHandler._running_tests = False
         response = {}
         params = self.get_params("test", "url")
@@ -180,6 +191,7 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         self._wait_for_run_request()
 
     def start_listen(self):
+
         params = self.get_params("events")
         error = params.get("error")
         response = {}
@@ -196,6 +208,7 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         self._send_response(response)
 
     def run_tests(self):
+
         AttaRequestHandler._running_tests = True
         params = self.get_params("title", "id", "data")
         response = {}
@@ -209,6 +222,7 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         self._send_response(response)
 
     def stop_listen(self):
+
         if self._atta is not None:
             self._atta.stop_listen()
 
@@ -216,6 +230,7 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         self._send_response(response)
 
     def end_test_run(self):
+
         self._atta.end_test_run()
         response = {"status": "DONE"}
         self._send_response(response)

@@ -27,10 +27,16 @@ Boston, MA 02111-1307, USA.
 import constants
 from ctypes import windll, oledll, POINTER, byref, c_int
 from comtypes.automation import VARIANT
+from comtypes import CoInitializeEx
+from comtypes import CoUninitialize
+from comtypes import COINIT_MULTITHREADED
 from comtypes.gen.Accessibility import IAccessible
 from comtypes import COMError, IServiceProvider
 from comtypes.client import GetModule, CreateObject
 import comtypesClient
+from pyia2.constants import CHILDID_SELF, \
+    UNLOCALIZED_ROLE_NAMES, \
+    UNLOCALIZED_STATE_NAMES
 
 #a = GetModule("ia2.tlb")
 #IServiceProvider=comtypesClient.GetModule('ServProv.tlb').IServiceProvider
@@ -66,36 +72,123 @@ def accessibleObjectFromEvent(event):
     byref(ptr), byref(varChild))
   if res == 0:
     child=varChild.value
-    return normalizeIAccessible(ptr, child)
-    #return ptr.QueryInterface(IAccessible)
+    return ptr.QueryInterface(IAccessible)
   else:
     return None
 
-def normalizeIAccessible(pacc, child_id):
+def accessible2FromAccessible(pacc, child_id):
+
     if not isinstance(pacc, IAccessible):
         try:
             pacc = pacc.QueryInterface(IAccessible)
         except COMError:
             raise RuntimeError("%s Not an IAccessible"%pacc)
+
     if child_id==0 and not isinstance(pacc,IA2Lib.IAccessible2):
         try:
-            print("pacc: " + str(pacc))
+#            print("pacc: " + str(pacc))
             s=pacc.QueryInterface(IServiceProvider)
-            print("S: " + str(s))
-            print("_iid_: " + str(IALib._iid_))
-            print("IAccessible2: " + str(IA2Lib.IAccessible2))
+#            print("S: " + str(s))
+#            print("_iid_: " + str(IALib._iid_))
+#            print("IAccessible2: " + str(IA2Lib.IAccessible2))
             pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessible2)
             #newPacc=ctypes.POINTER(IA2Lib.IAccessible2)(i)
             if not pacc2:
-                print ("IA2: %s"%pacc)
+    #            print ("IA2: %s"%pacc)
                 raise ValueError
             else:
-                pacc = pacc2
-                print ("Got IA2 object: ", pacc2)
+#                print ("Got IA2 object: ", pacc2)
+                return pacc2
 
         except Exception as e:
             print "ERROR cannot get IA2 object:", str(e)
-    return pacc
+
+    return None
+
+def com_coinitialize():
+    CoInitializeEx(COINIT_MULTITHREADED)
+    return
+
+def com_couninitialize():
+    CoUninitialize()
+    return
+
+def get_value(pacc):
+    return pacc.accValue(CHILDID_SELF)
+
+def get_child_count(pacc):
+    return pacc.accChildcount    
+
+def get_description(pacc):
+    return pacc.accDescription(CHILDID_SELF)    
+
+def get_name(pacc):
+    return pacc.accName(CHILDID_SELF)  
+
+def get_role(pacc):
+    return pacc.accRoleName()
+
+def get_ia2_role(pacc):
+    pacc2 = self.accessible2FromAccessible(ao, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      return pacc2.role()
+
+    return ""
+
+def get_ia2_state_set(pacc):
+    str = ""
+
+    pacc2 = self.accessible2FromAccessible(ao, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      states = pacc2.states
+      for item in UNLOCALIZED_IA2_STATE_NAMES:
+        if item & states:
+          str += UNLOCALIZED_IA2_STATE_NAMES[item] + ' '
+ 
+    return str
+
+
+def get_ia2_attributes_as_array(pacc):
+
+    pacc2 = self.accessible2FromAccessible(ao, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      return pacc2.attributes.split(';')
+
+    return ""
+
+def get_parent(pacc):
+    return pacc.acc_parent 
+
+def get_relation_set(pacc):
+    pacc2 = self.accessible2FromAccessible(ao, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+        out = "Relation info:"
+        try:
+            out +=  "  Number(" + str(pacc2.nRelations) + ")\n\r "
+
+        except Exception as e:
+            print "ERROR cannot get IA2 nRelation:", str(e)
+
+        try:
+            for i in range (pacc2.nRelations):
+              out +=  "[Type: " + pacc2.relation(i).relationType + "; "
+              out +=  "Targets(" + str(pacc2.relation(i).nTargets) + ") "
+              for j in range(pacc2.relation(i).nTargets):
+                t = pacc2.relation(i).target(j)
+                s=t.QueryInterface(IServiceProvider)
+                oa2=s.QueryService(IALib._iid_, IA2Lib.IAccessible2)
+
+                out += "'" + str(oa2) + "'"
+
+              out += "]"
+
+            return out
+
+        except Exception as e:
+            print "ERROR cannot get IA2 relation:", str(e)
+
+    return "None"    
+
 
 def findDescendant(acc, pred, breadth_first=False):
   '''

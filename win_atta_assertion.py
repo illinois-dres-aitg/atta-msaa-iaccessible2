@@ -165,7 +165,7 @@ class AttaAssertion:
 class AttaEventAssertion(AttaAssertion):
 
     def __init__(self, obj, assertion, atta):
-        super().__init__(obj, assertion, atta)
+        super(AttaEventAssertion, self).__init__(obj, assertion, atta)
         events = self._atta.get_event_history()
         self._actual_value = list(map(self._atta.value_to_string, events))
 
@@ -191,7 +191,7 @@ class AttaEventAssertion(AttaAssertion):
 class AttaPropertyAssertion(AttaAssertion):
 
     def __init__(self, obj, assertion, atta):
-        super().__init__(obj, assertion, atta)
+        super( AttaPropertyAssertion, self).__init__(obj, assertion, atta)
         if self._expected_value == "<nil>":
             self._expected_value = "None"
 
@@ -208,7 +208,7 @@ class AttaPropertyAssertion(AttaAssertion):
 class AttaRelationAssertion(AttaAssertion):
 
     def __init__(self, obj, assertion, atta):
-        super().__init__(obj, assertion, atta)
+        super(AttaRelationAssertion, self).__init__(obj, assertion, atta)
         self._relation_type = atta.string_to_value(self._test_string)
 
     def _get_value(self):
@@ -224,7 +224,7 @@ class AttaRelationAssertion(AttaAssertion):
 class AttaResultAssertion(AttaAssertion):
 
     def __init__(self, obj, assertion, atta):
-        super().__init__(obj, assertion, atta)
+        super(AttaResultAssertion, self).__init__(obj, assertion, atta)
         self._method = None
         self._args = []
 
@@ -251,7 +251,7 @@ class AttaDumpInfoAssertion(AttaAssertion):
 
     def __init__(self, obj, assertion, atta):
         assertion = [""] * 4
-        super().__init__(obj, assertion, atta)
+        super(AttaDumpInfoAssertion, self).__init__(obj, assertion, atta)
 
     def run(self):
         info = dict.fromkeys(["properties", "relation targets", "supported methods"])

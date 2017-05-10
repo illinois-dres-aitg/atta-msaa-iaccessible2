@@ -22,7 +22,7 @@ from win_atta_assertion import AttaAssertion
 from win_atta_request_handler import AttaRequestHandler
 
 
-class Atta:
+class Atta(object):
     """Optional base class for python27 Accessible Technology Test Adapters."""
 
     STATUS_ERROR = "ERROR"
@@ -65,15 +65,16 @@ class Atta:
         self._event_history = []
         self._listeners = {}
 
-        if not sys.version_info[0] == 3:
+        if not sys.version_info[0] == 2:
             self._print(self.LOG_ERROR, "This ATTA requires Python 2.7.")
             return
 
-        self._api_version = self._get_system_api_version()
+# TODO: Is this information needed?
+#        self._api_version = self._get_system_api_version()
 
-        if not self._get_accessibility_enabled() \
-           and not self._set_accessibility_enabled(True):
-            return
+#        if not self._get_accessibility_enabled() \
+#           and not self._set_accessibility_enabled(True):
+#            return
 
         self._enabled = True
 
@@ -92,6 +93,8 @@ class Atta:
     def start(self, **kwargs):
         """Starts this ATTA (i.e. before running a series of tests)."""
 
+        self._print(self.LOG_INFO,"[WIN_ATTA_BASE][start]")
+
         if not self._enabled:
             self._print(self.LOG_ERROR, "Start failed because ATTA is not enabled.")
             return
@@ -100,13 +103,18 @@ class Atta:
         signal.signal(signal.SIGINT, self.shutdown)
         signal.signal(signal.SIGTERM, self.shutdown)
 
+
         self._print(self.LOG_INFO, "Starting server on http://%s:%s/" % (self._host, self._port))
         self._server = HTTPServer((self._host, self._port), AttaRequestHandler)
+        
         AttaRequestHandler.set_atta(self)
+
 
         if self._server_thread is None:
             self._server_thread = threading.Thread(target=self._server.serve_forever)
             self._server_thread.start()
+
+        self._print(self.LOG_INFO, "[WIN_ATTA_BASE][start]: " + str(self._server_thread))
 
     def get_info(self, **kwargs):
         """Returns a dict of details about this ATTA needed by the harness."""
@@ -131,6 +139,8 @@ class Atta:
         if test_name is None:
             return False
 
+        print('[is_ready] ' + str(document) + ' ' + str(self._current_document))
+
         document = document or self._current_document
         if document is None:
             return False
@@ -146,6 +156,7 @@ class Atta:
     def start_test_run(self, name, url, **kwargs):
         """Sets the test details the ATTA should be looking for. The ATTA should
         update its "ready" status upon finding that file."""
+
 
         self._next_test = name, url
         self._ready = False
@@ -269,6 +280,7 @@ class Atta:
 
     def _get_system_api_version(self, **kwargs):
         """Returns a string with the installed version of the accessibility API."""
+
 
         self._print(self.LOG_DEBUG, "_get_system_api_version() not implemented")
         return ""
