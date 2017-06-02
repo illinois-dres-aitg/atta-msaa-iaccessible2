@@ -190,6 +190,7 @@ class AttaEventAssertion(AttaAssertion):
 
 class AttaPropertyAssertion(AttaAssertion):
 
+
     def __init__(self, obj, assertion, atta):
         super( AttaPropertyAssertion, self).__init__(obj, assertion, atta)
         if self._expected_value == "<nil>":
@@ -199,7 +200,7 @@ class AttaPropertyAssertion(AttaAssertion):
         try:
             value = self._atta.get_property_value(self._obj, self._test_string)
         except Exception as error:
-            self._messages.append("ERROR: %s" % error)
+            self._messages.append("[ASSERTION][AttaPropertyAssertion]ERROR: %s" % error)
             return None
 
         return value
@@ -215,7 +216,7 @@ class AttaRelationAssertion(AttaAssertion):
         try:
             targets = self._atta.get_relation_targets(self._obj, self._relation_type)
         except Exception as error:
-            self._messages.append("ERROR: %s" % error)
+            self._messages.append("[ASSERTION][AttaRelationAssertion]ERROR: %s" % error)
             return None
 
         return "[%s]" % " ".join(self._atta.value_to_string(targets))
@@ -231,7 +232,7 @@ class AttaResultAssertion(AttaAssertion):
         try:
             result = self._atta.string_to_method_and_arguments(self._test_string)
         except Exception as error:
-            self._messages.append("ERROR: %s" % error)
+            self._messages.append("[ASSERTION][AttaResultAssertion][__init__]ERROR: %s" % error)
         else:
             self._method, self._args = result
 
@@ -241,7 +242,7 @@ class AttaResultAssertion(AttaAssertion):
         except AttributeError:
             return None
         except Exception as error:
-            self._messages.append("ERROR: %s" % error)
+            self._messages.append("[ASSERTION][AttaResultAssertion][_get_value]ERROR: %s" % error)
             return None
 
         return value

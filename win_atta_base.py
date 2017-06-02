@@ -21,6 +21,8 @@ from BaseHTTPServer import HTTPServer
 from win_atta_assertion import AttaAssertion
 from win_atta_request_handler import AttaRequestHandler
 
+import pyia2
+
 
 class Atta(object):
     """Optional base class for python27 Accessible Technology Test Adapters."""
@@ -45,6 +47,12 @@ class Atta(object):
         LOG_ERROR: "ERROR",
     }
 
+    FORMAT_NONE = "%(label)s%(msg)s"
+    FORMAT_NORMAL = "\x1b[1m%(label)s\x1b[22m%(msg)s\x1b[0m"
+    FORMAT_GOOD = "\x1b[32;1m%(label)s\x1b[22m%(msg)s\x1b[0m"
+    FORMAT_WARNING = "\x1b[33;1m%(label)s\x1b[22m%(msg)s\x1b[0m"
+    FORMAT_BAD = "\x1b[31;1m%(label)s\x1b[22m%(msg)s\x1b[0m"
+
     def __init__(self, host, port, name, version, api, log_level=None):
         """Initializes this ATTA."""
 
@@ -60,7 +68,9 @@ class Atta(object):
         self._enabled = False
         self._ready = False
         self._next_test = None, ""
+        self._current_document_event = None
         self._current_document = None
+        self._current_uri = ""
         self._monitored_event_types = []
         self._event_history = []
         self._listeners = {}
@@ -89,6 +99,9 @@ class Atta(object):
 
         if level >= self._log_level:
             print("%s: %s" % (self.LOG_LEVELS.get(level), string))
+
+    def log_message(self, string, level):
+        self._print(level, string)
 
     def start(self, **kwargs):
         """Starts this ATTA (i.e. before running a series of tests)."""
@@ -132,24 +145,46 @@ class Atta(object):
     def is_ready(self, document=None, **kwargs):
         """Returns True if this ATTA is able to proceed with a test run."""
 
+        print('[BASE][is_ready][A][_ready]: ' + str(self._ready))    
+
+        try:
+            pyia2.com_coinitialize()
+        except:
+            print('[_is_ready]: error cointializing')
+
+        print('[BASE][is_ready][B][_ready]: ' + str(self._ready))    
+
         if self._ready:
             return True
 
         test_name, test_uri = self._next_test
+        print('[BASE][is_ready][C][test_name]: ' + str(test_name))    
+        print('[BASE][is_ready][C][test_uri]:  ' + str(test_uri))    
+
         if test_name is None:
             return False
 
-        print('[is_ready] ' + str(document) + ' ' + str(self._current_document))
+        # need to get the current IAccessible for document here because of theading issues
+        if self._current_document_event:
+            self._current_document = pyia2.accessibleObjectFromEvent(self._current_document_event)
 
         document = document or self._current_document
         if document is None:
             return False
 
-        uri = self._get_uri(document)
+        print('[BASE][is_ready][D][document]: ' + str(document))    
+        print('[BASE][is_ready][D][children]: ' + str(pyia2.get_children(document)))    
+
+        uri = pyia2.get_value(document)
+        print('[BASE][is_ready][D][uri]: ' + str(uri))    
+
         self._ready = uri and uri == test_uri
+
         if self._ready:
             self._current_document = document
             self._print(self.LOG_INFO, "Test is '%s' (%s)" % (test_name, test_uri))
+
+        print('[BASE][is_ready][E][_ready]: ' + str(self._ready))    
 
         return self._ready
 
@@ -157,6 +192,7 @@ class Atta(object):
         """Sets the test details the ATTA should be looking for. The ATTA should
         update its "ready" status upon finding that file."""
 
+        self._print(self.LOG_INFO, "%s (%s)" % (name, url) + "\n[BASE][start_test_run] ")
 
         self._next_test = name, url
         self._ready = False
@@ -175,6 +211,8 @@ class Atta(object):
         """Runs the assertions on the object with the specified id, returning
         a dict with the results, the status of the run, and any messages."""
 
+        print("[BASE][run_tests][A]")
+
         if not self.is_enabled():
             return {"status": self.STATUS_ERROR,
                     "message": self.FAILURE_ATTA_NOT_ENABLED,
@@ -185,14 +223,24 @@ class Atta(object):
                     "message": self.FAILURE_ATTA_NOT_READY,
                     "results": []}
 
+        print("[BASE][run_tests][B]")
+
         to_run = self._create_platform_assertions(assertions)
+        print("[BASE][run_tests][C][to_run]: " + str(to_run))
+
         obj = self._get_element_with_id(self._current_document, obj_id)
+
+        print("[BASE][run_tests][D][obj]: " + str(obj))
+
         if not obj:
             return {"status": self.STATUS_ERROR,
                     "message": self.FAILURE_ELEMENT_NOT_FOUND,
                     "results": []}
 
         results = [self._run_test(obj, a) for a in to_run]
+
+        print("[BASE][run_tests][E][results]: " + str(results))
+
         return {"status": self.STATUS_OK,
                 "results": results}
 
@@ -235,11 +283,21 @@ class Atta(object):
     def _get_element_with_id(self, root, element_id, **kwargs):
         """Returns the accessible descendant of root with the specified id."""
 
+        print("[BASE][_get_element_with_id][root]: " + str(root))
+        print("[BASE][_get_element_with_id][root][role]: " + pyia2.get_role(root))
+        print("[BASE][_get_element_with_id][root][childCount]: " + str(pyia2.get_child_count(root)))
+        print("[BASE][_get_element_with_id][element_id]: " + str(element_id))
+
         if not element_id:
             return None
 
         pred = lambda x: self._get_id(x) == element_id
-        return self._find_descendant(root, pred, **kwargs)
+
+        elem =  self._find_descendant(root, pred, **kwargs)
+
+        print("[BASE][_get_element_with_id][elem]: " + str(elem))
+
+        return elem
 
     def _in_current_document(self, obj, **kwargs):
         """Returns True if obj is an element in the current test's document."""
@@ -271,7 +329,11 @@ class Atta(object):
             return root
 
         children = self._get_children(root, **kwargs)
+#        print('[_find_descendant][childern]: ' + str(children))
         for child in children:
+#            print('[_find_descendant][child]: ' + str(child))
+#            print('[_find_descendant][child][role]: ' + pyia2.get_role(child))
+#            print('[_find_descendant][child][name]: ' + pyia2.get_name(child))
             element = self._find_descendant(child, pred, **kwargs)
             if element:
                 return element
@@ -310,20 +372,70 @@ class Atta(object):
     def _create_platform_assertions(self, assertions, **kwargs):
         """Performs platform-specific changes needed to harness assertions."""
 
-        return assertions
+        is_event = lambda x: x and x[0] == "event"
+        event_assertions = list(filter(is_event, assertions))
+        if not event_assertions:
+            return assertions
+
+        platform_assertions = list(filter(lambda x: x not in event_assertions, assertions))
+
+        # The properties associated with accessible events are currently given to
+        # us as individual subtests. Unlike other assertions, event properties are
+        # not independent of one another. Because these should be tested as an all-
+        # or-nothing assertion, we'll combine the subtest values into a dictionary
+        # passed along with each subtest.
+        properties = {}
+        for test, name, verb, value in event_assertions:
+            properties[name] = value
+
+        combined_event_assertions = ["event", "event", "contains", properties]
+        platform_assertions.append(combined_event_assertions)
+        return platform_assertions
 
     def _run_test(self, obj, assertion, **kwargs):
         """Runs a single assertion on obj, returning a results dict."""
 
-        log = "_run_test() not implemented"
-        self._print(self.LOG_DEBUG, log)
-        return {"result": AttaAssertion.STATUS_FAIL, "message": log, "log": log}
+        bug = ""
+        test_class = self._get_assertion_test_class(assertion)
+        if test_class is None:
+            result = AttaAssertion.STATUS_FAIL
+            message = "ERROR: %s is not a valid assertion" % assertion
+            log = message
+        else:
+            test = test_class(obj, assertion, self)
+            result, message, log = test.run()
+            if result == AttaAssertion.STATUS_FAIL:
+                bug = test.get_bug()
 
-    def _get_id(self, obj, **kwargs):
-        """Returns the element id associated with obj or an empty string upon failure."""
+        test_file = parse.urlsplit(self._next_test[1]).path
+        status_results = self._results.get(bug or result, {})
+        file_results = status_results.get(test_file, [])
+        file_results.append(" ".join(map(str, assertion)))
+        status_results[test_file] = file_results
+        self._results[bug or result] = status_results
 
-        self._print(self.LOG_DEBUG, "_get_id() not implemented")
-        return ""
+        if not self._ansi_formatting:
+            formatting = self.FORMAT_NONE
+        elif result == AttaAssertion.STATUS_PASS:
+            formatting = self.FORMAT_GOOD
+        elif not test_class:
+            formatting = self.FORMAT_BAD
+        elif result == AttaAssertion.STATUS_FAIL:
+            if bug:
+                formatting = self.FORMAT_WARNING
+            else:
+                formatting = self.FORMAT_BAD
+        else:
+            formatting = self.FORMAT_WARNING
+
+        string = " ".join(map(str, assertion))
+        if message:
+            string = "%s %s" % (string, message)
+
+        self._print(self.LOG_INFO, string, "%s: " % result, formatting)
+        return {"result": result, "message": message, "log": log}
+
+
 
     def _get_uri(self, document, **kwargs):
         """Returns the URI associated with document or an empty string upon failure."""
@@ -331,11 +443,6 @@ class Atta(object):
         self._print(self.LOG_DEBUG, "_get_uri() not implemented")
         return ""
 
-    def _get_children(self, obj, **kwargs):
-        """Returns the children of obj or [] upon failure or absence of children."""
-
-        self._print(self.LOG_DEBUG, "_get_children() not implemented")
-        return []
 
     def _get_parent(self, obj, **kwargs):
         """Returns the parent of obj or None upon failure."""
@@ -350,5 +457,4 @@ class Atta(object):
 
     def _on_test_event(self, data, **kwargs):
         """Callback for platform accessibility events the ATTA is testing."""
-
         self._print(self.LOG_DEBUG, "_on_test_event() not implemented")

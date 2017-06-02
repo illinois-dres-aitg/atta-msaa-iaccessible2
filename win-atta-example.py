@@ -27,7 +27,7 @@ import json
 
 debug = True
 # myAPI = 'WAIFAKE'
-myAPI = "IAccessible2"
+myAPI = "MSAA"
 myAPIversion = 0.1
 myprotocol = 'http'
 myhost = 'localhost'
@@ -88,6 +88,7 @@ def get_params(request, params):
     return resp
 
 def listenFor(request):
+    print('[listenFor]')
     listenResp = {
             "status":     "READY",
             "statusText": "",
@@ -131,6 +132,7 @@ def listenFor(request):
     request.wfile.write(bytes(dump_json(listenResp)))
 
 def listenStop(request):
+    print('[listenStop]')
     listenResp = {
             "status":     "READY",
             "statusText": "",
@@ -149,6 +151,7 @@ def listenStop(request):
     request.wfile.write(bytes(dump_json(listenResp)))
 
 def runTests(request):
+    print('[runTests]')
     runResp = {
             "status":     "OK",
             "statusText": "",
@@ -171,11 +174,13 @@ def runTests(request):
         try:
             theTests = params['data']
 
+            print('[runTets][DATA]: ' + str(theTests))
+
             # loop over each item and update the results
 
             for assertion in theTests:
-                print("Looking at assertion")
-                print(assertion[0] + ", " + assertion[1])
+                print("[runTests]: Looking at assertion")
+                print("[runTests][Assertion]: " + assertion[0] + ", " + assertion[1])
                 # evaluate the assertion
                 myRes = "PASS"
                 myMessage = ""
@@ -202,6 +207,7 @@ def runTests(request):
     request.wfile.write(bytes(dump_json(runResp)))
 
 def startTest(request):
+    print('[startTest]')
     testResp = {
             "status": "READY",
             "statusText": "",
@@ -245,6 +251,7 @@ def startTest(request):
     request.wfile.write( bytes(dump_json(testResp)))
 
 def endTest(request):
+    print('[endTest]')
 
     resp  = {
             "status": "DONE",
@@ -271,9 +278,11 @@ def sendError(request):
 
 class theServer(BaseHTTPRequestHandler):
     def do_GET(self):
+        print('[do_GET]')
         self.dispatch()
 
     def do_POST(self):
+        print('[do_Post]')
         # pull in arguments
         self.dispatch()
 

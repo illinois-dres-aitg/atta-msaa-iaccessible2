@@ -22,15 +22,17 @@ from win_atta_base import Atta
 import pyia2
 from pyia2.utils import IA2Lib
 
+
 class IA2Atta(Atta):
     """Accessible Technology Test Adapter to test IAccessible2 support."""
 
-    def __init__(self, host, port, ansi_formatting, name="ATTA for IA2", version="0.5", api="IA2"):
+    def __init__(self, host, port, ansi_formatting, name="ATTA for IA2", version="0.5", api="IAccessible2"):
         """Initializes this ATTA."""
 
         self._listener_thread = None
         self._proxy = None
         self._interfaces = []
+        self._last_id = ""
 
         try:
             #Atspi.get_desktop(0)
@@ -68,15 +70,10 @@ class IA2Atta(Atta):
         self._register_listener(pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE, atta._on_load_complete)
 
         super(IA2Atta, self).start(**kwargs)
-        print("done 1")
         return
 
     def _run_test(self, obj, assertion, **kwargs):
         """Runs a single assertion on obj, returning a results dict."""
-
-# JRG
-#        if obj:
-#            Atspi.Accessible.clear_cache(obj)
 
         return super(IA2Atta, self)._run_test(obj, assertion, **kwargs)
 
@@ -94,29 +91,13 @@ class IA2Atta(Atta):
         if not self._current_document:
             return ""
 
-        try:
-            attrs = Atspi.Accessible.get_attributes(self._current_document) or {}
-        except:
-            return ""
-
-        return attrs.get("toolkit") or self._current_document.get_toolkit_name()
+        return "Rendering engine unknown"
 
     def _get_system_api_version(self, **kwargs):
         """Returns a string with the installed version of the accessibility API."""
 
-        try:
-            version = Atk.get_version()
-        except:
-            self._print(self.LOG_ERROR, "Could not get ATK version.")
-            return ""
+        return "Version Unknown"
 
-        actual_version = list(map(int, version.split(".")))
-        minimum_version = list(map(int, self._api_min_version.split(".")))
-        if actual_version < minimum_version:
-            msg = "ATK %s < %s." % (version, self._api_min_version)
-            self._print(self.LOG_WARNING, msg)
-
-        return version
 
     def _get_accessibility_enabled(self, **kwargs):
         """Returns True if accessibility support is enabled on this platform."""
@@ -151,13 +132,13 @@ class IA2Atta(Atta):
         if obj is None:
             return ""
 
-        try:
-            attrs = Atspi.Accessible.get_attributes(obj) or {}
-        except:
-            return ""
+        value = pyia2.get_id(obj)    
+        if len(value) and self._last_id != value:
+            print('[_get_id]: ' + value)
+            self._last_id = value
 
-        # Gecko and WebKitGtk respectively
-        return attrs.get("id") or attrs.get("html-id") or ""
+        return value   
+
 
     def _get_uri(self, document, **kwargs):
         """Returns the URI associated with document or an empty string upon failure."""
@@ -173,17 +154,22 @@ class IA2Atta(Atta):
     def _get_children(self, obj, **kwargs):
         """Returns the children of obj or [] upon failure or absence of children."""
 
+
         try:
             count = pyia2.get_child_count(obj)
         except:
-            self._print(self.LOG_ERROR, self._on_exception())
+            self._print(self.LOG_ERROR, "[IA2][_get_children]" + self._on_exception())
             return []
 
+#        print("[IA2][_get_children][obj][count]: " + str(count))
+
         try:
-            children = [pyia2.get_child_at_index(obj, i) for i in range(count)]
+            children = pyia2.get_children(obj)
         except:
-            self._print(self.LOG_ERROR, self._on_exception())
+            self._print(self.LOG_ERROR, "[IA2][_get_children]" + self._on_exception())
             return []
+
+#        print("[IA2][_get_children][obj][children]: " + str(children))
 
         return children
 
@@ -193,7 +179,7 @@ class IA2Atta(Atta):
         try:
             parent = pyia2.get_parent(obj)
         except:
-            self._print(self.LOG_ERROR, self._on_exception())
+            self._print(self.LOG_ERROR, "[IA2][_get_parent]" + self._on_exception())
             return None
 
         return parent
@@ -216,13 +202,8 @@ class IA2Atta(Atta):
         if not obj:
             raise AttributeError("Object not found")
 
-        is_type = lambda x: Atspi.Relation.get_relation_type(x) == relation_type
-        relations = list(filter(is_type, Atspi.Accessible.get_relation_set(obj)))
-        if not len(relations) == 1:
-            return []
+        self._print(self.LOG_DEBUG, "get_relation_targets() not implemented")
 
-        count = Atspi.Relation.get_n_targets(relations[0])
-        return [Atspi.Relation.get_target(relations[0], i) for i in range(count)]
 
 
 
@@ -247,20 +228,36 @@ class IA2Atta(Atta):
 #            application = Atspi.Accessible.get_application(data.source)
 #            Atspi.Accessible.set_cache_mask(application, Atspi.Cache.DEFAULT)
 
-        pyia2.com_coinitialize()
+#        try:
+#            pyia2.com_coinitialize()
+#        except:
+#            print('[_on_load_complete]: error cointializing')
 
-        print("[_on_load_complete: Start")
+        print("[_on_load_complete]: Start")
+        self._current_document_event   = event
         self._current_document = pyia2.accessibleObjectFromEvent(event)
-        print("[_on_load_complete] _current_document: " + str(self._current_document))
+        print("[_on_load_complete] _current_document_event:      " + str(self._current_document_event))
+        print("[_on_load_complete] current_document_iaccesible: " + str(self._current_document))
 
-        if self._current_document:
-            url = pyia2.get_value(self._current_document)
-            print("[_on_load_complete] role: " + pyia2.get_role(self._current_document))
-            print("[_on_load_complete] name: " + pyia2.get_name(self._current_document))
-            print("[_on_load_complete] URL: "  + pyia2.get_value(self._current_document))
+        if  self._current_document:
+            self._current_role        = pyia2.get_role(self._current_document)
+            self._current_uri         = pyia2.get_value(self._current_document)
+            self._current_name        = pyia2.get_name(self._current_document)
+            self._current_child_count = pyia2.get_child_count(self._current_document)
+            self._current_children    = pyia2.get_children(self._current_document)
+            print("[_on_load_complete][_current_role]:        " + self._current_role)
+            print("[_on_load_complete][_current_uri]:         " + self._current_uri)
+            print("[_on_load_complete][_current_name]:        " + self._current_name)
+            print("[_on_load_complete][_current_child_count]: " + str(self._current_child_count))
+            print("[_on_load_complete][_current_children]:    " + str(self._current_children))
 
     def _on_test_event(self, data, **kwargs):
         """Callback for platform accessibility events the ATTA is testing."""
+
+        try:
+            pyia2.com_coinitialize()
+        except:
+            print('[_on_test_event]: error cointializing')
 
         if not self._in_current_document(data.source):
             return

@@ -25,6 +25,7 @@ Boston, MA 02111-1307, USA.
 '''
 
 import constants
+
 from ctypes import windll, oledll, POINTER, byref, c_int
 from comtypes.automation import VARIANT
 from comtypes import CoInitializeEx
@@ -38,8 +39,6 @@ from pyia2.constants import CHILDID_SELF, \
     UNLOCALIZED_ROLE_NAMES, \
     UNLOCALIZED_STATE_NAMES
 
-#a = GetModule("ia2.tlb")
-#IServiceProvider=comtypesClient.GetModule('ServProv.tlb').IServiceProvider
 IA2Lib=comtypesClient.GetModule('ia2.tlb')
 IALib=comtypesClient.GetModule('oleacc.dll').IAccessible
 
@@ -101,7 +100,7 @@ def accessible2FromAccessible(pacc, child_id):
                 return pacc2
 
         except Exception as e:
-            print "ERROR cannot get IA2 object:", str(e)
+            print "[accessible2FromAccessible] EXCEPTION cannot get IA2 object:", str(e)
 
     return None
 
@@ -119,6 +118,37 @@ def get_value(pacc):
 def get_child_count(pacc):
     return pacc.accChildcount    
 
+def get_child_at_index(pacc, index):
+    try:
+      child = pacc.accChild(index)
+    except:
+      child = None
+    return child  
+
+def get_children(pacc):
+    """Returns the children of obj or [] upon failure or absence of children."""
+
+    children = []
+
+    try:
+        count = pacc.accChildCount
+    except:
+        print('[utils][get_children][count][exception]')
+        return []
+
+    try:
+        for i in range(count):
+#          print('[utils][get_children][i]: ' + str(i))
+          child = pacc.accChild(i)
+#          print('[utils][get_children][child]: ' + str(child))
+          children.append(child)
+    except:
+#        print('[utils][get_children][children][exception]')
+        return []
+
+
+    return children
+
 def get_description(pacc):
     return pacc.accDescription(CHILDID_SELF)    
 
@@ -129,7 +159,7 @@ def get_role(pacc):
     return pacc.accRoleName()
 
 def get_ia2_role(pacc):
-    pacc2 = self.accessible2FromAccessible(ao, CHILDID_SELF)
+    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessible2):
       return pacc2.role()
 
@@ -138,7 +168,7 @@ def get_ia2_role(pacc):
 def get_ia2_state_set(pacc):
     str = ""
 
-    pacc2 = self.accessible2FromAccessible(ao, CHILDID_SELF)
+    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessible2):
       states = pacc2.states
       for item in UNLOCALIZED_IA2_STATE_NAMES:
@@ -147,10 +177,28 @@ def get_ia2_state_set(pacc):
  
     return str
 
+def get_ia2_attributes(pacc):
+
+    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      return pacc2.attributes
+
+    return ""
+
+def get_id(pacc):
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      attrs = pacc2.attributes.split(';')
+      for attr in attrs:
+        parts = attr.split(':')
+        if len(parts) == 2 and parts[0] == 'id':
+          return parts[1]
+
+    return ""    
 
 def get_ia2_attributes_as_array(pacc):
 
-    pacc2 = self.accessible2FromAccessible(ao, CHILDID_SELF)
+    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessible2):
       return pacc2.attributes.split(';')
 
@@ -160,7 +208,7 @@ def get_parent(pacc):
     return pacc.acc_parent 
 
 def get_relation_set(pacc):
-    pacc2 = self.accessible2FromAccessible(ao, CHILDID_SELF)
+    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessible2):
         out = "Relation info:"
         try:
@@ -185,7 +233,7 @@ def get_relation_set(pacc):
             return out
 
         except Exception as e:
-            print "ERROR cannot get IA2 relation:", str(e)
+            print "[get_relation_set] Exception cannot get IA2 relation:", str(e)
 
     return "None"    
 
