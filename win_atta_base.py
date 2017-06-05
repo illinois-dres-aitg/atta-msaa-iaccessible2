@@ -16,6 +16,8 @@ import sys
 import threading
 import traceback
 
+from urlparse import urlparse
+
 
 from BaseHTTPServer import HTTPServer
 from win_atta_assertion import AttaAssertion
@@ -59,6 +61,8 @@ class Atta(object):
         self._log_level = log_level or self.LOG_DEBUG
         self._host = host
         self._port = int(port)
+        self._ansi_formatting = True
+
         self._server = None
         self._server_thread = None
         self._atta_name = name
@@ -71,6 +75,7 @@ class Atta(object):
         self._current_document_event = None
         self._current_document = None
         self._current_uri = ""
+        self._results = {}
         self._monitored_event_types = []
         self._event_history = []
         self._listeners = {}
@@ -369,6 +374,10 @@ class Atta(object):
 
         self._print(self.LOG_DEBUG, "_deregister_listener() not implemented")
 
+    def _get_assertion_test_class(self, assertion, **kwargs):
+        """Returns the appropriate Assertion class for assertion."""
+        return AttaAssertion.get_test_class(assertion)
+
     def _create_platform_assertions(self, assertions, **kwargs):
         """Performs platform-specific changes needed to harness assertions."""
 
@@ -395,8 +404,12 @@ class Atta(object):
     def _run_test(self, obj, assertion, **kwargs):
         """Runs a single assertion on obj, returning a results dict."""
 
+        print("[BASE][_run_test][obj]: " + str(obj))
+        print("[BASE][_run_test][assertion]: " + str(assertion))
+
         bug = ""
         test_class = self._get_assertion_test_class(assertion)
+        print("[BASE][_run_test][test_class]: " + str(test_class))
         if test_class is None:
             result = AttaAssertion.STATUS_FAIL
             message = "ERROR: %s is not a valid assertion" % assertion
@@ -407,11 +420,19 @@ class Atta(object):
             if result == AttaAssertion.STATUS_FAIL:
                 bug = test.get_bug()
 
-        test_file = parse.urlsplit(self._next_test[1]).path
+        print("[BASE][_run_test][_next_test[1]]: " + str(self._next_test[1]))
+        test_file = urlparse(self._next_test[1]).path
+        print("[BASE][_run_test][test_file]: " + str(test_file))
+
         status_results = self._results.get(bug or result, {})
+        print("[BASE][_run_test][status_results]: " + str(status_results))
+
         file_results = status_results.get(test_file, [])
+
         file_results.append(" ".join(map(str, assertion)))
+
         status_results[test_file] = file_results
+
         self._results[bug or result] = status_results
 
         if not self._ansi_formatting:
@@ -432,7 +453,7 @@ class Atta(object):
         if message:
             string = "%s %s" % (string, message)
 
-        self._print(self.LOG_INFO, string, "%s: " % result, formatting)
+        self._print(self.LOG_INFO, string +  ", [RESULT]: %s: " % result)
         return {"result": result, "message": message, "log": log}
 
 

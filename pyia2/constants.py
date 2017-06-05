@@ -304,26 +304,26 @@ IA2_STATE_CHECKABLE       = 0x40000
 IA2_STATE_PINNED          = 0x80000
 
 UNLOCALIZED_IA2_STATE_NAMES = {
-    1:          u'active',
-    2:          u'armed',
-    4:          u'defunct',
-    8:          u'editable',
-    16:         u'horizontal',
-    32:         u'iconified',
-    64:         u'invalid entry',
-    128:        u'manages descendants',
-    256:        u'modal',
-    512:        u'multi-line',
-    1024:       u'opaque',
-    2048:       u'required',
-    4096:       u'selectable text',
-    8192:       u'single line',
-    16384:      u'stale',
-    32768:      u'supports autocompletion',
-    65536:      u'transient',
-    131072:     u'vertical',
-    262144:     u'checkable',
-    524288:     u'pinned'}
+    1:          u'IA2_STATE_ACTIVE',
+    2:          u'IA2_STATE_ARMED',
+    4:          u'IA2_STATE_DEFUNCT',
+    8:          u'IA2_STATE_EDITABLE',
+    16:         u'IA2_STATE_HORIZONTAL',
+    32:         u'IA2_STATE_ICONIFIED',
+    64:         u'IA2_STATE_INVALID_ENTRY',
+    128:        u'IA2_STATE_MANAGES_DESCENDANTS',
+    256:        u'IA2_STATE_MODAL',
+    512:        u'IA2_STATE_MULTI_LINE',
+    1024:       u'IA2_STATE_OPAQUE',
+    2048:       u'IA2_STATE_REQUIRED',
+    4096:       u'IA2_STATE_SELECTABLE_TEXT',
+    8192:       u'IA2_STATE_SINGLE_LINE',
+    16384:      u'IA2_STATE_STALE',
+    32768:      u'IA2_STATE_SUPPORTS_AUTOCOMPLETION',
+    65536:      u'IA2_STATE_TRANSIENT',
+    131072:     u'IA2_STATE_VERTICAL',
+    262144:     u'IA2_STATE_CHECKABLE',
+    524288:     u'IA2_STATE_PINNED'}
 
 
 # SetWinEventHook() flags

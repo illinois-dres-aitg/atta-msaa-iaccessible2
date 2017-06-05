@@ -35,7 +35,7 @@ from comtypes.gen.Accessibility import IAccessible
 from comtypes import COMError, IServiceProvider
 from comtypes.client import GetModule, CreateObject
 import comtypesClient
-from pyia2.constants import CHILDID_SELF, \
+from constants import CHILDID_SELF, \
     UNLOCALIZED_ROLE_NAMES, \
     UNLOCALIZED_STATE_NAMES
 
@@ -176,6 +176,20 @@ def get_ia2_state_set(pacc):
           str += UNLOCALIZED_IA2_STATE_NAMES[item] + ' '
  
     return str
+
+def get_ia2_property_value(pacc, property):
+
+    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
+
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      states = pacc2.states
+
+      try:
+        return states & constants[property]
+      except:
+        return -1  
+ 
+    return -1
 
 def get_ia2_attributes(pacc):
 

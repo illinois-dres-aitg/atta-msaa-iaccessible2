@@ -17,7 +17,7 @@ import traceback
 from textwrap import TextWrapper
 
 
-class AttaAssertion:
+class AttaAssertion(object):
 
     STATUS_PASS = "PASS"
     STATUS_FAIL = "FAIL"
@@ -113,10 +113,15 @@ class AttaAssertion:
 
     def _get_result(self):
         value = self._get_value()
+
+        print('[ASSERTION][_get_result][_expectation]: ' + str(self._expectation))
+        print('[ASSERTION][_get_result][value]: ' + str(value))
+        print('[ASSERTION][_get_result][_expected_result]: ' + str(self._expected_value))
+
         if self._expectation == self.EXPECTATION_IS_TYPE:
             self._actual_value = self._atta.type_to_string(value)
         else:
-            self._actual_value = self._atta.value_to_string(value)
+            self._actual_value = value
 
         if self._expectation == self.EXPECTATION_IS:
             result = self._compare(self._actual_value, self._expected_value) == 0
@@ -157,15 +162,19 @@ class AttaAssertion:
     def _get_value(self):
         pass
 
+    def get_bug(self):
+        return self._bug
+
     def run(self):
         self._get_result()
         return self._status, " ".join(self._messages), str(self)
 
 
+
 class AttaEventAssertion(AttaAssertion):
 
     def __init__(self, obj, assertion, atta):
-        super(AttaEventAssertion, self).__init__(obj, assertion, atta)
+        super(self.__class__, self).__init__(obj, assertion, atta)
         events = self._atta.get_event_history()
         self._actual_value = list(map(self._atta.value_to_string, events))
 
@@ -192,7 +201,13 @@ class AttaPropertyAssertion(AttaAssertion):
 
 
     def __init__(self, obj, assertion, atta):
-        super( AttaPropertyAssertion, self).__init__(obj, assertion, atta)
+        
+        print('[ASSERTION][AttaPropertyAssertion][__class__]: ' + str(self.__class__))
+        print('[ASSERTION][AttaPropertyAssertion][obj]: ' + str(obj))
+        print('[ASSERTION][AttaPropertyAssertion][assertion]: ' + str(assertion))
+        print('[ASSERTION][AttaPropertyAssertion][atta]: ' + str(atta))
+
+        super(self.__class__, self).__init__(obj, assertion, atta)
         if self._expected_value == "<nil>":
             self._expected_value = "None"
 
@@ -209,7 +224,7 @@ class AttaPropertyAssertion(AttaAssertion):
 class AttaRelationAssertion(AttaAssertion):
 
     def __init__(self, obj, assertion, atta):
-        super(AttaRelationAssertion, self).__init__(obj, assertion, atta)
+        super(self.__class__, self).__init__(obj, assertion, atta)
         self._relation_type = atta.string_to_value(self._test_string)
 
     def _get_value(self):
@@ -225,7 +240,7 @@ class AttaRelationAssertion(AttaAssertion):
 class AttaResultAssertion(AttaAssertion):
 
     def __init__(self, obj, assertion, atta):
-        super(AttaResultAssertion, self).__init__(obj, assertion, atta)
+        super(self.__class__, self).__init__(obj, assertion, atta)
         self._method = None
         self._args = []
 

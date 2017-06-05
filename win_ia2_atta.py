@@ -116,9 +116,9 @@ class IA2Atta(Atta):
     def _register_listener(self, event_type, callback, **kwargs):
         """Registers an accessible-event listener on the platform."""
 
-        print("registered: A")
+        print("[IA2][_register_listener][A]")
         pyia2.Registry.registerEventListener(callback, event_type)
-        print("registered: B")
+        print("[IA2][_register_listener][B]")
 
 
     def _deregister_listener(self, event_type, callback, **kwargs):
@@ -134,7 +134,7 @@ class IA2Atta(Atta):
 
         value = pyia2.get_id(obj)    
         if len(value) and self._last_id != value:
-            print('[_get_id]: ' + value)
+            print('[IA2][_get_id]: ' + value)
             self._last_id = value
 
         return value   
@@ -193,6 +193,8 @@ class IA2Atta(Atta):
         getter = self._supported_properties.get(property_name)
         if getter is None:
             raise ValueError("Unsupported property: %s" % property_name)
+
+        print("[IA2][get_property_value][getter]: " + str(getter))
 
         return getter(obj)
 
