@@ -24,6 +24,12 @@ Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 '''
 
+import faulthandler
+import signal
+import sys
+import threading
+import traceback
+
 import constants
 
 from ctypes import windll, oledll, POINTER, byref, c_int
@@ -37,7 +43,8 @@ from comtypes.client import GetModule, CreateObject
 import comtypesClient
 from constants import CHILDID_SELF, \
     UNLOCALIZED_ROLE_NAMES, \
-    UNLOCALIZED_STATE_NAMES
+    UNLOCALIZED_STATE_NAMES, \
+    UNLOCALIZED_IA2_STATE_NAMES
 
 IA2Lib=comtypesClient.GetModule('ia2.tlb')
 IALib=comtypesClient.GetModule('oleacc.dll').IAccessible
@@ -159,27 +166,32 @@ def get_role(pacc):
     return pacc.accRoleName()
 
 def get_ia2_role(pacc):
-    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessible2):
       return pacc2.role()
 
     return ""
 
 def get_ia2_state_set(pacc):
-    str = ""
+    list = []
 
-    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
+#    print('[get_ia2_state_set][pacc]: ' + str(pacc))
+
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+#    print('[get_ia2_state_set][pacc2]: ' + str(pacc2))
+
     if isinstance(pacc2, IA2Lib.IAccessible2):
       states = pacc2.states
       for item in UNLOCALIZED_IA2_STATE_NAMES:
+#        print('[get_ia2_state_set][item]: ' + str(item))
         if item & states:
-          str += UNLOCALIZED_IA2_STATE_NAMES[item] + ' '
+          list.append(UNLOCALIZED_IA2_STATE_NAMES[item])
  
-    return str
+    return list
 
 def get_ia2_property_value(pacc, property):
 
-    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
 
     if isinstance(pacc2, IA2Lib.IAccessible2):
       states = pacc2.states
@@ -193,7 +205,7 @@ def get_ia2_property_value(pacc, property):
 
 def get_ia2_attributes(pacc):
 
-    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessible2):
       return pacc2.attributes
 

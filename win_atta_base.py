@@ -291,6 +291,7 @@ class Atta(object):
         print("[BASE][_get_element_with_id][root]: " + str(root))
         print("[BASE][_get_element_with_id][root][role]: " + pyia2.get_role(root))
         print("[BASE][_get_element_with_id][root][childCount]: " + str(pyia2.get_child_count(root)))
+        print("[BASE][_get_element_with_id][root][states]: " + str(pyia2.get_ia2_state_set(root)))
         print("[BASE][_get_element_with_id][element_id]: " + str(element_id))
 
         if not element_id:
@@ -301,6 +302,7 @@ class Atta(object):
         elem =  self._find_descendant(root, pred, **kwargs)
 
         print("[BASE][_get_element_with_id][elem]: " + str(elem))
+        print("[BASE][_get_element_with_id][elem][states]: " + str(pyia2.get_ia2_state_set(elem)))
 
         return elem
 
@@ -334,11 +336,11 @@ class Atta(object):
             return root
 
         children = self._get_children(root, **kwargs)
-#        print('[_find_descendant][childern]: ' + str(children))
+#        print('[BASE][_find_descendant][childern]: ' + str(children))
         for child in children:
-#            print('[_find_descendant][child]: ' + str(child))
-#            print('[_find_descendant][child][role]: ' + pyia2.get_role(child))
-#            print('[_find_descendant][child][name]: ' + pyia2.get_name(child))
+#            print('[BASE][_find_descendant][child]: ' + str(child))
+#            print('[BASE][_find_descendant][child][role]: ' + pyia2.get_role(child))
+#            print('[BASE][_find_descendant][child][name]: ' + pyia2.get_name(child))
             element = self._find_descendant(child, pred, **kwargs)
             if element:
                 return element

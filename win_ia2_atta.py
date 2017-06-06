@@ -187,6 +187,9 @@ class IA2Atta(Atta):
     def get_property_value(self, obj, property_name, **kwargs):
         """Returns the value of property_name for obj."""
 
+        print("[IA2][get_property_value][obj]: " + str(obj))
+        print("[IA2][get_property_value][property_name]: " + property_name)
+
         if not obj and property_name != "accessible":
             raise AttributeError("Object not found")
 
@@ -196,7 +199,14 @@ class IA2Atta(Atta):
 
         print("[IA2][get_property_value][getter]: " + str(getter))
 
-        return getter(obj)
+        try:
+            value =  getter(obj)
+            print("[IA2][get_property_value][value]: " + str(value))        
+        except:
+            print("[IA2][get_property_value][except]")        
+            value = []    
+
+        return value
 
     def get_relation_targets(self, obj, relation_type, **kwargs):
         """Returns the elements of pointed to by relation_type for obj."""

@@ -123,6 +123,8 @@ class AttaAssertion(object):
         else:
             self._actual_value = value
 
+        print('[ASSERTION][_get_result][_actual_value]: ' + str(self._actual_value))
+
         if self._expectation == self.EXPECTATION_IS:
             result = self._compare(self._actual_value, self._expected_value) == 0
         elif self._expectation == self.EXPECTATION_IS_NOT:
@@ -156,6 +158,8 @@ class AttaAssertion(object):
             self._bug = self._atta.get_bug(self._as_string, self._expected_value, self._actual_value)
             if self._bug:
                 self._messages.append(self._bug)
+
+        print('[ASSERTION][_get_result][result]: ' + str(result))
 
         return result
 
