@@ -111,6 +111,27 @@ def accessible2FromAccessible(pacc, child_id):
 
     return None
 
+def accessibleTable2FromAccessible(pacc, child_id):
+
+    if not isinstance(pacc, IAccessible):
+        try:
+            pacc = pacc.QueryInterface(IAccessible)
+        except COMError:
+            raise RuntimeError("%s Not an IAccessible"%pacc)
+
+    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleTable2):
+        try:
+            s=pacc.QueryInterface(IServiceProvider)
+            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleTable2)
+            if not pacc2:
+                raise ValueError
+            else:
+                return pacc2
+
+        except Exception as e:
+          return None
+
+
 def com_coinitialize():
     CoInitializeEx(COINIT_MULTITHREADED)
     return
@@ -204,9 +225,9 @@ def get_ia2_property_value(pacc, property):
     return -1
 
 def get_ia2_attributes(pacc):
-
     pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessible2):
+
       return pacc2.attributes
 
     return ""
@@ -222,13 +243,26 @@ def get_id(pacc):
 
     return ""    
 
-def get_ia2_attributes_as_array(pacc):
+def get_ia2_attributes_as_list(pacc):
 
     pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessible2):
       return pacc2.attributes.split(';')
 
-    return ""
+    return []
+
+def get_interfaces(pacc):
+    list []
+
+    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      list.push('IAccessible2')
+
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      list.push('IAccessible2')
+      
+
+    return list
 
 def get_parent(pacc):
     return pacc.acc_parent 
