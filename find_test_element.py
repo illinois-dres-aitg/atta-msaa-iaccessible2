@@ -47,16 +47,21 @@ def event_cb(event):
     print('\n\n===== Document Load Event =====')
     accessible_object_information(ao)
 
+    print('\n----- test Element -----')
     pred = lambda x: pyia2.get_id(x) == 'test'
-
     ao_test = pyia2.findDescendant(ao, pred)
-
-    print('\n----- Test Element -----')
     if ao_test:
       accessible_object_information(ao_test)
     else:  
         print('Not found')
 
+    print('\n----- myID Element -----')
+    pred = lambda x: pyia2.get_id(x) == 'myID'
+    ao_myid = pyia2.findDescendant(ao, pred)
+    if ao_myid:
+      accessible_object_information(ao_myid)
+    else:  
+        print('Not found')
 
 
 print("This program monitors document and focus changes events for MSAA and IAccessible2 and provides information about the event.")
