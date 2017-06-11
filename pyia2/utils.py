@@ -111,6 +111,68 @@ def accessible2FromAccessible(pacc, child_id):
 
     return None
 
+def accessibleDocumentFromAccessible(pacc, child_id):
+
+    if not isinstance(pacc, IAccessible):
+        try:
+            pacc = pacc.QueryInterface(IAccessible)
+        except COMError:
+            raise RuntimeError("%s Not an IAccessible"%pacc)
+
+    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleDocument):
+        try:
+            s=pacc.QueryInterface(IServiceProvider)
+            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleDocument)
+            if not pacc2:
+                raise ValueError
+            else:
+                return pacc2
+
+        except Exception as e:
+          return None
+
+def accessibleText2FromAccessible(pacc, child_id):
+
+    if not isinstance(pacc, IAccessible):
+        try:
+            pacc = pacc.QueryInterface(IAccessible)
+        except COMError:
+            raise RuntimeError("%s Not an IAccessible"%pacc)
+
+    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleText2):
+        try:
+            s=pacc.QueryInterface(IServiceProvider)
+            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleText2)
+            if not pacc2:
+                raise ValueError
+            else:
+                return pacc2
+
+        except Exception as e:
+          return None
+
+def accessibleHypertext2FromAccessible(pacc, child_id):
+
+    if not isinstance(pacc, IAccessible):
+        try:
+            pacc = pacc.QueryInterface(IAccessible)
+        except COMError:
+            raise RuntimeError("%s Not an IAccessible"%pacc)
+
+    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleHypertext2):
+        try:
+            s=pacc.QueryInterface(IServiceProvider)
+            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleHypertext2)
+            if not pacc2:
+                raise ValueError
+            else:
+                return pacc2
+
+        except Exception as e:
+          return None
+
+
+
 def accessibleTable2FromAccessible(pacc, child_id):
 
     if not isinstance(pacc, IAccessible):
@@ -123,6 +185,26 @@ def accessibleTable2FromAccessible(pacc, child_id):
         try:
             s=pacc.QueryInterface(IServiceProvider)
             pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleTable2)
+            if not pacc2:
+                raise ValueError
+            else:
+                return pacc2
+
+        except Exception as e:
+          return None
+
+def accessibleTableCellFromAccessible(pacc, child_id):
+
+    if not isinstance(pacc, IAccessible):
+        try:
+            pacc = pacc.QueryInterface(IAccessible)
+        except COMError:
+            raise RuntimeError("%s Not an IAccessible"%pacc)
+
+    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleTableCell):
+        try:
+            s=pacc.QueryInterface(IServiceProvider)
+            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleTableCell)
             if not pacc2:
                 raise ValueError
             else:
@@ -178,36 +260,108 @@ def get_children(pacc):
     return children
 
 def get_description(pacc):
-    return pacc.accDescription(CHILDID_SELF)    
+    return str(pacc.accDescription(CHILDID_SELF))
 
 def get_name(pacc):
     return pacc.accName(CHILDID_SELF)  
 
+
 def get_role(pacc):
-    return pacc.accRoleName()
+    return str(pacc.accRoleName())
 
 def get_ia2_role(pacc):
     pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessible2):
-      return pacc2.role()
+      if pacc2.role() == 0:
+          return UNLOCALIZED_IA2_ROLE_NAMES[0]
+      else:
+        if pacc2.role() < 62:
+          return UNLOCALIZED_ROLE_NAMES[pacc2.role()]
+        else:
+          return UNLOCALIZED_IA2_ROLE_NAMES[pacc2.role()]
 
     return ""
+
+def get_state_set(pacc):
+    list = []
+
+    states = pacc.accState(CHILDID_SELF)
+    for item in UNLOCALIZED_STATE_NAMES:
+      if item & states:
+        list.append(UNLOCALIZED_STATE_NAMES[item])
+ 
+    return list
 
 def get_ia2_state_set(pacc):
     list = []
 
-#    print('[get_ia2_state_set][pacc]: ' + str(pacc))
-
     pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
-#    print('[get_ia2_state_set][pacc2]: ' + str(pacc2))
 
     if isinstance(pacc2, IA2Lib.IAccessible2):
       states = pacc2.states
       for item in UNLOCALIZED_IA2_STATE_NAMES:
-#        print('[get_ia2_state_set][item]: ' + str(item))
         if item & states:
           list.append(UNLOCALIZED_IA2_STATE_NAMES[item])
  
+    return list
+
+def get_ia2_attributes(pacc):
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      return pacc2.attributes
+
+    return ""
+
+def get_ia2_attribute_set(pacc):
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      attrs = pacc2.attributes.strip()
+      if len(attrs) and attrs[-1] == ';':
+        attrs = attrs[:-1]
+      return attrs.split(';')
+
+    return []
+
+def get_id(pacc):
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      attrs = pacc2.attributes.split(';')
+      for attr in attrs:
+        parts = attr.split(':')
+        if len(parts) == 2 and parts[0] == 'id':
+          return parts[1]
+
+    return ""    
+
+
+def get_interface_set(pacc):
+    list = []
+
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      list.append('IAccessible2')
+
+    pacc2 = accessibleDocumentFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleDocument):
+      list.append('IAccessibleDocument')
+
+    pacc2 = accessibleText2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleText2):
+      list.append('IAccessibleText2')
+
+    pacc2 = accessibleHypertext2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleHypertext2):
+      list.append('IAccessibleHypertext2')
+
+    pacc2 = accessibleTable2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleTable2):
+      list.append('IAccessibleTable2')
+
+    pacc2 = accessibleTableCellFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleTableCell):
+      list.append('IAccessibleTableCell')
+      
+      
     return list
 
 def get_ia2_property_value(pacc, property):
@@ -223,46 +377,6 @@ def get_ia2_property_value(pacc, property):
         return -1  
  
     return -1
-
-def get_ia2_attributes(pacc):
-    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
-    if isinstance(pacc2, IA2Lib.IAccessible2):
-
-      return pacc2.attributes
-
-    return ""
-
-def get_id(pacc):
-    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
-    if isinstance(pacc2, IA2Lib.IAccessible2):
-      attrs = pacc2.attributes.split(';')
-      for attr in attrs:
-        parts = attr.split(':')
-        if len(parts) == 2 and parts[0] == 'id':
-          return parts[1]
-
-    return ""    
-
-def get_ia2_attributes_as_list(pacc):
-
-    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
-    if isinstance(pacc2, IA2Lib.IAccessible2):
-      return pacc2.attributes.split(';')
-
-    return []
-
-def get_interfaces(pacc):
-    list []
-
-    pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
-    if isinstance(pacc2, IA2Lib.IAccessible2):
-      list.push('IAccessible2')
-
-    if isinstance(pacc2, IA2Lib.IAccessible2):
-      list.push('IAccessible2')
-      
-
-    return list
 
 def get_parent(pacc):
     return pacc.acc_parent 
