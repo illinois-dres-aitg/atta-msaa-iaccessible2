@@ -171,7 +171,25 @@ def accessibleHypertext2FromAccessible(pacc, child_id):
         except Exception as e:
           return None
 
+def accessibleRelationFromAccessible(pacc, child_id):
 
+    if not isinstance(pacc, IAccessible):
+        try:
+            pacc = pacc.QueryInterface(IAccessible)
+        except COMError:
+            raise RuntimeError("%s Not an IAccessible"%pacc)
+
+    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleRelation):
+        try:
+            s=pacc.QueryInterface(IServiceProvider)
+            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleRelation)
+            if not pacc2:
+                raise ValueError
+            else:
+                return pacc2
+
+        except Exception as e:
+          return None
 
 def accessibleTable2FromAccessible(pacc, child_id):
 
@@ -282,6 +300,13 @@ def get_ia2_role(pacc):
 
     return ""
 
+def get_ia2_relation(pacc):
+    pacc2 = accessibleRelationFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleRelation):
+      return pacc2.relationType
+
+    return "none"
+
 def get_state_set(pacc):
     list = []
 
@@ -352,6 +377,10 @@ def get_interface_set(pacc):
     pacc2 = accessibleHypertext2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessibleHypertext2):
       list.append('IAccessibleHypertext2')
+
+    pacc2 = accessibleRelationFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleRelation):
+      list.append('IAccessibleRelation')
 
     pacc2 = accessibleTable2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessibleTable2):
