@@ -372,6 +372,31 @@ UNLOCALIZED_IA2_STATE_NAMES = {
     262144:     u'IA2_STATE_CHECKABLE',
     524288:     u'IA2_STATE_PINNED'}
 
+UNLOCALIZED_IA2_RELATION_TYPES = {
+ u'containingApplication' : u'IA2_RELATION_CONTAINING_APPLICATION',
+ u'containingDocument' : u'IA2_RELATION_CONTAINING_DOCUMENT',
+ u'containingTabPane' : u'IA2_RELATION_CONTAINING_TAB_PANE',
+ u'containingWindow' : u'IA2_RELATION_CONTAINING_WINDOW',
+ u'controlledBy' : u'IA2_RELATION_CONTROLLED_BY',
+ u'controllerFor' : u'IA2_RELATION_CONTROLLER_FOR',
+ u'describedBy' : u'IA2_RELATION_DESCRIBED_BY',
+ u'descriptionFor' : u'IA2_RELATION_DESCRIPTION_FOR',
+ u'embeddedBy' : u'IA2_RELATION_EMBEDDED_BY',
+ u'embeds' : u'IA2_RELATION_EMBEDS',
+ u'flowsFrom' : u'IA2_RELATION_FLOWS_FROM',
+ u'flowsTo' : u'IA2_RELATION_FLOWS_TO',
+ u'labelFor' : u'IA2_RELATION_LABEL_FOR',
+ u'labelledBy' : u'IA2_RELATION_LABELED_BY',
+ u'labelledBy' : u'IA2_RELATION_LABELLED_BY',
+ u'memberOf' : u'IA2_RELATION_MEMBER_OF',
+ u'nextTabbable' : u'IA2_RELATION_NEXT_TABBABLE',
+ u'nodeChildOf' : u'IA2_RELATION_NODE_CHILD_OF',
+ u'nodeParentOf' : u'IA2_RELATION_NODE_PARENT_OF',
+ u'parentWindowOf' : u'IA2_RELATION_PARENT_WINDOW_OF',
+ u'popupFor' : u'IA2_RELATION_POPUP_FOR',
+ u'previousTabbable' : u'IA2_RELATION_PREVIOUS_TABBABLE',
+ u'subwindowOf' : u'IA2_RELATION_SUBWINDOW_OF'}
+
 
 # SetWinEventHook() flags
 WINEVENT_OUTOFCONTEXT = 0x0
