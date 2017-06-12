@@ -44,7 +44,8 @@ import comtypesClient
 from constants import CHILDID_SELF, \
     UNLOCALIZED_ROLE_NAMES, \
     UNLOCALIZED_STATE_NAMES, \
-    UNLOCALIZED_IA2_STATE_NAMES
+    UNLOCALIZED_IA2_STATE_NAMES, \
+    UNLOCALIZED_IA2_ROLE_NAMES
 
 IA2Lib=comtypesClient.GetModule('ia2.tlb')
 IALib=comtypesClient.GetModule('oleacc.dll').IAccessible
@@ -171,26 +172,6 @@ def accessibleHypertext2FromAccessible(pacc, child_id):
         except Exception as e:
           return None
 
-def accessibleRelationFromAccessible(pacc, child_id):
-
-    if not isinstance(pacc, IAccessible):
-        try:
-            pacc = pacc.QueryInterface(IAccessible)
-        except COMError:
-            raise RuntimeError("%s Not an IAccessible"%pacc)
-
-    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleRelation):
-        try:
-            s=pacc.QueryInterface(IServiceProvider)
-            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleRelation)
-            if not pacc2:
-                raise ValueError
-            else:
-                return pacc2
-
-        except Exception as e:
-          return None
-
 def accessibleTable2FromAccessible(pacc, child_id):
 
     if not isinstance(pacc, IAccessible):
@@ -300,12 +281,18 @@ def get_ia2_role(pacc):
 
     return ""
 
-def get_ia2_relation(pacc):
-    pacc2 = accessibleRelationFromAccessible(pacc, CHILDID_SELF)
-    if isinstance(pacc2, IA2Lib.IAccessibleRelation):
-      return pacc2.relationType
+def get_ia2_relation_set(pacc):
+    list = []
 
-    return "none"
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+    try:
+        for i in range (pacc2.nRelations):
+          type = pacc2.relation(i).relationType
+          list.append(type)
+
+    except Exception as e:
+        print "ERROR cannot get IA2 relation:", str(e)
+    return list
 
 def get_state_set(pacc):
     list = []
@@ -358,6 +345,18 @@ def get_id(pacc):
 
     return ""    
 
+def has_id(pacc):
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      attrs = pacc2.attributes.split(';')
+      for attr in attrs:
+        parts = attr.split(':')
+        if len(parts) == 2 and parts[0] == 'id':
+          return True
+
+    return False
+
+
 
 def get_interface_set(pacc):
     list = []
@@ -377,10 +376,6 @@ def get_interface_set(pacc):
     pacc2 = accessibleHypertext2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessibleHypertext2):
       list.append('IAccessibleHypertext2')
-
-    pacc2 = accessibleRelationFromAccessible(pacc, CHILDID_SELF)
-    if isinstance(pacc2, IA2Lib.IAccessibleRelation):
-      list.append('IAccessibleRelation')
 
     pacc2 = accessibleTable2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessibleTable2):

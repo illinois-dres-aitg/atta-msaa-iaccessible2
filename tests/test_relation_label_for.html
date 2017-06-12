@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <title>TEST: LABEL_FOR relation</title>
+  </head>
+  <body>
+  	<main>
+	  	<h1>LABEL_FOR relation</h1>
+	  	<label id="id1" for="name">Name</label>
+	  	<input id="name"/>
+	  	<div id="addr_label">Address</div>
+	  	<input id="address" aria-labelledby="addr_label" aria-describedby="desc_label" aria-controls="controlled1"/>
+	  	<div id="desc_label">Address description</div>
+	  	<div id="controlled1">Controlled element</div>
+	</main>
+  </body>
+</html>
