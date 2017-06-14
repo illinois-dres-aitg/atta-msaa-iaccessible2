@@ -52,12 +52,12 @@ class IA2Atta(Atta):
             "description": pyia2.get_description,
             "name": pyia2.get_name,
 #            "interfaces": pyia2.get_interfaces,
-            "objectAttributes": pyia2.get_ia2_attributes_as_list,
+            "objectAttributes": pyia2.get_ia2_attribute_set,
             "parent": pyia2.get_parent,
-            "relations": pyia2.get_relation_set,
+            "relations": pyia2.get_ia2_relation_set,
             "role": pyia2.get_ia2_role,
-            "type": pyia2.get_types,
-            "interfaces": pyia2.get_interfaces,
+            "type": pyia2.get_type_set,
+            "interfaces": pyia2.get_interface_set,
             "states": pyia2.get_ia2_state_set,
         }
 
