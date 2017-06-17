@@ -44,9 +44,9 @@ class AttaAssertion(object):
     _text_wrapper = TextWrapper(width=80, break_on_hyphens=False, break_long_words=False)
     _labels = ["ASSERTION:", "STATUS:", "ACTUAL VALUE:", "MESSAGES:"]
 
-    def __init__(self, obj, assertion, atta):
+    def __init__(self, acc_elem, assertion, atta):
         self._atta = atta
-        self._obj = obj
+        self._acc_elem = acc_elem
         self._as_string = " ".join(map(str, assertion))
         self._test_class = assertion[0]
         self._test_string = assertion[1]
@@ -204,20 +204,15 @@ class AttaEventAssertion(AttaAssertion):
 class AttaPropertyAssertion(AttaAssertion):
 
 
-    def __init__(self, obj, assertion, atta):
+    def __init__(self, acc_elem, assertion, atta):
         
-        print('[ASSERTION][AttaPropertyAssertion][__class__]: ' + str(self.__class__))
-        print('[ASSERTION][AttaPropertyAssertion][obj]: ' + str(obj))
-        print('[ASSERTION][AttaPropertyAssertion][assertion]: ' + str(assertion))
-        print('[ASSERTION][AttaPropertyAssertion][atta]: ' + str(atta))
-
-        super(self.__class__, self).__init__(obj, assertion, atta)
+        super(self.__class__, self).__init__(acc_elem, assertion, atta)
         if self._expected_value == "<nil>":
             self._expected_value = "None"
 
     def _get_value(self):
         try:
-            value = self._atta.get_property_value(self._obj, self._test_string)
+            value = self._atta.get_property_value(self._acc_elem, self._test_string)
         except Exception as error:
             self._messages.append("[ASSERTION][AttaPropertyAssertion]ERROR: %s" % error)
             return None
@@ -227,13 +222,13 @@ class AttaPropertyAssertion(AttaAssertion):
 
 class AttaRelationAssertion(AttaAssertion):
 
-    def __init__(self, obj, assertion, atta):
-        super(self.__class__, self).__init__(obj, assertion, atta)
+    def __init__(self, acc_elem, assertion, atta):
+        super(self.__class__, self).__init__(acc_elem, assertion, atta)
         self._relation_type = atta.string_to_value(self._test_string)
 
     def _get_value(self):
         try:
-            targets = self._atta.get_relation_targets(self._obj, self._relation_type)
+            targets = self._atta.get_relation_targets(self._acc_elem, self._relation_type)
         except Exception as error:
             self._messages.append("[ASSERTION][AttaRelationAssertion]ERROR: %s" % error)
             return None
@@ -243,8 +238,8 @@ class AttaRelationAssertion(AttaAssertion):
 
 class AttaResultAssertion(AttaAssertion):
 
-    def __init__(self, obj, assertion, atta):
-        super(self.__class__, self).__init__(obj, assertion, atta)
+    def __init__(self, acc_elem, assertion, atta):
+        super(self.__class__, self).__init__(acc_elem, assertion, atta)
         self._method = None
         self._args = []
 
@@ -257,7 +252,7 @@ class AttaResultAssertion(AttaAssertion):
 
     def _get_value(self):
         try:
-            value = self._atta.get_result(self._method, self._args, obj=self._obj)
+            value = self._atta.get_result(self._method, self._args, acc_elem=self._acc_elem)
         except AttributeError:
             return None
         except Exception as error:
@@ -269,9 +264,9 @@ class AttaResultAssertion(AttaAssertion):
 
 class AttaDumpInfoAssertion(AttaAssertion):
 
-    def __init__(self, obj, assertion, atta):
+    def __init__(self, acc_elem, assertion, atta):
         assertion = [""] * 4
-        super(AttaDumpInfoAssertion, self).__init__(obj, assertion, atta)
+        super(AttaDumpInfoAssertion, self).__init__(acc_elem, assertion, atta)
 
     def run(self):
         info = dict.fromkeys(["properties", "relation targets", "supported methods"])

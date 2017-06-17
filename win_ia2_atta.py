@@ -21,6 +21,8 @@ from win_atta_base import Atta
 
 import pyia2
 from pyia2.utils import IA2Lib
+from pyia2.utils import AccessibleDocument
+
 
 
 class IA2Atta(Atta):
@@ -90,9 +92,6 @@ class IA2Atta(Atta):
     def _get_rendering_engine(self, **kwargs):
         """Returns a string with details of the user agent's rendering engine."""
 
-        if not self._current_document:
-            return ""
-
         return "Rendering engine unknown"
 
     def _get_system_api_version(self, **kwargs):
@@ -118,9 +117,9 @@ class IA2Atta(Atta):
     def _register_listener(self, event_type, callback, **kwargs):
         """Registers an accessible-event listener on the platform."""
 
-        print("[IA2][_register_listener][A]")
+#        print("[IA2][_register_listener][A]")
         pyia2.Registry.registerEventListener(callback, event_type)
-        print("[IA2][_register_listener][B]")
+#        print("[IA2][_register_listener][B]")
 
 
     def _deregister_listener(self, event_type, callback, **kwargs):
@@ -186,23 +185,32 @@ class IA2Atta(Atta):
 
         return parent
 
-    def get_property_value(self, obj, property_name, **kwargs):
+    def get_property_value(self, acc_elem, property_name, **kwargs):
         """Returns the value of property_name for obj."""
 
-        print("[IA2][get_property_value][obj]: " + str(obj))
+#        print("[IA2][get_property_value][acc_elem]: " + str(acc_elem))
         print("[IA2][get_property_value][property_name]: " + property_name)
 
-        if not obj and property_name != "accessible":
+        if not acc_elem and property_name != "accessible":
             raise AttributeError("Object not found")
 
-        getter = self._supported_properties.get(property_name)
-        if getter is None:
-            raise ValueError("Unsupported property: %s" % property_name)
-
-        print("[IA2][get_property_value][getter]: " + str(getter))
-
         try:
-            value =  getter(obj)
+            if property_name == 'role':
+                value =  acc_elem.role
+            if property_name == 'name':
+                value =  acc_elem.name
+            if property_name == 'value':
+                value =  acc_elem.value
+            if property_name == 'description':
+                value =  acc_elem.description
+            if property_name == 'objectAttributes':
+                value =  acc_elem.objectAttributes
+            if property_name == 'states':
+                value =  acc_elem.states
+            if property_name == 'relations':
+                value =  acc_elem.relations
+            if property_name == 'interfaces':
+                value =  acc_elem.interfaces
             print("[IA2][get_property_value][value]: " + str(value))        
         except:
             print("[IA2][get_property_value][except]")        
@@ -217,8 +225,6 @@ class IA2Atta(Atta):
             raise AttributeError("Object not found")
 
         self._print(self.LOG_DEBUG, "get_relation_targets() not implemented")
-
-
 
 
     def get_bug(self, assertion_string, expected_result, actual_result, **kwargs):
@@ -237,33 +243,16 @@ class IA2Atta(Atta):
     def _on_load_complete(self, event):
         """Callback for the platform's signal that a document has loaded."""
 
-#        self._print(self.LOG_DEBUG, self._get_uri(data.source), "LOADED: ")
-#        if self.is_ready(data.source):
-#            application = Atspi.Accessible.get_application(data.source)
-#            Atspi.Accessible.set_cache_mask(application, Atspi.Cache.DEFAULT)
+        try:
+            pyia2.com_coinitialize()
+        except:
+            print('[IA2][_on_test_event]: error cointializing')
 
-#        try:
-#            pyia2.com_coinitialize()
-#        except:
-#            print('[_on_load_complete]: error cointializing')
-
-        print("[_on_load_complete]: Start")
-        self._current_document_event   = event
-        self._current_document = pyia2.accessibleObjectFromEvent(event)
-        print("[_on_load_complete] _current_document_event:      " + str(self._current_document_event))
-        print("[_on_load_complete] current_document_iaccesible: " + str(self._current_document))
-
-        if  self._current_document:
-            self._current_role        = pyia2.get_role(self._current_document)
-            self._current_uri         = pyia2.get_value(self._current_document)
-            self._current_name        = pyia2.get_name(self._current_document)
-            self._current_child_count = pyia2.get_child_count(self._current_document)
-            self._current_children    = pyia2.get_children(self._current_document)
-            print("[_on_load_complete][_current_role]:        " + self._current_role)
-            print("[_on_load_complete][_current_uri]:         " + self._current_uri)
-            print("[_on_load_complete][_current_name]:        " + self._current_name)
-            print("[_on_load_complete][_current_child_count]: " + str(self._current_child_count))
-            print("[_on_load_complete][_current_children]:    " + str(self._current_children))
+        print("[IA2][_on_load_complete][event]: " + str(event))
+        ao = pyia2.accessibleObjectFromEvent(event)
+        print("[IA2][_on_load_complete][ao]: " + str(ao))
+        self._accessible_document = pyia2.AccessibleDocument(ao)
+        print("[IA2][_on_load_complete][_accessible_document][uri]: " + self._accessible_document.uri)
 
     def _on_test_event(self, data, **kwargs):
         """Callback for platform accessibility events the ATTA is testing."""
@@ -271,7 +260,7 @@ class IA2Atta(Atta):
         try:
             pyia2.com_coinitialize()
         except:
-            print('[_on_test_event]: error cointializing')
+            print('[IA2][_on_test_event]: error cointializing')
 
         if not self._in_current_document(data.source):
             return
@@ -295,7 +284,7 @@ def get_cmdline_options():
     return vars(parser.parse_args())
 
 if __name__ == "__main__":
-    print("Starting ATTA for MSAA+IAccessible2")
+    print("Starting ATTA for IAccessible2")
     ia2_atta = IA2Atta("localhost", 4119, False)
     if not ia2_atta.is_enabled():
         print("not enabled")
