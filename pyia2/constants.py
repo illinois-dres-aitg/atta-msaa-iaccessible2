@@ -135,6 +135,7 @@ IA2_ROLE_TEXT_FRAME       = 0x429
 IA2_ROLE_TOGGLE_BUTTON    = 0x42a
 IA2_ROLE_VIEW_PORT        = 0x42b
 IA2_ROLE_COMPLEMENTARY_CONTENT  = 0x42c
+IA2_ROLE_LANDMARK         = 0x42d
 
 
 
@@ -248,7 +249,8 @@ UNLOCALIZED_IA2_ROLE_NAMES = {
     0x429: u'IA2_ROLE_TEXT_FRAME',
     0x42a: u'IA2_ROLE_TOGGLE_BUTTON',
     0x42b: u'IA2_ROLE_VIEW_PORT',
-    0x42c: u'IA2_ROLE_COMPLEMENTARY_CONTENT'}
+    0x42c: u'IA2_ROLE_COMPLEMENTARY_CONTENT',
+    0x42d: u'IA2_ROLE_LANDMARK'}
 
 # Navigation constants
 NAVDIR_DOWN = 2
@@ -297,37 +299,38 @@ STATE_SYSTEM_VALID        = 0x1fffffff
 
 # Unlocalized state strings
 UNLOCALIZED_STATE_NAMES = {
-    1:          u'unavailable',
-    2:          u'selected',
-    4:          u'focused',
-    8:          u'pressed',
-    16:         u'checked',
-    32:         u'mixed',
-    64:         u'read only',
-    128:        u'hot tracked',
-    256:        u'default',
-    512:        u'expanded',
-    1024:       u'collapsed',
-    2048:       u'busy',
-    4096:       u'floating',
-    8192:       u'marqueed',
-    16384:      u'animated',
-    32768:      u'invisible',
-    65536:      u'offscreen',
-    131072:     u'sizeable',
-    262144:     u'moveable',
-    524288:     u'self voicing',
-    1048576:    u'focusable',
-    2097152:    u'selectable',
-    4194304:    u'linked',
-    8388608:    u'traversed',
-    16777216:   u'multiple selectable',
-    33554432:   u'extended selectable',
-    67108864:   u'alert low',
-    134217728:  u'alert medium',
-    268435456:  u'alert high',
-    536870912:  u'protected',
-    1073741824: u'has popup'}
+    1:          u'STATE_SYSTEM_UNAVAILABLE',
+    2:          u'STATE_SYSTEM_SELECTED',
+    4:          u'STATE_SYSTEM_FOCUSED',
+    8:          u'STATE_SYSTEM_PRESSED',
+    16:         u'STATE_SYSTEM_CHECKED',
+    32:         u'STATE_SYSTEM_MIXED',
+    64:         u'STATE_SYSTEM_READONLY',
+    128:        u'STATE_SYSTEM_HOTTRACKED',
+    256:        u'STATE_SYSTEM_DEFAULT',
+    512:        u'STATE_SYSTEM_EXPANDED',
+    1024:       u'STATE_SYSTEM_COLLAPSED',
+    2048:       u'STATE_SYSTEM_BUSY',
+    4096:       u'STATE_SYSTEM_FLOATING',
+    8192:       u'STATE_SYSTEM_MARQUEED',
+    16384:      u'STATE_SYSTEM_ANIMATED',
+    32768:      u'STATE_SYSTEM_INVISIBLE',
+    65536:      u'STATE_SYSTEM_OFFSCREEN',
+    131072:     u'STATE_SYSTEM_SIZEABLE',
+    262144:     u'STATE_SYSTEM_MOVEABLE',
+    524288:     u'STATE_SYSTEM_SELFVOICING',
+    1048576:    u'STATE_SYSTEM_FOCUSABLE',
+    2097152:    u'STATE_SYSTEM_SELECTABLE',
+    4194304:    u'STATE_SYSTEM_LINKED',
+    8388608:    u'STATE_SYSTEM_TRAVERSED',
+    16777216:   u'STATE_SYSTEM_MULTISELECTABLE',
+    33554432:   u'STATE_SYSTEM_EXTSELECTABLE',
+    67108864:   u'STATE_SYSTEM_ALERT_LOW',
+    134217728:  u'STATE_SYSTEM_ALERT_MEDIUM',
+    268435456:  u'STATE_SYSTEM_ALERT_HIGH',
+    536870912:  u'STATE_SYSTEM_PROTECTED',
+    1073741824: u'STATE_SYSTEM_HASPOPUP',
+    0x1fffffff: u'STATE_SYSTEM_VALID'}
 
 IA2_STATE_ACTIVE        = 0x1
 IA2_STATE_ARMED         = 0x2
@@ -374,28 +377,28 @@ UNLOCALIZED_IA2_STATE_NAMES = {
 
 UNLOCALIZED_IA2_RELATION_TYPES = {
  u'containingApplication' : u'IA2_RELATION_CONTAINING_APPLICATION',
- u'containingDocument' : u'IA2_RELATION_CONTAINING_DOCUMENT',
- u'containingTabPane' : u'IA2_RELATION_CONTAINING_TAB_PANE',
- u'containingWindow' : u'IA2_RELATION_CONTAINING_WINDOW',
- u'controlledBy' : u'IA2_RELATION_CONTROLLED_BY',
- u'controllerFor' : u'IA2_RELATION_CONTROLLER_FOR',
- u'describedBy' : u'IA2_RELATION_DESCRIBED_BY',
- u'descriptionFor' : u'IA2_RELATION_DESCRIPTION_FOR',
- u'embeddedBy' : u'IA2_RELATION_EMBEDDED_BY',
- u'embeds' : u'IA2_RELATION_EMBEDS',
- u'flowsFrom' : u'IA2_RELATION_FLOWS_FROM',
- u'flowsTo' : u'IA2_RELATION_FLOWS_TO',
- u'labelFor' : u'IA2_RELATION_LABEL_FOR',
- u'labelledBy' : u'IA2_RELATION_LABELED_BY',
- u'labelledBy' : u'IA2_RELATION_LABELLED_BY',
- u'memberOf' : u'IA2_RELATION_MEMBER_OF',
- u'nextTabbable' : u'IA2_RELATION_NEXT_TABBABLE',
- u'nodeChildOf' : u'IA2_RELATION_NODE_CHILD_OF',
- u'nodeParentOf' : u'IA2_RELATION_NODE_PARENT_OF',
- u'parentWindowOf' : u'IA2_RELATION_PARENT_WINDOW_OF',
- u'popupFor' : u'IA2_RELATION_POPUP_FOR',
- u'previousTabbable' : u'IA2_RELATION_PREVIOUS_TABBABLE',
- u'subwindowOf' : u'IA2_RELATION_SUBWINDOW_OF'}
+ u'containingDocument'    : u'IA2_RELATION_CONTAINING_DOCUMENT',
+ u'containingTabPane'     : u'IA2_RELATION_CONTAINING_TAB_PANE',
+ u'containingWindow'      : u'IA2_RELATION_CONTAINING_WINDOW',
+ u'controlledBy'          : u'IA2_RELATION_CONTROLLED_BY',
+ u'controllerFor'         : u'IA2_RELATION_CONTROLLER_FOR',
+ u'describedBy'           : u'IA2_RELATION_DESCRIBED_BY',
+ u'descriptionFor'        : u'IA2_RELATION_DESCRIPTION_FOR',
+ u'embeddedBy'            : u'IA2_RELATION_EMBEDDED_BY',
+ u'embeds'                : u'IA2_RELATION_EMBEDS',
+ u'flowsFrom'             : u'IA2_RELATION_FLOWS_FROM',
+ u'flowsTo'               : u'IA2_RELATION_FLOWS_TO',
+ u'labelFor'              : u'IA2_RELATION_LABEL_FOR',
+ u'labelledBy'            : u'IA2_RELATION_LABELED_BY',
+ u'labelledBy'            : u'IA2_RELATION_LABELLED_BY',
+ u'memberOf'              : u'IA2_RELATION_MEMBER_OF',
+ u'nextTabbable'          : u'IA2_RELATION_NEXT_TABBABLE',
+ u'nodeChildOf'           : u'IA2_RELATION_NODE_CHILD_OF',
+ u'nodeParentOf'          : u'IA2_RELATION_NODE_PARENT_OF',
+ u'parentWindowOf'        : u'IA2_RELATION_PARENT_WINDOW_OF',
+ u'popupFor'              : u'IA2_RELATION_POPUP_FOR',
+ u'previousTabbable'      : u'IA2_RELATION_PREVIOUS_TABBABLE',
+ u'subwindowOf'           : u'IA2_RELATION_SUBWINDOW_OF'}
 
 
 # SetWinEventHook() flags

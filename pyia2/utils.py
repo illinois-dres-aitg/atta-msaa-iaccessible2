@@ -51,6 +51,91 @@ from constants import CHILDID_SELF, \
 IA2Lib=comtypesClient.GetModule('ia2.tlb')
 IALib=comtypesClient.GetModule('oleacc.dll').IAccessible
 
+class AccessibleElement:
+
+  def __init__(self, ao):
+    self.test_id          = get_id(ao)
+    self.role             = get_ia2_role(ao)
+    self.name             = get_name(ao)
+    self.value            = get_value(ao)
+    self.description      = get_description(ao)        
+    self.states           = get_state_set(ao)
+    self.objectAttributes = get_ia2_attribute_set(ao)
+    self.relations        = get_ia2_relation_set(ao)
+    self.interfaces       = get_interface_set(ao)
+
+  def __str__(self):
+
+    s = ''
+
+    if self.test_id:
+        s += "         ID: " + self.test_id + "\n" 
+    else:    
+        pass
+
+    s += "       ROLE: " + self.role + "\n"
+
+    if self.name:
+        s += "       NAME: " + self.name + "\n"
+    else:
+        s += "       NAME: none" + "\n"
+
+    if self.value:        
+        s += "      VALUE: " + self.value + "\n"
+    else:
+        s += "      VALUE: none" + "\n"
+
+        
+    if self.description:     
+        s += "DESCRIPTION: " + self.description + "\n"
+    else:
+        s += "DESCRIPTION: none" + "\n"
+        
+    s += "     STATES: " + str(self.states) + "\n"
+
+    s += " ATTRIBUTES: " + str(self.objectAttributes) + "\n"
+    s += "  RELATIONS: " + str(self.relations) + "\n"
+    s += " INTERFACES: " + str(self.interfaces) + "\n"
+
+    return s
+
+
+class AccessibleDocument:
+
+  def __init__(self, ao):
+    self.busy = False
+    self.event_types = []
+    self.test_elements = []
+    self.document = AccessibleElement(ao)
+    self.uri = get_value(ao)
+    self.updateTestElements(ao)
+
+  def __str__(self):
+
+    s = ""
+    s += "\n\n===== Document =====" + "\n"
+    s += str(self.document)
+    s += "\nEVENT TYPES: " + str(self.event_types) + "\n"
+
+    for elem in self.test_elements:
+      s += "\n--- Test Element ---" + "\n"
+      s += str(elem)
+
+    return s  
+
+  def updateTestElements(self, ao):
+    self.test_elements = []
+
+    pred = lambda x: has_id(x)
+    test_elems = findAllDescendants(ao, pred)
+
+    for test_elem in test_elems:
+      self.test_elements.append(AccessibleElement(test_elem))
+
+
+
+
+
 def getDesktop():
   desktop_hwnd = windll.user32.GetDesktopWindow()
   desktop_window = accessibleObjectFromWindow(desktop_hwnd)
@@ -302,6 +387,14 @@ def get_state_set(pacc):
     for item in UNLOCALIZED_STATE_NAMES:
       if item & states:
         list.append(UNLOCALIZED_STATE_NAMES[item])
+
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+
+    if isinstance(pacc2, IA2Lib.IAccessible2):
+      states = pacc2.states
+      for item in UNLOCALIZED_IA2_STATE_NAMES:
+        if item & states:
+          list.append(UNLOCALIZED_IA2_STATE_NAMES[item])
  
     return list
 
@@ -334,6 +427,10 @@ def get_ia2_attribute_set(pacc):
       return attrs.split(';')
 
     return []
+
+def get_type_set(pacc):
+    list = []
+    return list
 
 def get_id(pacc):
     pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
