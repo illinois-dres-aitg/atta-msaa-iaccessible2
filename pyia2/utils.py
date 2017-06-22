@@ -32,6 +32,7 @@ import traceback
 
 import constants
 
+import ctypes
 from ctypes import windll, oledll, POINTER, byref, c_int
 from comtypes.automation import VARIANT
 from comtypes import CoInitializeEx
@@ -48,8 +49,9 @@ from constants import CHILDID_SELF, \
     UNLOCALIZED_IA2_ROLE_NAMES, \
     UNLOCALIZED_IA2_RELATION_TYPES
 
-IA2Lib=comtypesClient.GetModule('ia2.tlb')
-IALib=comtypesClient.GetModule('oleacc.dll').IAccessible
+# IA2Lib = ctypes.WinDLL('C:\Program Files (x86)\NVDA\lib64\IAccessible2Proxy.dll')
+IA2Lib = comtypesClient.GetModule('ia2.tlb')
+IALib  = comtypesClient.GetModule('oleacc.dll').IAccessible
 
 class AccessibleElement:
 
