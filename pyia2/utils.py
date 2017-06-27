@@ -56,15 +56,16 @@ IALib  = comtypesClient.GetModule('oleacc.dll').IAccessible
 class AccessibleElement:
 
   def __init__(self, ao):
-    self.test_id          = get_id(ao)
-    self.role             = get_ia2_role(ao)
-    self.name             = get_name(ao)
-    self.value            = get_value(ao)
-    self.description      = get_description(ao)        
-    self.states           = get_state_set(ao)
-    self.objectAttributes = get_ia2_attribute_set(ao)
-    self.relations        = get_ia2_relation_set(ao)
-    self.interfaces       = get_interface_set(ao)
+    self.test_id           = get_id(ao)
+    self.role              = get_ia2_role(ao)
+    self.name              = get_name(ao)
+    self.value             = get_value(ao)
+    self.description       = get_description(ao)        
+    self.states            = get_state_set(ao)
+    self.objectAttributes  = get_ia2_attribute_set(ao)
+    self.relations         = get_ia2_relation_set(ao)
+    self.interfaces        = get_interface_set(ao)
+    self.keyboardShortcut  = get_keyboard_shortcut(ao)
 
   def __str__(self):
 
@@ -86,6 +87,11 @@ class AccessibleElement:
         s += "      VALUE: " + self.value + "\n"
     else:
         s += "      VALUE: none" + "\n"
+
+    if self.keyboardShortcut:        
+        s += "KB SHORTCUT: " + self.keyboardShortcut + "\n"
+    else:
+        s += "KB SHORTCUT: none" + "\n"
 
         
     if self.description:     
@@ -352,6 +358,8 @@ def get_description(pacc):
 def get_name(pacc):
     return pacc.accName(CHILDID_SELF)  
 
+def get_keyboard_shortcut(pacc):
+    return pacc.accKeyboardShortcut(CHILDID_SELF)
 
 def get_role(pacc):
     return str(pacc.accRoleName())
