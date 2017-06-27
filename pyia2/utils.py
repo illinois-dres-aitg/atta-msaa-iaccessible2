@@ -377,6 +377,7 @@ def get_ia2_relation_set(pacc):
         for i in range (pacc2.nRelations):
           type = pacc2.relation(i).relationType
           list.append(UNLOCALIZED_IA2_RELATION_TYPES[type])
+#          list.append(type)
 
     except Exception as e:
         print "ERROR cannot get IA2 relation:", str(e)
