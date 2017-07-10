@@ -60,50 +60,60 @@ class AccessibleElement:
     self.role              = get_ia2_role(ao)
     self.name              = get_name(ao)
     self.value             = get_value(ao)
+    self.ia2_value         = get_ia2_value(ao)
     self.description       = get_description(ao)        
     self.states            = get_state_set(ao)
     self.objectAttributes  = get_ia2_attribute_set(ao)
     self.relations         = get_ia2_relation_set(ao)
     self.interfaces        = get_interface_set(ao)
     self.keyboardShortcut  = get_keyboard_shortcut(ao)
-
+    self.groupPosition     = get_ia2_group_position(ao)
+ 
   def __str__(self):
 
     s = ''
 
     if self.test_id:
-        s += "         ID: " + self.test_id + "\n" 
+        s += "            ID: " + self.test_id + "\n" 
     else:    
         pass
 
-    s += "       ROLE: " + self.role + "\n"
+    s += "          ROLE: " + self.role + "\n"
 
     if self.name:
-        s += "       NAME: " + self.name + "\n"
+        s += "          NAME: " + self.name + "\n"
     else:
-        s += "       NAME: none" + "\n"
+        s += "          NAME: none" + "\n"
 
     if self.value:        
-        s += "      VALUE: " + self.value + "\n"
+        s += "         VALUE: " + self.value + "\n"
     else:
-        s += "      VALUE: none" + "\n"
+        s += "         VALUE: none" + "\n"
+
+    if self.ia2_value:        
+        s += "     IA2 VALUE: " + str(self.ia2_value) + "\n"
+    else:
+        s += "     IA2 VALUE: none" + "\n"
+
 
     if self.keyboardShortcut:        
-        s += "KB SHORTCUT: " + self.keyboardShortcut + "\n"
+        s += "   KB SHORTCUT: " + self.keyboardShortcut + "\n"
     else:
-        s += "KB SHORTCUT: none" + "\n"
+        s += "   KB SHORTCUT: none" + "\n"
 
         
     if self.description:     
-        s += "DESCRIPTION: " + self.description + "\n"
+        s += "   DESCRIPTION: " + self.description + "\n"
     else:
-        s += "DESCRIPTION: none" + "\n"
+        s += "   DESCRIPTION: none" + "\n"
         
-    s += "     STATES: " + str(self.states) + "\n"
+    s += "        STATES: " + str(self.states) + "\n"
 
-    s += " ATTRIBUTES: " + str(self.objectAttributes) + "\n"
-    s += "  RELATIONS: " + str(self.relations) + "\n"
-    s += " INTERFACES: " + str(self.interfaces) + "\n"
+    s += "    ATTRIBUTES: " + str(self.objectAttributes) + "\n"
+    s += "     RELATIONS: " + str(self.relations) + "\n"
+    s += "    INTERFACES: " + str(self.interfaces) + "\n"
+
+    s += "GROUP POSITION: " + str(self.groupPosition) + "\n"
 
     return s
 
@@ -138,9 +148,9 @@ class AccessibleDocument:
     test_elems = findAllDescendants(ao, pred)
 
     for test_elem in test_elems:
-      self.test_elements.append(AccessibleElement(test_elem))
-
-
+      id = get_id(test_elem)
+      if id != 'manualMode' and id != 'log' and id != 'ATTAmessages':
+        self.test_elements.append(AccessibleElement(test_elem))
 
 
 
@@ -306,6 +316,25 @@ def accessibleTableCellFromAccessible(pacc, child_id):
         except Exception as e:
           return None
 
+def accessibleValueFromAccessible(pacc, child_id):
+
+    if not isinstance(pacc, IAccessible):
+        try:
+            pacc = pacc.QueryInterface(IAccessible)
+        except COMError:
+            raise RuntimeError("%s Not an IAccessible"%pacc)
+
+    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleValue):
+        try:
+            s=pacc.QueryInterface(IServiceProvider)
+            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleValue)
+            if not pacc2:
+                raise ValueError
+            else:
+                return pacc2
+
+        except Exception as e:
+          return None
 
 def com_coinitialize():
     CoInitializeEx(COINIT_MULTITHREADED)
@@ -317,6 +346,7 @@ def com_couninitialize():
 
 def get_value(pacc):
     return pacc.accValue(CHILDID_SELF)
+
 
 def get_child_count(pacc):
     return pacc.accChildcount    
@@ -390,6 +420,24 @@ def get_ia2_relation_set(pacc):
     except Exception as e:
         print "ERROR cannot get IA2 relation:", str(e)
     return list
+
+def get_ia2_group_position(pacc):
+    value = (-1, -1, -1)
+
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+    try:
+        value = pacc2.groupPosition
+
+    except Exception as e:
+        print "ERROR cannot get IA2 group postion:", str(e)
+
+    values = []
+    values.append('groupLevel:' + str(value[0]))
+    values.append('similarItemsInGroup:' + str(value[1]))
+    values.append('positionInGroup:' + str(value[2]))
+
+    return values
+
 
 def get_state_set(pacc):
     list = []
@@ -493,6 +541,11 @@ def get_interface_set(pacc):
     pacc2 = accessibleTableCellFromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessibleTableCell):
       list.append('IAccessibleTableCell')
+
+    pacc2 = accessibleValueFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleValue):
+      list.append('IAccessibleValue')
+      
       
       
     return list
@@ -513,6 +566,24 @@ def get_ia2_property_value(pacc, property):
 
 def get_parent(pacc):
     return pacc.acc_parent 
+
+def get_ia2_value(pacc):
+
+    pacc2 = accessibleValueFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleValue):
+        list = []
+        try:
+            list.append(pacc2.minimumValue)
+            list.append(pacc2.currentValue)
+            list.append(pacc2.maximumValue)
+            return list
+
+        except Exception as e:
+            print "[get_ia2_value] Exception cannot get IA2 value:", str(e)
+
+        return None
+    else:
+        return None        
 
 def get_relation_set(pacc):
     pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
