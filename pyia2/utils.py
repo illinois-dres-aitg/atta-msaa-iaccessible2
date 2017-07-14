@@ -236,6 +236,26 @@ def accessibleDocumentFromAccessible(pacc, child_id):
         except Exception as e:
           return None
 
+def accessibleImageFromAccessible(pacc, child_id):
+
+    if not isinstance(pacc, IAccessible):
+        try:
+            pacc = pacc.QueryInterface(IAccessible)
+        except COMError:
+            raise RuntimeError("%s Not an IAccessible"%pacc)
+
+    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleImage):
+        try:
+            s=pacc.QueryInterface(IServiceProvider)
+            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleImage)
+            if not pacc2:
+                raise ValueError
+            else:
+                return pacc2
+
+        except Exception as e:
+          return None
+
 def accessibleText2FromAccessible(pacc, child_id):
 
     if not isinstance(pacc, IAccessible):
@@ -533,6 +553,10 @@ def get_interface_set(pacc):
     pacc2 = accessibleHypertext2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessibleHypertext2):
       list.append('IAccessibleHypertext2')
+
+    pacc2 = accessibleImageFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleImage):
+      list.append('IAccessibleImage')
 
     pacc2 = accessibleTable2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessibleTable2):
