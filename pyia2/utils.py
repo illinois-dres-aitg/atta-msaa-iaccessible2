@@ -68,6 +68,21 @@ class AccessibleElement:
     self.interfaces        = get_interface_set(ao)
     self.keyboardShortcut  = get_keyboard_shortcut(ao)
     self.groupPosition     = get_ia2_group_position(ao)
+    
+    if self.ia2_value:
+      self.ia2_value_min     = str(self.ia2_value[0])
+      self.ia2_value_current = str(self.ia2_value[1])
+      self.ia2_value_max     = str(self.ia2_value[2])
+
+      if self.ia2_value_min.find(".0") >= 0:
+        self.ia2_value_min = self.ia2_value_min[:-2]
+
+      if self.ia2_value_current.find(".0") >= 0:
+        self.ia2_value_current = self.ia2_value_current[:-2]
+
+      if self.ia2_value_max.find(".0") >= 0:
+        self.ia2_value_max = self.ia2_value_max[:-2]
+
  
   def __str__(self):
 
@@ -91,7 +106,9 @@ class AccessibleElement:
         s += "         VALUE: none" + "\n"
 
     if self.ia2_value:        
-        s += "     IA2 VALUE: " + str(self.ia2_value) + "\n"
+        s += "     IA2 VALUE_MIN: " + self.ia2_value_min     + "\n"
+        s += " IA2 VALUE_CURRENT: " + self.ia2_value_current + "\n"
+        s += "     IA2 VALUE_MAX: " + self.ia2_value_max     + "\n"
     else:
         s += "     IA2 VALUE: none" + "\n"
 
@@ -607,7 +624,9 @@ def get_ia2_value(pacc):
 
         return None
     else:
-        return None        
+        return None     
+
+           
 
 def get_relation_set(pacc):
     pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
