@@ -211,6 +211,12 @@ class IA2Atta(Atta):
                 value =  acc_elem.relations
             if property_name == 'interfaces':
                 value =  acc_elem.interfaces
+            if property_name == 'minimumValue':
+                value =  acc_elem.ia2_value_min
+            if property_name == 'currentValue':
+                value =  acc_elem.ia2_value_current
+            if property_name == 'maximumValue':
+                value =  acc_elem.ia2_value_max
             print("[IA2][get_property_value][value]: " + str(value))        
         except:
             print("[IA2][get_property_value][except]")        
