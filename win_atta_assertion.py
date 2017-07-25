@@ -57,6 +57,10 @@ class AttaAssertion(object):
         self._status = self.STATUS_NOT_RUN
         self._bug = ""
 
+        # in some cases for MSAA there is more than one acceptable role value
+        if self._expected_value.find(" or ") > 0:
+            self._expected_value = self._expected_value.split(" or ")
+
     @classmethod
     def get_test_class(cls, assertion):
         if cls.CLASS_TBD in assertion:
@@ -114,16 +118,10 @@ class AttaAssertion(object):
     def _get_result(self):
         value = self._get_value()
 
-        print('[ASSERTION][_get_result][_expectation]: ' + str(self._expectation))
-        print('[ASSERTION][_get_result][value]: ' + str(value))
-        print('[ASSERTION][_get_result][_expected_result]: ' + str(self._expected_value))
-
         if self._expectation == self.EXPECTATION_IS_TYPE:
             self._actual_value = self._atta.type_to_string(value)
         else:
             self._actual_value = value
-
-        print('[ASSERTION][_get_result][_actual_value]: ' + str(self._actual_value))
 
         if self._expectation == self.EXPECTATION_IS:
             result = self._compare(self._actual_value, self._expected_value) == 0
@@ -159,7 +157,7 @@ class AttaAssertion(object):
             if self._bug:
                 self._messages.append(self._bug)
 
-        print('[ASSERTION][_get_result][result]: ' + str(result))
+#        self._atta._print(self._atta.LOG_INFO, self._test_class + ' ' + self._test_string + ' ' + self._expectation + ' ' + str(self._expected_value) + ', ' + str(result))
 
         return result
 

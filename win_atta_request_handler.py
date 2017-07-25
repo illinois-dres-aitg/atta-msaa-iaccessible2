@@ -34,33 +34,28 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         return cls._running_tests
 
     def do_GET(self):
-        print("[RH][do_GET]")
         self.dispatch()
 
     def do_POST(self):
-        print("[RH][do_POST]")
         self.dispatch()
 
     def dispatch(self):
         if len(self.path):
-            print("[RH][dispatch]: " + self.path)
 
-
-        if self.path.endswith("start"):
-            self.start_test_run()
-        elif self.path.endswith("startlisten"):
-            self.start_listen()
-        elif self.path.endswith("test"):
-            self.run_tests()
-        elif self.path.endswith("stoplisten"):
-            self.stop_listen()
-        elif self.path.endswith("end"):
-            self.end_test_run()
+            if self.path.endswith("start"):
+                self.start_test_run()
+            elif self.path.endswith("startlisten"):
+                self.start_listen()
+            elif self.path.endswith("test"):
+                self.run_tests()
+            elif self.path.endswith("stoplisten"):
+                self.stop_listen()
+            elif self.path.endswith("end"):
+                self.end_test_run()
         else:
             self.send_error(400, "UNHANDLED PATH: %s" % self.path)
 
     def send_error(self, code, message=None):
-        print("[RH][send_error]")
 
         if message is None:
             message = "Error: bad request"
@@ -101,7 +96,6 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
             length = self.headers.__getitem__("content-length")
             content = self.rfile.read(int(length))
             submission = json.loads(content.decode("utf-8"))
-            print('[RH][get_params][submission]: ' + str(submission))
         except:
             error = traceback.format_exc(limit=1, chain=False)
             errors.append(error)
@@ -123,7 +117,6 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         self._atta.log_message(format % args, self._atta.LOG_DEBUG)
 
     def _send_response(self, response, status_code=200):
-        print("[RH][_send_response]: " + str(response))
 
         if response.get("statusText") is None:
             response["statusText"] = ""
@@ -139,7 +132,6 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
             self._atta.log_message('[RH][_send_response]' + error, self._atta.LOG_ERROR)
 
     def _wait(self, start_time, method, response={}):
-        print("[RH][_wait]: ")
 
         # the method seems to always be is_ready from ATTA object
         if method.__call__():
@@ -154,7 +146,6 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         return True
 
     def _wait_for_run_request(self):
-        print("[RH][_wait_for_run_request]")
         win_atta_request_handler = self
 
         class Timer(threading.Thread):
@@ -173,7 +164,6 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         thread.start()
 
     def start_test_run(self):
-        print('[RH][start_test_run]: ' + str())
 
         AttaRequestHandler._running_tests = False
         response = {}
@@ -220,14 +210,11 @@ class AttaRequestHandler(BaseHTTPRequestHandler):
         self._send_response(response)
 
     def run_tests(self):
-        print('[RH][run_tests]')
 
         AttaRequestHandler._running_tests = True
         params = self.get_params("title", "id", "data")
         response = {}
         if self._atta is not None:
-            print('[RH][run_tests][id]:   ' + str(params.get("id")))
-            print('[RH][run_tests][data]: ' + str(params.get("data", {})))
 
             result = self._atta.run_tests(params.get("id"), params.get("data", {}))
             response.update(result)

@@ -57,7 +57,8 @@ class AccessibleElement:
 
   def __init__(self, ao):
     self.test_id           = get_id(ao)
-    self.role              = get_ia2_role(ao)
+    self.role              = get_role(ao)
+    self.ia2_role              = get_ia2_role(ao)
     self.name              = get_name(ao)
     self.value             = get_value(ao)
     self.ia2_value         = get_ia2_value(ao)
@@ -74,6 +75,7 @@ class AccessibleElement:
       self.ia2_value_current = str(self.ia2_value[1])
       self.ia2_value_max     = str(self.ia2_value[2])
 
+      # This is fix to be compatible with ARIA 1.1 Test cases and WPT
       if self.ia2_value_min.find(".0") >= 0:
         self.ia2_value_min = self.ia2_value_min[:-2]
 
@@ -214,18 +216,11 @@ def accessible2FromAccessible(pacc, child_id):
 
     if child_id==0 and not isinstance(pacc,IA2Lib.IAccessible2):
         try:
-#            print("pacc: " + str(pacc))
             s=pacc.QueryInterface(IServiceProvider)
-#            print("S: " + str(s))
-#            print("_iid_: " + str(IALib._iid_))
-#            print("IAccessible2: " + str(IA2Lib.IAccessible2))
             pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessible2)
-            #newPacc=ctypes.POINTER(IA2Lib.IAccessible2)(i)
             if not pacc2:
-    #            print ("IA2: %s"%pacc)
                 raise ValueError
             else:
-#                print ("Got IA2 object: ", pacc2)
                 return pacc2
 
         except Exception as e:

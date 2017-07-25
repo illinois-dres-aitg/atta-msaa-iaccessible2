@@ -117,9 +117,7 @@ class IA2Atta(Atta):
     def _register_listener(self, event_type, callback, **kwargs):
         """Registers an accessible-event listener on the platform."""
 
-#        print("[IA2][_register_listener][A]")
         pyia2.Registry.registerEventListener(callback, event_type)
-#        print("[IA2][_register_listener][B]")
 
 
     def _deregister_listener(self, event_type, callback, **kwargs):
@@ -135,7 +133,6 @@ class IA2Atta(Atta):
 
         value = pyia2.get_id(obj)    
         if len(value) and self._last_id != value:
-            print('[IA2][_get_id]: ' + value)
             self._last_id = value
 
         return value   
@@ -189,14 +186,17 @@ class IA2Atta(Atta):
         """Returns the value of property_name for obj."""
 
 #        print("[IA2][get_property_value][acc_elem]: " + str(acc_elem))
-        print("[IA2][get_property_value][property_name]: " + property_name)
+#        print("[IA2][get_property_value][property_name]: " + property_name)
 
         if not acc_elem and property_name != "accessible":
             raise AttributeError("Object not found")
 
         try:
             if property_name == 'role':
-                value =  acc_elem.role
+                if self._api_name == 'IAccessible2':
+                    value =  acc_elem.ia2_role
+                else:
+                    value =  acc_elem.role
             if property_name == 'name':
                 value =  acc_elem.name
             if property_name == 'value':
@@ -217,9 +217,8 @@ class IA2Atta(Atta):
                 value =  acc_elem.ia2_value_current
             if property_name == 'maximumValue':
                 value =  acc_elem.ia2_value_max
-            print("[IA2][get_property_value][value]: " + str(value))        
         except:
-            print("[IA2][get_property_value][except]")        
+            self._print(self.LOG_ERROR, "[IA2][get_property_value][except]" + self._on_exception())
             value = []    
 
         return value
@@ -249,24 +248,21 @@ class IA2Atta(Atta):
     def _on_load_complete(self, event):
         """Callback for the platform's signal that a document has loaded."""
 
-        try:
-            pyia2.com_coinitialize()
-        except:
-            print('[IA2][_on_test_event]: error cointializing')
+#        try:
+#            pyia2.com_coinitialize()
+#        except:
+#            print('[IA2][_on_test_event]: error cointializing')
 
-        print("[IA2][_on_load_complete][event]: " + str(event))
         ao = pyia2.accessibleObjectFromEvent(event)
-        print("[IA2][_on_load_complete][ao]: " + str(ao))
         self._accessible_document = pyia2.AccessibleDocument(ao)
-        print("[IA2][_on_load_complete][_accessible_document][uri]: " + self._accessible_document.uri)
 
     def _on_test_event(self, data, **kwargs):
         """Callback for platform accessibility events the ATTA is testing."""
 
-        try:
-            pyia2.com_coinitialize()
-        except:
-            print('[IA2][_on_test_event]: error cointializing')
+#        try:
+#            pyia2.com_coinitialize()
+#        except:
+#            print('[IA2][_on_test_event]: error cointializing')
 
         if not self._in_current_document(data.source):
             return

@@ -40,6 +40,10 @@ class Atta(object):
     LOG_INFO = 1
     LOG_WARNING = 2
     LOG_ERROR = 3
+    LOG_TEST_NAME = 4
+    LOG_TEST_URI = 5
+    LOG_RESULT_PASS = 6
+    LOG_RESULT_FAIL = 7
     LOG_NONE = 100
 
     LOG_LEVELS = {
@@ -47,6 +51,10 @@ class Atta(object):
         LOG_INFO: "INFO",
         LOG_WARNING: "WARNING",
         LOG_ERROR: "ERROR",
+        LOG_TEST_NAME: "TEST TITLE",
+        LOG_TEST_URI: "TEST URI",
+        LOG_RESULT_PASS: "PASS",
+        LOG_RESULT_FAIL: "FAIL",
     }
 
     FORMAT_NONE = "%(label)s%(msg)s"
@@ -145,32 +153,23 @@ class Atta(object):
     def is_ready(self, document=None, **kwargs):
         """Returns True if this ATTA is able to proceed with a test run."""
 
-#        print('[BASE][is_ready][A][_ready]: ' + str(self._ready))    
-
         if self._ready:
             return True
 
         test_name, test_uri = self._next_test
-#        print('[BASE][is_ready][C][test_name]: ' + str(test_name))    
-#        print('[BASE][is_ready][C][test_uri]:  ' + str(test_uri))    
-
         if test_name is None:
             return False
 
         if self._accessible_document is None:
             return False
 
-#        print('[BASE][is_ready][D][_accessible_document]: ' + str(document.))    
-
         uri = self._accessible_document.uri
-#        print('[BASE][is_ready][D][uri]: ' + str(uri))    
 
         self._ready = uri and uri == test_uri
 
         if self._ready:
-            self._print(self.LOG_INFO, "Test is '%s' (%s)" % (test_name, test_uri))
-
-#        print('[BASE][is_ready][E][_ready]: ' + str(self._ready))    
+            self._print(self.LOG_TEST_NAME, "%s" % test_name)
+            self._print(self.LOG_TEST_URI,  "%s" % test_uri)
 
         return self._ready
 
@@ -178,7 +177,8 @@ class Atta(object):
         """Sets the test details the ATTA should be looking for. The ATTA should
         update its "ready" status upon finding that file."""
 
-        self._print(self.LOG_INFO, "%s (%s)" % (name, url) + "\n[BASE][start_test_run] ")
+        print("\n")
+#        self._print(self.LOG_INFO, "%s (%s)\n" % (name, url))
 
         self._next_test = name, url
         self._ready = False
@@ -195,8 +195,6 @@ class Atta(object):
         """Runs the assertions on the object with the specified id, returning
         a dict with the results, the status of the run, and any messages."""
 
-        print("[BASE][run_tests]")
-
         if not self.is_enabled():
             return {"status": self.STATUS_ERROR,
                     "message": self.FAILURE_ATTA_NOT_ENABLED,
@@ -208,11 +206,8 @@ class Atta(object):
                     "results": []}
 
         to_run = self._create_platform_assertions(assertions)
-#        print("[BASE][run_tests][C][to_run]: " + str(to_run))
 
         acc_elem = self._get_accessible_element_with_id(self._accessible_document, obj_id)
-
-#        print("[BASE][run_tests][D][obj]: " + str(acc_elem))
 
         if not acc_elem:
             return {"status": self.STATUS_ERROR,
@@ -220,8 +215,6 @@ class Atta(object):
                     "results": []}
 
         results = [self._run_test(acc_elem, a) for a in to_run]
-
-#        print("[BASE][run_tests][E][results]: " + str(results))
 
         return {"status": self.STATUS_OK,
                 "results": results}
@@ -307,11 +300,7 @@ class Atta(object):
             return root
 
         children = self._get_children(root, **kwargs)
-#        print('[BASE][_find_descendant][childern]: ' + str(children))
         for child in children:
-#            print('[BASE][_find_descendant][child]: ' + str(child))
-#            print('[BASE][_find_descendant][child][role]: ' + pyia2.get_role(child))
-#            print('[BASE][_find_descendant][child][name]: ' + pyia2.get_name(child))
             element = self._find_descendant(child, pred, **kwargs)
             if element:
                 return element
@@ -376,12 +365,8 @@ class Atta(object):
     def _run_test(self, acc_elem, assertion, **kwargs):
         """Runs a single assertion on accessible element object, returning a results dict."""
 
-        print("[BASE][_run_test][acc_elem][test_id]: " + str(acc_elem.test_id))
-        print("[BASE][_run_test][assertion]: " + str(assertion))
-
         bug = ""
         test_class = self._get_assertion_test_class(assertion)
-        print("[BASE][_run_test][test_class]: " + str(test_class))
 
         if test_class is None:
             result = AttaAssertion.STATUS_FAIL
@@ -393,12 +378,9 @@ class Atta(object):
             if result == AttaAssertion.STATUS_FAIL:
                 bug = test.get_bug()
 
-        print("[BASE][_run_test][_next_test[1]]: " + str(self._next_test[1]))
         test_file = urlparse(self._next_test[1]).path
-        print("[BASE][_run_test][test_file]: " + str(test_file))
 
         status_results = self._results.get(bug or result, {})
-#        print("[BASE][_run_test][status_results]: " + str(status_results))
 
         file_results = status_results.get(test_file, [])
 
@@ -426,7 +408,11 @@ class Atta(object):
         if message:
             string = "%s %s" % (string, message)
 
-        self._print(self.LOG_INFO, string +  ", [RESULT]: %s: " % result)
+        if result == AttaAssertion.STATUS_PASS:
+            self._print(self.LOG_RESULT_PASS, "%s" % string)
+        else:
+            self._print(self.LOG_RESULT_FAIL, "%s" % string)
+            
         return {"result": result, "message": message, "log": log}
 
 
