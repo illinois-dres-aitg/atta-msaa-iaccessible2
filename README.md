@@ -41,7 +41,7 @@ Note: Assuming you have no changes to make to the active descendant tests.
    hand-edited tests with the generated tests. This is a known issue
    which we'll hopefully fix soon.
 
-3. COpy updated test files to ```wai-aria``` directory 
+3. Copy updated test files to ```wai-aria``` directory 
 
 ```
 cp temp/* wai-aria
