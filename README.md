@@ -7,7 +7,7 @@ This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the
 
 ## Setting up a virtual environment
 
-## Running the ATTA
+## Running WPT with ATTA to get test results
 
 1. You need to have either Chrome or Firefox open to one of the following URLS:
     * http://w3c-test.org/tools/runner/index.html (for using the W3C version of WPT)
