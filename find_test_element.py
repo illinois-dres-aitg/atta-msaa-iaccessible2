@@ -1,20 +1,39 @@
 import pyia2
+import inspect
 from pyia2.constants import CHILDID_SELF, \
     UNLOCALIZED_ROLE_NAMES, \
     UNLOCALIZED_STATE_NAMES
 from pyia2.utils import IA2Lib
 from pyia2.utils import AccessibleDocument
 
+doc = False
+
 def event_cb(event):
     global doc
 
-    ao = pyia2.accessibleObjectFromEvent(event)
-    doc = AccessibleDocument(ao)
-    print(doc)
+    if event.type == pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE:
+        ao = pyia2.accessibleObjectFromEvent(event)
+        doc = AccessibleDocument(ao)
+    else:
+        if doc:
+            doc.addEvent(event.type)
+            doc.updateTestElements()
+
+    if doc:
+        print(doc)
 
 
 print("This program monitors document change events for MSAA and IAccessible2 and provides information about test elements.")
-event_id = pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE
-pyia2.Registry.registerEventListener(event_cb, event_id )
+pyia2.Registry.registerEventListener(event_cb, pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE )
+
+pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_FOCUS)
+pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_STATECHANGE)
+pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_SELECTION)
+pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_SELECTIONREMOVE)
+pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_NAMECHANGE)
+pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_DESCRIPTIONCHANGE)
+
+pyia2.Registry.registerEventListener(event_cb, pyia2.IA2_EVENT_ACTIVE_DESCENDANT_CHANGED)
+pyia2.Registry.registerEventListener(event_cb, pyia2.IA2_EVENT_OBJECT_ATTRIBUTE_CHANGED)
 
 pyia2.Registry.start()

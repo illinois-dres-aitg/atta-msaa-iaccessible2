@@ -71,7 +71,19 @@ class IA2Atta(Atta):
         if not self._enabled:
             return
 
+        self._register_listener(pyia2.EVENT_OBJECT_FOCUS, atta._on_load_complete)
+        self._register_listener(pyia2.EVENT_OBJECT_STATECHANGE, atta._on_load_complete)
+        self._register_listener(pyia2.EVENT_OBJECT_SELECTION, atta._on_load_complete)
+        self._register_listener(pyia2.EVENT_OBJECT_SELECTIONREMOVE, atta._on_load_complete)
+        self._register_listener(pyia2.EVENT_OBJECT_NAMECHANGE, atta._on_load_complete)
+        self._register_listener(pyia2.EVENT_OBJECT_DESCRIPTIONCHANGE, atta._on_load_complete)
+
         self._register_listener(pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE, atta._on_load_complete)
+        self._register_listener(pyia2.IA2_EVENT_ACTIVE_DESCENDANT_CHANGED, atta._on_load_complete)
+        self._register_listener(pyia2.IA2_EVENT_OBJECT_ATTRIBUTE_CHANGED, atta._on_load_complete)
+
+
+
 
         super(IA2Atta, self).start(**kwargs)
         return
@@ -248,13 +260,13 @@ class IA2Atta(Atta):
     def _on_load_complete(self, event):
         """Callback for the platform's signal that a document has loaded."""
 
-#        try:
-#            pyia2.com_coinitialize()
-#        except:
-#            print('[IA2][_on_test_event]: error cointializing')
-
-        ao = pyia2.accessibleObjectFromEvent(event)
-        self._accessible_document = pyia2.AccessibleDocument(ao)
+        if event.type == pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE:
+            ao = pyia2.accessibleObjectFromEvent(event)
+            self._accessible_document = pyia2.AccessibleDocument(ao)
+        else:
+            if self._accessible_document:
+                self._accessible_document.addEvent(event.type)
+                self._accessible_document.updateTestElements()
 
     def _on_test_event(self, data, **kwargs):
         """Callback for platform accessibility events the ATTA is testing."""

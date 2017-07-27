@@ -47,7 +47,8 @@ from constants import CHILDID_SELF, \
     UNLOCALIZED_STATE_NAMES, \
     UNLOCALIZED_IA2_STATE_NAMES, \
     UNLOCALIZED_IA2_ROLE_NAMES, \
-    UNLOCALIZED_IA2_RELATION_TYPES
+    UNLOCALIZED_IA2_RELATION_TYPES, \
+    UNLOCALIZED_EVENT_NAMES
 
 # IA2Lib = ctypes.WinDLL('C:\Program Files (x86)\NVDA\lib64\IAccessible2Proxy.dll')
 IA2Lib = comtypesClient.GetModule('ia2.tlb')
@@ -140,19 +141,20 @@ class AccessibleElement:
 class AccessibleDocument:
 
   def __init__(self, ao):
+    self.ao = ao
     self.busy = False
-    self.event_types = []
+    self.events = []
     self.test_elements = []
     self.document = AccessibleElement(ao)
     self.uri = get_value(ao)
-    self.updateTestElements(ao)
+    self.updateTestElements()
 
   def __str__(self):
 
     s = ""
     s += "\n\n===== Document =====" + "\n"
     s += str(self.document)
-    s += "\nEVENT TYPES: " + str(self.event_types) + "\n"
+    s += "\nEVENT TYPES: " + str(self.events) + "\n"
 
     for elem in self.test_elements:
       s += "\n--- Test Element ---" + "\n"
@@ -160,11 +162,15 @@ class AccessibleDocument:
 
     return s  
 
-  def updateTestElements(self, ao):
+  def addEvent(self, event_type):
+
+    self.events.append(UNLOCALIZED_EVENT_NAMES[event_type])
+
+  def updateTestElements(self):
     self.test_elements = []
 
     pred = lambda x: has_id(x)
-    test_elems = findAllDescendants(ao, pred)
+    test_elems = findAllDescendants(self.ao, pred)
 
     for test_elem in test_elems:
       id = get_id(test_elem)
