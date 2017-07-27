@@ -9,6 +9,10 @@ This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the
 
 ## Running the ATTA
 
+You need to have either Chrome or Firefox open to one of the following URLS:
+1. http://w3c-test.org/tools/runner/index.html (for using the W3C version of WPT)
+1. localhost:8000/tools/runner/index.html (for using a local version of WPT)
+
 For IAccessible2 testing:
 
 ```
