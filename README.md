@@ -10,8 +10,8 @@ This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the
 ## Running the ATTA
 
 1. You need to have either Chrome or Firefox open to one of the following URLS:
-1.1 http://w3c-test.org/tools/runner/index.html (for using the W3C version of WPT)
-1.1 localhost:8000/tools/runner/index.html (for using a local version of WPT)
+    1. http://w3c-test.org/tools/runner/index.html (for using the W3C version of WPT)
+    1. localhost:8000/tools/runner/index.html (for using a local version of WPT)
 1. Add to the textbox label ```Run tests under path``` add ```/wai-ara/```
 1. Start the ATTA for IAccesible2 or MSAA (see options following)
 1. Press the ```Start``` button
