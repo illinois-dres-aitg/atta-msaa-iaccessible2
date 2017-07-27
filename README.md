@@ -21,7 +21,13 @@ For MSAA (or IAccessible) testing:
 python att_msaa.py
 ```
 
+## Setting up a local copy of WPT
+
+
+
 ## Updating a local copy of the test cases for ARIA 1.1
+
+The following instructions are assuming you are in the WPT root directory.
 
 1. Generate all tests and put them in a temporary directory.
 
