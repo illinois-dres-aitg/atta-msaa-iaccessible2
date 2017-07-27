@@ -29,7 +29,7 @@ python att_msaa.py
 mkdir temp; perl wai-aria/tools/make_tests.pl -d temp -s aria11
 ```   
 
-1. Remove certain test files that have been updated by hand
+2. Remove certain test files that have been updated by hand
 
 ```
 rm temp/*activedescendant*
@@ -41,13 +41,13 @@ Note: Assuming you have no changes to make to the active descendant tests.
    hand-edited tests with the generated tests. This is a known issue
    which we'll hopefully fix soon.
 
-1. COpy updated test files to ```wai-aria``` directory 
+3. COpy updated test files to ```wai-aria``` directory 
 
 ```
 cp temp/* wai-aria
 ```
-1. Having done the above, you'll have a local copy of the regenerated tests. To get them added to the official repo, you'll need to do a pull request for the upstream (w3c's official) web-platform-tests repo.
 
-HTH.
+4. Having done the above, you'll have a local copy of the regenerated tests. To get them added to the official repo, you'll need to do a pull request for the upstream (w3c's official) web-platform-tests repo.
+
 
 
