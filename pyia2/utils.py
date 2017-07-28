@@ -100,32 +100,22 @@ class AccessibleElement:
 
     if self.name:
         s += "          NAME: " + self.name + "\n"
-    else:
-        s += "          NAME: none" + "\n"
 
     if self.value:        
         s += "         VALUE: " + self.value + "\n"
-    else:
-        s += "         VALUE: none" + "\n"
 
     if self.ia2_value:        
         s += "     IA2 VALUE_MIN: " + self.ia2_value_min     + "\n"
         s += " IA2 VALUE_CURRENT: " + self.ia2_value_current + "\n"
         s += "     IA2 VALUE_MAX: " + self.ia2_value_max     + "\n"
-    else:
-        s += "     IA2 VALUE: none" + "\n"
 
 
     if self.keyboardShortcut:        
         s += "   KB SHORTCUT: " + self.keyboardShortcut + "\n"
-    else:
-        s += "   KB SHORTCUT: none" + "\n"
 
         
     if self.description:     
         s += "   DESCRIPTION: " + self.description + "\n"
-    else:
-        s += "   DESCRIPTION: none" + "\n"
         
     s += "        STATES: " + str(self.states) + "\n"
 
@@ -133,7 +123,8 @@ class AccessibleElement:
     s += "     RELATIONS: " + str(self.relations) + "\n"
     s += "    INTERFACES: " + str(self.interfaces) + "\n"
 
-    s += "GROUP POSITION: " + str(self.groupPosition) + "\n"
+    if self.groupPosition:     
+        s += "GROUP POSITION: " + str(self.groupPosition) + "\n"
 
     return s
 
@@ -152,19 +143,22 @@ class AccessibleDocument:
   def __str__(self):
 
     s = ""
-    s += "\n\n===== Document =====" + "\n"
+    s += "\n===== Accessible Document Object =====" + "\n"
     s += str(self.document)
     s += "\nEVENT TYPES: " + str(self.events) + "\n"
 
     for elem in self.test_elements:
-      s += "\n--- Test Element ---" + "\n"
+      s += "\n--- Accessible Element Objects ---" + "\n"
       s += str(elem)
 
     return s  
 
   def addEvent(self, event_type):
 
-    self.events.append(UNLOCALIZED_EVENT_NAMES[event_type])
+    event_name = UNLOCALIZED_EVENT_NAMES[event_type]
+
+    if not event_name in self.events:
+        self.events.append(event_name)
 
   def updateTestElements(self):
     self.test_elements = []

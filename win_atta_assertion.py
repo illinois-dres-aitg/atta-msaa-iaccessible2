@@ -177,21 +177,11 @@ class AttaEventAssertion(AttaAssertion):
 
     def __init__(self, obj, assertion, atta):
         super(self.__class__, self).__init__(obj, assertion, atta)
-        events = self._atta.get_event_history()
-        self._actual_value = list(map(self._atta.value_to_string, events))
-
-        # At the moment, the assumption is that we are only testing that
-        # we have an event which matches the asserted event properties.
-        self._matching_events = []
-        for event in filter(lambda x: x.get("obj") == obj, events):
-            for key, value in self._expected_value.items():
-                if str(event.get(key)) != value:
-                    break
-            else:
-                self._matching_events.append(event)
 
     def _get_result(self):
-        if self._matching_events:
+        result = self._expected_value in self._atta.get_event_history()
+
+        if result:
             self._status = self.STATUS_PASS
             return True
 

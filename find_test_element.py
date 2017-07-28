@@ -14,13 +14,13 @@ def event_cb(event):
     if event.type == pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE:
         ao = pyia2.accessibleObjectFromEvent(event)
         doc = AccessibleDocument(ao)
+        print(doc)
     else:
         if doc:
-            doc.addEvent(event.type)
-            doc.updateTestElements()
+            if doc.addEvent(event.type):
+                print(doc)
+#            doc.updateTestElements()
 
-    if doc:
-        print(doc)
 
 
 print("This program monitors document change events for MSAA and IAccessible2 and provides information about test elements.")
