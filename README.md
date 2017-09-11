@@ -19,7 +19,7 @@ This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the
   six==1.10.0
 ```
 
-## Adding IAccesible2Proxy.dll
+## Registering IAccesible2Proxy.dll
 
 There is a file in the "IAccessible2Proxy.dll" is in the "pyia2" directory that needs to be registered with the Windows operating system.
 From the Windows Command prompt type the following command:
@@ -28,8 +28,16 @@ From the Windows Command prompt type the following command:
 regsvr32 IAccessible2Proxy.dll
 ```
 
+## Enabling Accessibility Features on Firefox
+
+* I was not able to get Firefox to expose accessibility API information unless I had a screen reader running.
+* Installed [NVDA](https://www.nvaccess.org/download/) and ran it before starting Firefox before testing, but [JAWS](https://www.freedomscientific.com/Downloads/JAWS) can also be used in its demo mode.  
+
+NOTE: If you down load NVDA, please donate to support the continued development of the open source scren reader.
+
 ## Running WPT with ATTA to get test results
 
+1. Only 32-bit version of Chrome and Firefox can be tested at this time
 1. You need to have either Chrome or Firefox open to one of the following URLS:
     * http://w3c-test.org/tools/runner/index.html (for using the W3C version of WPT)
     * localhost:8000/tools/runner/index.html (for using a local version of WPT)
@@ -49,11 +57,10 @@ For MSAA (or IAccessible) testing:
 python att_msaa.py
 ```
 
-## Setting up a local copy of WPT
-
-
 
 ## Updating a local copy of the test cases for ARIA 1.1
+
+Install and configure a local copy of [W3C Web Platform Tests](https://github.com/w3c/web-platform-tests).
 
 The following instructions are assuming you are in the WPT root directory.
 
