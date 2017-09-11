@@ -7,7 +7,7 @@ This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the
 
 * Install Python version 2.7.x
 * Setup a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) for python
-* Requirements file:
+* Requirements file for virtual environment:
 
 ```
   appdirs==1.4.3
