@@ -28,6 +28,8 @@ From the Windows Command prompt type the following command:
 regsvr32 IAccessible2Proxy.dll
 ```
 
+NOTE: You need to run the command prompt as an administrator to register DLLs.
+
 ## Enabling Accessibility Features on Firefox
 
 * I was not able to get Firefox to expose accessibility API information unless I had a screen reader running.
