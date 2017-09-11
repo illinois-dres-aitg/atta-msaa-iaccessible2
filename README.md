@@ -7,6 +7,7 @@ This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the
 
 * Python version 2.7.x
 * Requirements file:
+
   appdirs==1.4.3
   comtypes==1.1.3.post2
   faulthandler==2.6
