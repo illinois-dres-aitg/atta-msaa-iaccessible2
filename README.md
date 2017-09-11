@@ -19,7 +19,7 @@ This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the
   six==1.10.0
 ```
 
-## Registering IAccesible2Proxy.dll
+## Registering IAccessible2Proxy.dll
 
 There is a file in the "IAccessible2Proxy.dll" is in the "pyia2" directory that needs to be registered with the Windows operating system.
 From the Windows Command prompt type the following command:
