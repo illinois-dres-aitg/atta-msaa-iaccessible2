@@ -8,6 +8,7 @@ This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the
 * Python version 2.7.x
 * Requirements file:
 
+```
   appdirs==1.4.3
   comtypes==1.1.3.post2
   faulthandler==2.6
@@ -16,6 +17,15 @@ This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the
   pyparsing==2.2.0
   requests==2.13.0
   six==1.10.0
+```
+
+## Adding IAccesible2Proxy.dll
+
+There is a file in the "IAccessible2Proxy.dll" is in the "pyia2" directory that needs to be registered with the Windows operating system.
+
+'''
+regsvr32 IAccessible2Proxy.dll
+'''
 
 ## Running WPT with ATTA to get test results
 
