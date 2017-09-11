@@ -22,10 +22,11 @@ This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the
 ## Adding IAccesible2Proxy.dll
 
 There is a file in the "IAccessible2Proxy.dll" is in the "pyia2" directory that needs to be registered with the Windows operating system.
+From the Windows Command prompt type the following command:
 
-'''
+```
 regsvr32 IAccessible2Proxy.dll
-'''
+```
 
 ## Running WPT with ATTA to get test results
 
