@@ -57,9 +57,14 @@ class AttaAssertion(object):
         self._status = self.STATUS_NOT_RUN
         self._bug = ""
 
-        # in some cases for MSAA there is more than one acceptable role value
-        if self._expected_value.find(" or ") > 0:
-            self._expected_value = self._expected_value.split(" or ")
+        print('[ASSERTION][INIT][_expected_value][A]' + str(self._expected_value))
+        # in some cases for MSAA there is more than one acceptable role value so convert to array
+        if self._expected_value.find("[") == 0 and self._expected_value.find("]"):
+            self._expected_value  = self._expected_value[1:]
+            self._expected_value  = self._expected_value[:-1]
+            print('[ASSERTION][INIT][_expected_value][B]' + str(self._expected_value))
+            self._expected_value = self._expected_value.split(",")
+
 
     @classmethod
     def get_test_class(cls, assertion):

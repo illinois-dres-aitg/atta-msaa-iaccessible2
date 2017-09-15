@@ -298,7 +298,7 @@ def get_cmdline_options():
     return vars(parser.parse_args())
 
 if __name__ == "__main__":
-    print("Starting ATTA for IAccessible2")
+    print("Starting ATTA for IAccessible2 Interfaces")
     ia2_atta = IA2Atta("localhost", 4119, False)
     if not ia2_atta.is_enabled():
         print("not enabled")
