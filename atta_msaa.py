@@ -24,8 +24,7 @@ from pyia2.utils import IA2Lib
 from pyia2.utils import AccessibleDocument
 
 
-
-class IA2Atta(Atta):
+class IAccessibleAtta(Atta):
     """Accessible Technology Test Adapter to test IAccessible2 support."""
 
     def __init__(self, host, port, ansi_formatting, name="ATTA for MSAA", version="0.5", api="MSAA"):
@@ -63,7 +62,7 @@ class IA2Atta(Atta):
             "states": pyia2.get_ia2_state_set,
         }
 
-        super(IA2Atta, self).__init__(host, port, name, version, api, Atta.LOG_INFO)
+        super(IAccessibleAtta, self).__init__(host, port, name, version, api, Atta.LOG_INFO)
 
     def start(self, atta, **kwargs):
         """Starts this ATTA (i.e. before running a series of tests)."""
@@ -73,13 +72,13 @@ class IA2Atta(Atta):
 
         self._register_listener(pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE, atta._on_load_complete)
 
-        super(IA2Atta, self).start(**kwargs)
+        super(IAccessibleAtta, self).start(**kwargs)
         return
 
     def _run_test(self, obj, assertion, **kwargs):
         """Runs a single assertion on obj, returning a results dict."""
 
-        return super(IA2Atta, self)._run_test(obj, assertion, **kwargs)
+        return super(IAccessibleAtta, self)._run_test(obj, assertion, **kwargs)
 
     def shutdown(self, signum=None, frame=None, **kwargs):
         """Shuts down this ATTA (i.e. after all tests have been run)."""
@@ -87,7 +86,7 @@ class IA2Atta(Atta):
         if not self._enabled:
             return
 
-        super(IA2Atta, self).shutdown(signum, frame, **kwargs)
+        super(IAccessibleAtta, self).shutdown(signum, frame, **kwargs)
 
     def _get_rendering_engine(self, **kwargs):
         """Returns a string with details of the user agent's rendering engine."""
@@ -287,10 +286,10 @@ def get_cmdline_options():
 
 if __name__ == "__main__":
     print("Starting ATTA for MSAA (e.g. IAccessible Interfaces)")
-    ia2_atta = IA2Atta("localhost", 4119, False)
-    if not ia2_atta.is_enabled():
+    ia_atta = IAccessibleAtta("localhost", 4119, False)
+    if not ia_atta.is_enabled():
         print("not enabled")
         sys.exit(1)
-    ia2_atta.start(ia2_atta)
+    ia_atta.start(ia_atta)
     pyia2.Registry.start()
 
