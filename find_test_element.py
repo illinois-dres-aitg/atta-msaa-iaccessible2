@@ -24,16 +24,22 @@ def event_cb(event):
 
 
 print("This program monitors document change events for MSAA and IAccessible2 and provides information about test elements.")
-pyia2.Registry.registerEventListener(event_cb, pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE )
 
-pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_FOCUS)
-pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_STATECHANGE)
-pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_SELECTION)
-pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_SELECTIONREMOVE)
-pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_NAMECHANGE)
-pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_DESCRIPTIONCHANGE)
+events_array = [pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE, pyia2.EVENT_OBJECT_FOCUS, pyia2.EVENT_OBJECT_STATECHANGE, pyia2.EVENT_OBJECT_SELECTION, pyia2.EVENT_OBJECT_SELECTIONREMOVE, pyia2.EVENT_OBJECT_NAMECHANGE, pyia2.EVENT_OBJECT_DESCRIPTIONCHANGE, pyia2.IA2_EVENT_ACTIVE_DESCENDANT_CHANGED, pyia2.IA2_EVENT_OBJECT_ATTRIBUTE_CHANGED]
 
-pyia2.Registry.registerEventListener(event_cb, pyia2.IA2_EVENT_ACTIVE_DESCENDANT_CHANGED)
-pyia2.Registry.registerEventListener(event_cb, pyia2.IA2_EVENT_OBJECT_ATTRIBUTE_CHANGED)
+for i in events_array:
+    pyia2.Registry.registerEventListener(event_cb, i)
+
+# pyia2.Registry.registerEventListener(event_cb, pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE )
+
+# pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_FOCUS)
+# pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_STATECHANGE)
+# pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_SELECTION)
+# pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_SELECTIONREMOVE)
+# pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_NAMECHANGE)
+# pyia2.Registry.registerEventListener(event_cb, pyia2.EVENT_OBJECT_DESCRIPTIONCHANGE)
+
+# pyia2.Registry.registerEventListener(event_cb, pyia2.IA2_EVENT_ACTIVE_DESCENDANT_CHANGED)
+# pyia2.Registry.registerEventListener(event_cb, pyia2.IA2_EVENT_OBJECT_ATTRIBUTE_CHANGED)
 
 pyia2.Registry.start()

@@ -3,7 +3,7 @@
 # win_atta_base
 # Optional base class for python27 Accessible Technology Test Adapters
 #
-# Developed by Jon Gunderson, Bei Zhang and Naijing Zhang 
+# Developed by Jon Gunderson, Bei Zhang and Naijing Zhang
 # Copyright (c) 2017 University of Illinois
 # Based on the ATTAs developed by Joanmarie Diggs (@joanmarie)
 #
@@ -171,7 +171,7 @@ class Atta(object):
 
         self._print(self.LOG_INFO, "Starting server on http://%s:%s/" % (self._host, self._port))
         self._server = HTTPServer((self._host, self._port), AttaRequestHandler)
-        
+
         AttaRequestHandler.set_atta(self)
 
 
@@ -281,8 +281,17 @@ class Atta(object):
         self._monitored_event_types = []
         self._event_history = []
 
-    def shutdown(self, signum=None, frame=None, **kwargs):
+    def shutdown(self, atta, signum=None, frame=None, **kwargs):
         """Shuts down this ATTA (i.e. after all tests have been run)."""
+        self._deregister_listener(pyia2.EVENT_OBJECT_FOCUS, atta._on_load_complete)
+        self._deregister_listener(pyia2.EVENT_OBJECT_STATECHANGE, atta._on_load_complete)
+        self._deregister_listener(pyia2.EVENT_OBJECT_SELECTION, atta._on_load_complete)
+        self._deregister_listener(pyia2.EVENT_OBJECT_SELECTIONREMOVE, atta._on_load_complete)
+        self._deregister_listener(pyia2.EVENT_OBJECT_NAMECHANGE, atta._on_load_complete)
+        self._deregister_listener(pyia2.EVENT_OBJECT_DESCRIPTIONCHANGE, atta._on_load_complete)
+        self._deregister_listener(pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE, atta._on_load_complete)
+        self._deregister_listener(pyia2.IA2_EVENT_ACTIVE_DESCENDANT_CHANGED, atta._on_load_complete)
+        self._deregister_listener(pyia2.IA2_EVENT_OBJECT_ATTRIBUTE_CHANGED, atta._on_load_complete)
 
         if not self._enabled:
             return
@@ -332,7 +341,7 @@ class Atta(object):
         if obj is None:
             return ""
 
-        value = pyia2.get_id(obj)    
+        value = pyia2.get_id(obj)
         if len(value) and self._last_id != value:
             self._last_id = value
 
@@ -396,7 +405,7 @@ class Atta(object):
                 value =  acc_elem.ia2_value_max
         except:
             self._print(self.LOG_ERROR, "[IA2][get_property_value][except]" + self._on_exception())
-            value = []    
+            value = []
 
         return value
 
@@ -577,7 +586,7 @@ class Atta(object):
             self._print(self.LOG_RESULT_PASS, "%s" % string)
         else:
             self._print(self.LOG_RESULT_FAIL, "%s" % string)
-            
+
         return {"result": result, "message": message, "log": log}
 
 

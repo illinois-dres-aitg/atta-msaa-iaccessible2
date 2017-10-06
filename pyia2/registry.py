@@ -1,5 +1,5 @@
 '''
-A registry, sort of like AT-SPI has. For now it's just an entry point for 
+A registry, sort of like AT-SPI has. For now it's just an entry point for
 registering liteners for MSAA events.
 
 Inspired by pyatspi:
@@ -43,7 +43,7 @@ class Registry(object):
     def __call__(self):
         return self
 
-    def _handleEvent(self, handle, eventID, window, objectID, childID, 
+    def _handleEvent(self, handle, eventID, window, objectID, childID,
                      threadID, timestamp):
         e = Event(eventID, window, objectID, childID, threadID, timestamp)
         for client, event_type in self.clients.keys():
@@ -52,14 +52,14 @@ class Registry(object):
                     client(e)
                 except Exception:
                     traceback.print_exc()
-            
+
     def registerEventListener(self, client, *event_types):
         for event_type in event_types:
             if self.clients.has_key((client, event_type)):
                 continue
             hook_id = \
                 windll.user32.SetWinEventHook(
-                    event_type, event_type, 0, self._c_handleEvent, 0, 0, 
+                    event_type, event_type, 0, self._c_handleEvent, 0, 0,
                     constants.WINEVENT_OUTOFCONTEXT)
             if hook_id:
                 self.clients[(client, event_type)] = hook_id
@@ -80,6 +80,7 @@ class Registry(object):
         while True:
             try:
                 client_tuple, hook_id = self.clients.popitem()
+                # print(client_tuple, hook_id)
             except KeyError:
                 break
             else:
@@ -88,7 +89,7 @@ class Registry(object):
 
     def iter_loop(self, timeout=1):
         PumpEvents(timeout)
-        
+
     def start(self):
         while True:
             try:

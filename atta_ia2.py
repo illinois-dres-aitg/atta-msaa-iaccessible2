@@ -5,7 +5,7 @@
 # Accessible Technology Test Adapter for MSAA+IAccessible2
 # Tests MSAA+IAccessible2 (server-side) implementations via MSAA+IAccessible2 (client-side)
 #
-# Developed by Jon Gunderson, Bei Zhang and Naijing Zhang 
+# Developed by Jon Gunderson, Bei Zhang and Naijing Zhang
 # Copyright (c) 2017 University of Illinois
 # Based on the ATTAs developed by Joanmarie Diggs (@joanmarie)
 #
@@ -16,6 +16,7 @@
 import re
 import sys
 import threading
+import signal
 
 from win_atta_base import Atta
 from win_atta_base import get_cmdline_options
@@ -40,7 +41,10 @@ if __name__ == "__main__":
     print("Starting ATTA for IAccessible2 Interfaces")
     ia2_atta = IAccessible2Atta("localhost", 4119, False)
     if not ia2_atta.is_enabled():
-        print("not enabled")
+        print("ia2_atta is not enabled.")
         sys.exit(1)
     ia2_atta.start(ia2_atta)
     pyia2.Registry.start()
+    print("Shutting down...")
+    ia2_atta.shutdown(ia2_atta, signal.SIGTERM)
+    sys.exit(1)
