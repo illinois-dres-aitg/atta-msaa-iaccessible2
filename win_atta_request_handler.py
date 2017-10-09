@@ -3,7 +3,7 @@
 # win_atta_request_handler
 # Optional Request Handler for Accessible Technology Test Adapters
 #
-# Developed by Jon Gunderson, Bei Zhang and Naijing Zhang 
+# Developed by Jon Gunderson, Mihir Kumar and Bei Zhang
 # Copyright (c) 2017 University of Illinois
 # Based on the ATTAs developed by Joanmarie Diggs (@joanmarie)
 #
