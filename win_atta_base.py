@@ -3,7 +3,7 @@
 # win_atta_base
 # Optional base class for python27 Accessible Technology Test Adapters
 #
-# Developed by Jon Gunderson, Bei Zhang and Naijing Zhang
+# Developed by Jon Gunderson, Mihir Kumar and Bei Zhang
 # Copyright (c) 2017 University of Illinois
 # Based on the ATTAs developed by Joanmarie Diggs (@joanmarie)
 #
@@ -353,26 +353,23 @@ class Atta(object):
         try:
             count = pyia2.get_child_count(obj)
         except:
-            self._print(self.LOG_ERROR, "[IA2][_get_children]" + self._on_exception())
+            self._print(self.LOG_ERROR, "[BASE][_get_children]" + self._on_exception())
             return []
 
-#        print("[IA2][_get_children][obj][count]: " + str(count))
+#        print("[BASE][_get_children][obj][count]: " + str(count))
 
         try:
             children = pyia2.get_children(obj)
         except:
-            self._print(self.LOG_ERROR, "[IA2][_get_children]" + self._on_exception())
+            self._print(self.LOG_ERROR, "[BASE][_get_children]" + self._on_exception())
             return []
 
-#        print("[IA2][_get_children][obj][children]: " + str(children))
+#        print("[BASE][_get_children][obj][children]: " + str(children))
 
         return children
 
     def get_property_value(self, acc_elem, property_name, **kwargs):
         """Returns the value of property_name for obj."""
-
-#        print("[IA2][get_property_value][acc_elem]: " + str(acc_elem))
-#        print("[IA2][get_property_value][property_name]: " + property_name)
 
         if not acc_elem and property_name != "accessible":
             raise AttributeError("Object not found")
@@ -404,8 +401,10 @@ class Atta(object):
             if property_name == 'maximumValue':
                 value =  acc_elem.ia2_value_max
         except:
-            self._print(self.LOG_ERROR, "[IA2][get_property_value][except]" + self._on_exception())
+            self._print(self.LOG_ERROR, "[BASE][get_property_value][except]" + self._on_exception())
             value = []
+
+#        self._print(self.LOG_INFO, "[BASE][get_property_value][" + property_name + "]: " + str(value))
 
         return value
 
@@ -609,7 +608,7 @@ class Atta(object):
         try:
             parent = pyia2.get_parent(obj)
         except:
-            self._print(self.LOG_ERROR, "[IA2][_get_parent]" + self._on_exception())
+            self._print(self.LOG_ERROR, "[BASE][_get_parent]" + self._on_exception())
             return None
 
         return parent
