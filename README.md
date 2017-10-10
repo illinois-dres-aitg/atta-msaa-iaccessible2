@@ -31,15 +31,16 @@ regsvr32 IAccessible2Proxy.dll
 
 NOTE: You need to run the command prompt as an administrator to register DLLs.
 
-## Enabling IAccessible and IAccessible2 Features on Chrome
+## Enabling Accessibility APIs on Chrome
 
 * Use the chrome://accessibility settings URL and check all the boxes related to using the accessibility API.
 * No need to restart Chrome it will support IAccessible and IAccessible2 interfaces once you enable in the accessibiity settings.
 
-## Enabling IAccessible and IAccessible2 Features on Firefox
+## Enabling Accessibility APIs on Firefox
 
 * I was not able to get Firefox to expose accessibility API information unless I had a screen reader running.
-* Installed [NVDA](https://www.nvaccess.org/download/) and ran it before starting Firefox before testing, but [JAWS](https://www.freedomscientific.com/Downloads/JAWS) can also be used in its demo mode.  Once the accessibility API is enabled, you can exit the screen reader.
+* Installed [NVDA](https://www.nvaccess.org/download/) and ran it before starting Firefox before testing, but [JAWS](https://www.freedomscientific.com/Downloads/JAWS) can also be used in its demo mode.  
+* Once the accessibility API is enabled, you can exit the screen reader.
 
 NOTE: If you down load NVDA, please donate to support the continued development of the open source scren reader.
 
