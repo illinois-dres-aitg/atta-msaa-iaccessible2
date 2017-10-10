@@ -1,7 +1,7 @@
-# atta-msaa-iaccessible2
+# Assistive Technology Test Adapters (ATTA) for IAccessible (MSAA) and IAccessible2
 Assistive Technology Test Adapter (ATTA) for use in testing ARIA implementation using the [web platform test suite](http://w3c-test.org/tools/runner/index.html).
 
-This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the Windows operating system and are designed to support automated testing of ARIA implementations in browsers implementing MSAA+IAccessible2.   Currently can <strong>only</strong> test implementation on 32-bit versions of browser (e.g. Google Chrome and Mozilla Firefox), due to the lack of DLLs to support 64 bit access to IAccessible2 interfaces.
+This project contains ATTAs for IAccessible (MSAA) and IAccessible2 accessibility APIs for the Microsoft Windows operating system and are designed to support automated testing of W3C [Acessible Rich Internet Application 1.1](https://www.w3.org/TR/wai-aria-1.1/) and W3C [CORE Accessibility API Mapping](https://www.w3.org/TR/core-aam-1.1/) implementation in browsers implementing MSAA+IAccessible2.   
 
 ## Python Requirements
 
@@ -31,22 +31,26 @@ regsvr32 IAccessible2Proxy.dll
 
 NOTE: You need to run the command prompt as an administrator to register DLLs.
 
-## Enabling Accessibility Features on Firefox
+## Enabling Accessibility APIs on Chrome
+
+* Use the [chrome://accessibility](chrome://accessibility) settings URL and check all the boxes related to using the accessibility API.
+* No need to restart Chrome it will support IAccessible and IAccessible2 interfaces once you enable in the accessibiity settings.
+
+## Enabling Accessibility APIs on Firefox
 
 * I was not able to get Firefox to expose accessibility API information unless I had a screen reader running.
 * Installed [NVDA](https://www.nvaccess.org/download/) and ran it before starting Firefox before testing, but [JAWS](https://www.freedomscientific.com/Downloads/JAWS) can also be used in its demo mode.  
+* Once the accessibility API is enabled, you can exit the screen reader.
 
 NOTE: If you down load NVDA, please donate to support the continued development of the open source scren reader.
 
-## Running WPT with ATTA to get test results
+## Running WPT with ATTA to get ARIA 1.1 and CORE AAM test results
 
-1. Only 32-bit version of Chrome and Firefox can be tested at this time
-1. You need to have either Chrome or Firefox open to one of the following URLS:
-    * http://w3c-test.org/tools/runner/index.html (for using the W3C version of WPT)
-    * localhost:8000/tools/runner/index.html (for using a local version of WPT)
-1. Add to the textbox label ```Run tests under path``` add ```/wai-ara/```
+1. Start Chrome or Firefox (e.g. typically canary or firefox nightly) to start a test run
+1. Go to the [W3C WPT Test Runner](http://w3c-test.org/tools/runner/index.html )
+1. To run the [ARIA 1.1 test cases](https://www.w3.org/wiki/ARIA_1.1_Testable_Statements), enter  ```/wai-ara/``` to the textbox label ```Run tests under path```.
 1. Start the ATTA for IAccesible2 or MSAA (see options following)
-1. Press the ```Start``` button
+1. Press the ```Start``` button in the WPT Test Runner
 
 For IAccessible2 testing:
 
@@ -59,6 +63,7 @@ For MSAA (or IAccessible) testing:
 ```
 python att_msaa.py
 ```
+1. To run the [CORE AMM test cases](https://www.w3.org/wiki/Core_AAM_1.1_Testable_Statements) use the same proceedure as for ARIA 1.1, but for the textbox labelled ```Run tests under path``` use ```/core-aam/```.
 
 
 ## Updating a local copy of the test cases for ARIA 1.1
