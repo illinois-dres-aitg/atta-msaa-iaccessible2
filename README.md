@@ -1,4 +1,4 @@
-# atta-msaa-iaccessible2
+# Assistive Technology Test Adapters (ATTA) for IAccessible (MSAA) and IAccessible2
 Assistive Technology Test Adapter (ATTA) for use in testing ARIA implementation using the [web platform test suite](http://w3c-test.org/tools/runner/index.html).
 
 This project contains ATTAs for IAccessible (MSAA) and IAccessible2 accessibility APIs for the Microsoft Windows operating system and are designed to support automated testing of W3C [Acessible Rich Internet Application 1.1](https://www.w3.org/TR/wai-aria-1.1/) and W3C [CORE Accessibility API Mapping](https://www.w3.org/TR/core-aam-1.1/) implementation in browsers implementing MSAA+IAccessible2.   
