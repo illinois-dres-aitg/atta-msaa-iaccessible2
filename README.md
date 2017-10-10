@@ -1,7 +1,7 @@
 # atta-msaa-iaccessible2
 Assistive Technology Test Adapter (ATTA) for use in testing ARIA implementation using the [web platform test suite](http://w3c-test.org/tools/runner/index.html).
 
-This project contains ATTAs for IAccessible2 and MSAA accessibility APIs for the Windows operating system and are designed to support automated testing of ARIA implementations in browsers implementing MSAA+IAccessible2.   Currently can <strong>only</strong> test implementation on 32-bit versions of browser (e.g. Google Chrome and Mozilla Firefox), due to the lack of DLLs to support 64 bit access to IAccessible2 interfaces.
+This project contains ATTAs for IAccessible (MSAA) and IAccessible2 accessibility APIs for the Microsoft Windows operating system and are designed to support automated testing of W3C [Acessible Rich Internet Application 1.1](https://www.w3.org/TR/wai-aria-1.1/) and W3C [CORE Accessibility API Mapping](https://www.w3.org/TR/core-aam-1.1/) implementation in browsers implementing MSAA+IAccessible2.   
 
 ## Python Requirements
 
