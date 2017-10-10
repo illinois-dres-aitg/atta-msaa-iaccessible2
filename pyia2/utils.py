@@ -59,7 +59,8 @@ class AccessibleElement:
   def __init__(self, ao):
     self.test_id           = get_id(ao)
     self.role              = get_role(ao)
-    self.ia2_role              = get_ia2_role(ao)
+    self.ia2_role          = get_ia2_role(ao)
+    self.localizedExtendedRole = get_extended_role(ao)
     self.name              = get_name(ao)
     self.value             = get_value(ao)
     self.ia2_value         = get_ia2_value(ao)
@@ -68,7 +69,7 @@ class AccessibleElement:
     self.objectAttributes  = get_ia2_attribute_set(ao)
     self.relations         = get_ia2_relation_set(ao)
     self.interfaces        = get_interface_set(ao)
-    self.keyboardShortcut  = get_keyboard_shortcut(ao)
+    self.accKeyboardShortcut  = get_keyboard_shortcut(ao)
     self.groupPosition     = get_ia2_group_position(ao)
 
     if self.ia2_value:
@@ -98,6 +99,8 @@ class AccessibleElement:
 
     s += "          ROLE: " + self.role + "\n"
 
+    s += " EXTENDED ROLE: " + str(self.localizedExtendedRole) + "\n"
+
     if self.name:
         s += "          NAME: " + self.name + "\n"
 
@@ -110,8 +113,8 @@ class AccessibleElement:
         s += "     IA2 VALUE_MAX: " + self.ia2_value_max     + "\n"
 
 
-    if self.keyboardShortcut:
-        s += "   KB SHORTCUT: " + self.keyboardShortcut + "\n"
+    if self.accKeyboardShortcut:
+        s += "   KB SHORTCUT: " + self.accKeyboardShortcut + "\n"
 
 
     if self.description:
@@ -428,6 +431,21 @@ def get_keyboard_shortcut(pacc):
 
 def get_role(pacc):
     return str(pacc.accRoleName())
+
+def get_extended_role(pacc):
+    value = ""
+
+    pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
+    try:
+        value = pacc2.localizedExtendedRole
+
+        if value == '':
+            value = 'null'
+
+    except Exception as e:
+        print "ERROR cannot get IA2 extended role:", str(e)
+
+    return value
 
 def get_ia2_role(pacc):
     pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)

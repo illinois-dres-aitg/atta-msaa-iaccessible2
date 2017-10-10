@@ -402,6 +402,11 @@ class Atta(object):
                 value =  acc_elem.ia2_value_max
             if property_name == 'groupPosition':
                 value =  acc_elem.groupPosition
+            if property_name == 'localizedExtendedRole':
+                value =  acc_elem.localizedExtendedRole
+            if property_name == 'accKeyboardShortcut':
+                value =  acc_elem.accKeyboardShortcut
+
         except:
             self._print(self.LOG_ERROR, "[BASE][get_property_value][except]" + self._on_exception())
             value = []
