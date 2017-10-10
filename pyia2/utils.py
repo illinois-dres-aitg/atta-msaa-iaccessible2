@@ -48,7 +48,8 @@ from constants import CHILDID_SELF, \
     UNLOCALIZED_IA2_STATE_NAMES, \
     UNLOCALIZED_IA2_ROLE_NAMES, \
     UNLOCALIZED_IA2_RELATION_TYPES, \
-    UNLOCALIZED_EVENT_NAMES
+    UNLOCALIZED_EVENT_NAMES, \
+    IA2_TEXT_OFFSET_LENGTH
 
 # IA2Lib = ctypes.WinDLL('C:\Program Files (x86)\NVDA\lib64\IAccessible2Proxy.dll')
 IA2Lib = comtypesClient.GetModule('ia2.tlb')
@@ -67,6 +68,7 @@ class AccessibleElement:
     self.description       = get_description(ao)
     self.states            = get_state_set(ao)
     self.objectAttributes  = get_ia2_attribute_set(ao)
+    self.textAttributes    = get_ia2_text_attribute_set(ao)
     self.relations         = get_ia2_relation_set(ao)
     self.interfaces        = get_interface_set(ao)
     self.accKeyboardShortcut  = get_keyboard_shortcut(ao)
@@ -97,37 +99,39 @@ class AccessibleElement:
     else:
         pass
 
-    s += "          ROLE: " + self.role + "\n"
+    s += "           ROLE: " + self.role + "\n"
 
-    s += " EXTENDED ROLE: " + str(self.localizedExtendedRole) + "\n"
+    if self.localizedExtendedRole:
+        s += "  EXTENDED ROLE: " + str(self.localizedExtendedRole) + "\n"
 
     if self.name:
-        s += "          NAME: " + self.name + "\n"
+        s += "           NAME: " + self.name + "\n"
 
     if self.value:
-        s += "         VALUE: " + self.value + "\n"
+        s += "          VALUE: " + self.value + "\n"
 
     if self.ia2_value:
-        s += "     IA2 VALUE_MIN: " + self.ia2_value_min     + "\n"
-        s += " IA2 VALUE_CURRENT: " + self.ia2_value_current + "\n"
-        s += "     IA2 VALUE_MAX: " + self.ia2_value_max     + "\n"
+        s += "      IA2 VALUE_MIN: " + self.ia2_value_min     + "\n"
+        s += "  IA2 VALUE_CURRENT: " + self.ia2_value_current + "\n"
+        s += "      IA2 VALUE_MAX: " + self.ia2_value_max     + "\n"
 
 
     if self.accKeyboardShortcut:
-        s += "   KB SHORTCUT: " + self.accKeyboardShortcut + "\n"
+        s += "    KB SHORTCUT: " + self.accKeyboardShortcut + "\n"
 
 
     if self.description:
-        s += "   DESCRIPTION: " + self.description + "\n"
+        s += "    DESCRIPTION: " + self.description + "\n"
 
     s += "        STATES: " + str(self.states) + "\n"
 
-    s += "    ATTRIBUTES: " + str(self.objectAttributes) + "\n"
-    s += "     RELATIONS: " + str(self.relations) + "\n"
-    s += "    INTERFACES: " + str(self.interfaces) + "\n"
+    s += "     ATTRIBUTES: " + str(self.objectAttributes) + "\n"
+    s += "TEXT ATTRIBUTES: " + str(self.textAttributes) + "\n"
+    s += "      RELATIONS: " + str(self.relations) + "\n"
+    s += "     INTERFACES: " + str(self.interfaces) + "\n"
 
     if self.groupPosition:
-        s += "GROUP POSITION: " + str(self.groupPosition) + "\n"
+        s += " GROUP POSITION: " + str(self.groupPosition) + "\n"
 
     return s
 
@@ -274,7 +278,7 @@ def accessibleImageFromAccessible(pacc, child_id):
         except Exception as e:
           return None
 
-def accessibleText2FromAccessible(pacc, child_id):
+def accessibleTextFromAccessible(pacc, child_id):
 
     if not isinstance(pacc, IAccessible):
         try:
@@ -282,10 +286,10 @@ def accessibleText2FromAccessible(pacc, child_id):
         except COMError:
             raise RuntimeError("%s Not an IAccessible"%pacc)
 
-    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleText2):
+    if child_id==0 and not isinstance(pacc,IA2Lib.IAccessibleText):
         try:
             s=pacc.QueryInterface(IServiceProvider)
-            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleText2)
+            pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessibleText)
             if not pacc2:
                 raise ValueError
             else:
@@ -540,6 +544,18 @@ def get_ia2_attribute_set(pacc):
 
     return []
 
+def get_ia2_text_attribute_set(pacc):
+    pacc2 = accessibleTextFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleText):
+      # -1 means using the constant
+      [startOffset, endOffset, attrs] =pacc2.attributes(IA2_TEXT_OFFSET_LENGTH)
+      print("TEXT ATTRIBUTES: " + str(attrs))
+      if len(attrs) and attrs[-1] == ';':
+        attrs = attrs[:-1]
+      return attrs.split(';')
+
+    return []
+
 def get_type_set(pacc):
     list = []
     return list
@@ -579,9 +595,9 @@ def get_interface_set(pacc):
     if isinstance(pacc2, IA2Lib.IAccessibleDocument):
       list.append('IAccessibleDocument')
 
-    pacc2 = accessibleText2FromAccessible(pacc, CHILDID_SELF)
-    if isinstance(pacc2, IA2Lib.IAccessibleText2):
-      list.append('IAccessibleText2')
+    pacc2 = accessibleTextFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleText):
+      list.append('IAccessibleText')
 
     pacc2 = accessibleHypertext2FromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessibleHypertext2):
