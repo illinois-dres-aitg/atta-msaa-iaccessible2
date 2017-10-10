@@ -33,7 +33,7 @@ NOTE: You need to run the command prompt as an administrator to register DLLs.
 
 ## Enabling Accessibility APIs on Chrome
 
-* Use the chrome://accessibility settings URL and check all the boxes related to using the accessibility API.
+* Use the [chrome://accessibility](chrome://accessibility) settings URL and check all the boxes related to using the accessibility API.
 * No need to restart Chrome it will support IAccessible and IAccessible2 interfaces once you enable in the accessibiity settings.
 
 ## Enabling Accessibility APIs on Firefox
