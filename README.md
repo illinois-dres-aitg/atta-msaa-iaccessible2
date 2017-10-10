@@ -42,7 +42,7 @@ NOTE: If you down load NVDA, please donate to support the continued development 
 
 1. Start Chrome or Firefox (e.g. typically canary or firefox nightly) to start a test run
 1. Go to the [W3C WPT Test Runner](http://w3c-test.org/tools/runner/index.html )
-1. To run the [ARIA 1.1](https://www.w3.org/wiki/ARIA_1.1_Testable_Statements) test cases, enter  ```/wai-ara/``` to the textbox label ```Run tests under path```.
+1. To run the [ARIA 1.1 test cases](https://www.w3.org/wiki/ARIA_1.1_Testable_Statements), enter  ```/wai-ara/``` to the textbox label ```Run tests under path```.
 1. Start the ATTA for IAccesible2 or MSAA (see options following)
 1. Press the ```Start``` button in the WPT Test Runner
 
@@ -57,7 +57,7 @@ For MSAA (or IAccessible) testing:
 ```
 python att_msaa.py
 ```
-1. To run the [CORE AMM](https://www.w3.org/TR/core-aam-1.1/) tests use the same proceedure as for ARIA 1.1, but for the textbox labelled ```Run tests under path``` use ```/core-aam/```.
+1. To run the [CORE AMM Test Cases](https://www.w3.org/wiki/Core_AAM_1.1_Testable_Statements) use the same proceedure as for ARIA 1.1, but for the textbox labelled ```Run tests under path``` use ```/core-aam/```.
 
 
 ## Updating a local copy of the test cases for ARIA 1.1
