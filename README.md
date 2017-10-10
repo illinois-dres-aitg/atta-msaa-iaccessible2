@@ -57,7 +57,7 @@ For MSAA (or IAccessible) testing:
 ```
 python att_msaa.py
 ```
-1. Add to the textbox label ```Run tests under path``` add ```/wai-ara/``` for testing ARIA 1.1 implementation
+1. To run the CORE AMM test use the same proceedure as for ARIA 1.1, but for the textbox labelled ```Run tests under path``` add ```/core-aam/``` for testing CORE AMM implementation
 
 
 ## Updating a local copy of the test cases for ARIA 1.1
