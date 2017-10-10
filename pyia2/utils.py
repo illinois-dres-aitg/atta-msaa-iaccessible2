@@ -63,14 +63,14 @@ class AccessibleElement:
     self.name              = get_name(ao)
     self.value             = get_value(ao)
     self.ia2_value         = get_ia2_value(ao)
-    self.description       = get_description(ao)        
+    self.description       = get_description(ao)
     self.states            = get_state_set(ao)
     self.objectAttributes  = get_ia2_attribute_set(ao)
     self.relations         = get_ia2_relation_set(ao)
     self.interfaces        = get_interface_set(ao)
     self.keyboardShortcut  = get_keyboard_shortcut(ao)
     self.groupPosition     = get_ia2_group_position(ao)
-    
+
     if self.ia2_value:
       self.ia2_value_min     = str(self.ia2_value[0])
       self.ia2_value_current = str(self.ia2_value[1])
@@ -86,14 +86,14 @@ class AccessibleElement:
       if self.ia2_value_max.find(".0") >= 0:
         self.ia2_value_max = self.ia2_value_max[:-2]
 
- 
+
   def __str__(self):
 
     s = ''
 
     if self.test_id:
-        s += "            ID: " + self.test_id + "\n" 
-    else:    
+        s += "            ID: " + self.test_id + "\n"
+    else:
         pass
 
     s += "          ROLE: " + self.role + "\n"
@@ -101,29 +101,29 @@ class AccessibleElement:
     if self.name:
         s += "          NAME: " + self.name + "\n"
 
-    if self.value:        
+    if self.value:
         s += "         VALUE: " + self.value + "\n"
 
-    if self.ia2_value:        
+    if self.ia2_value:
         s += "     IA2 VALUE_MIN: " + self.ia2_value_min     + "\n"
         s += " IA2 VALUE_CURRENT: " + self.ia2_value_current + "\n"
         s += "     IA2 VALUE_MAX: " + self.ia2_value_max     + "\n"
 
 
-    if self.keyboardShortcut:        
+    if self.keyboardShortcut:
         s += "   KB SHORTCUT: " + self.keyboardShortcut + "\n"
 
-        
-    if self.description:     
+
+    if self.description:
         s += "   DESCRIPTION: " + self.description + "\n"
-        
+
     s += "        STATES: " + str(self.states) + "\n"
 
     s += "    ATTRIBUTES: " + str(self.objectAttributes) + "\n"
     s += "     RELATIONS: " + str(self.relations) + "\n"
     s += "    INTERFACES: " + str(self.interfaces) + "\n"
 
-    if self.groupPosition:     
+    if self.groupPosition:
         s += "GROUP POSITION: " + str(self.groupPosition) + "\n"
 
     return s
@@ -151,7 +151,7 @@ class AccessibleDocument:
       s += "\n--- Accessible Element Objects ---" + "\n"
       s += str(elem)
 
-    return s  
+    return s
 
   def addEvent(self, event_type):
 
@@ -159,6 +159,9 @@ class AccessibleDocument:
 
     if not event_name in self.events:
         self.events.append(event_name)
+        return True
+
+    return False
 
   def updateTestElements(self):
     self.test_elements = []
@@ -381,14 +384,14 @@ def get_value(pacc):
 
 
 def get_child_count(pacc):
-    return pacc.accChildcount    
+    return pacc.accChildcount
 
 def get_child_at_index(pacc, index):
     try:
       child = pacc.accChild(index)
     except:
       child = None
-    return child  
+    return child
 
 def get_children(pacc):
     """Returns the children of obj or [] upon failure or absence of children."""
@@ -418,7 +421,7 @@ def get_description(pacc):
     return str(pacc.accDescription(CHILDID_SELF))
 
 def get_name(pacc):
-    return pacc.accName(CHILDID_SELF)  
+    return pacc.accName(CHILDID_SELF)
 
 def get_keyboard_shortcut(pacc):
     return pacc.accKeyboardShortcut(CHILDID_SELF)
@@ -486,7 +489,7 @@ def get_state_set(pacc):
       for item in UNLOCALIZED_IA2_STATE_NAMES:
         if item & states:
           list.append(UNLOCALIZED_IA2_STATE_NAMES[item])
- 
+
     return list
 
 def get_ia2_state_set(pacc):
@@ -499,7 +502,7 @@ def get_ia2_state_set(pacc):
       for item in UNLOCALIZED_IA2_STATE_NAMES:
         if item & states:
           list.append(UNLOCALIZED_IA2_STATE_NAMES[item])
- 
+
     return list
 
 def get_ia2_attributes(pacc):
@@ -532,7 +535,7 @@ def get_id(pacc):
         if len(parts) == 2 and parts[0] == 'id':
           return parts[1]
 
-    return ""    
+    return ""
 
 def has_id(pacc):
     pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
@@ -581,9 +584,9 @@ def get_interface_set(pacc):
     pacc2 = accessibleValueFromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessibleValue):
       list.append('IAccessibleValue')
-      
-      
-      
+
+
+
     return list
 
 def get_ia2_property_value(pacc, property):
@@ -596,12 +599,12 @@ def get_ia2_property_value(pacc, property):
       try:
         return states & constants[property]
       except:
-        return -1  
- 
+        return -1
+
     return -1
 
 def get_parent(pacc):
-    return pacc.acc_parent 
+    return pacc.acc_parent
 
 def get_ia2_value(pacc):
 
@@ -619,9 +622,9 @@ def get_ia2_value(pacc):
 
         return None
     else:
-        return None     
+        return None
 
-           
+
 
 def get_relation_set(pacc):
     pacc2 = self.accessible2FromAccessible(pacc, CHILDID_SELF)
@@ -651,7 +654,7 @@ def get_relation_set(pacc):
         except Exception as e:
             print "[get_relation_set] Exception cannot get IA2 relation:", str(e)
 
-    return "None"    
+    return "None"
 
 
 def findDescendant(acc, pred, breadth_first=False):

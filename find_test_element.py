@@ -18,8 +18,8 @@ def event_cb(event):
     else:
         if doc:
             if doc.addEvent(event.type):
+                doc.updateTestElements()
                 print(doc)
-#            doc.updateTestElements()
 
 
 

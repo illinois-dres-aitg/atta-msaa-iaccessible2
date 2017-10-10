@@ -3,7 +3,7 @@
 # atta_assertion
 # Shareable Assertion support for Accessible Technology Test Adapters
 #
-# Developed by Jon Gunderson, Bei Zhang and Naijing Zhang 
+# Developed by Jon Gunderson, Mihir Kumar and Bei Zhang
 # Copyright (c) 2017 University of Illinois
 # Based on the ATTAs developed by Joanmarie Diggs (@joanmarie)
 #
@@ -184,7 +184,14 @@ class AttaEventAssertion(AttaAssertion):
         super(self.__class__, self).__init__(obj, assertion, atta)
 
     def _get_result(self):
-        result = self._expected_value in self._atta.get_event_history()
+#        result = self._expected_value in self._atta.get_event_history()
+
+        self._atta._print(self._atta.LOG_INFO, "[ASSERTION][AttaEventAssertion][_get_result][_expected_value]: " + str(self._expected_value))
+        self._atta._print(self._atta.LOG_INFO, "[ASSERTION][AttaEventAssertion][_get_result][events]:          " + str(self._atta._accessible_document.events))
+
+        result = self._expected_value in self._atta._accessible_document.events
+
+        self._atta._print(self._atta.LOG_INFO, "[ASSERTION][AttaEventAssertion][_get_result][result]:          " + str(result))
 
         if result:
             self._status = self.STATUS_PASS
@@ -198,7 +205,7 @@ class AttaPropertyAssertion(AttaAssertion):
 
 
     def __init__(self, acc_elem, assertion, atta):
-        
+
         super(self.__class__, self).__init__(acc_elem, assertion, atta)
         if self._expected_value == "<nil>":
             self._expected_value = "None"

@@ -400,6 +400,8 @@ class Atta(object):
                 value =  acc_elem.ia2_value_current
             if property_name == 'maximumValue':
                 value =  acc_elem.ia2_value_max
+            if property_name == 'groupPosition':
+                value =  acc_elem.groupPosition
         except:
             self._print(self.LOG_ERROR, "[BASE][get_property_value][except]" + self._on_exception())
             value = []
@@ -517,6 +519,9 @@ class Atta(object):
 
         is_event = lambda x: x and x[0] == "event"
         event_assertions = list(filter(is_event, assertions))
+        # We don't need these event assertions so always return assertions
+        return assertions
+
         if not event_assertions:
             return assertions
 
@@ -616,17 +621,16 @@ class Atta(object):
     def _on_load_complete(self, event):
         """Callback for the platform's signal that a document has loaded."""
 
-        #        try:
-        #            pyia2.com_coinitialize()
-        #        except:
-        #            print('[IA2][_on_test_event]: error cointializing')
+#        self._print(self.LOG_INFO, "[BASE][_on_load_complete][event.type]" + str(event.type))
+
         if event.type == pyia2.IA2_EVENT_DOCUMENT_LOAD_COMPLETE:
             ao = pyia2.accessibleObjectFromEvent(event)
             self._accessible_document = pyia2.AccessibleDocument(ao)
         else:
             if self._accessible_document:
-                self._accessible_document.addEvent(event.type)
-                self._accessible_document.updateTestElements()
+                if self._accessible_document.addEvent(event.type):
+#                    self._print(self.LOG_INFO, "[BASE][_on_load_complete][events]" + str(self._accessible_document.events))
+                    self._accessible_document.updateTestElements()
 
     def _on_test_event(self, data, **kwargs):
         """Callback for platform accessibility events the ATTA is testing."""
