@@ -38,13 +38,11 @@ NOTE: You need to run the command prompt as an administrator to register DLLs.
 
 NOTE: If you down load NVDA, please donate to support the continued development of the open source scren reader.
 
-## Running WPT with ATTA to get test results
+## Running WPT with ATTA to get ARIA 1.1 and CORE AAM test results
 
-1. Only 32-bit version of Chrome and Firefox can be tested at this time
-1. You need to have either Chrome or Firefox open to one of the following URLS:
-    * http://w3c-test.org/tools/runner/index.html (for using the W3C version of WPT)
-    * localhost:8000/tools/runner/index.html (for using a local version of WPT)
-1. Add to the textbox label ```Run tests under path``` add ```/wai-ara/```
+1. Start Chrome or Firefox (e.g. typically canary or firefox nightly) to start a test run
+1. Go to the [W3C WPT Test Runner](http://w3c-test.org/tools/runner/index.html )
+1. Add to the textbox label ```Run tests under path``` add ```/wai-ara/``` for testing ARIA 1.1 implementation
 1. Start the ATTA for IAccesible2 or MSAA (see options following)
 1. Press the ```Start``` button
 
@@ -59,6 +57,7 @@ For MSAA (or IAccessible) testing:
 ```
 python att_msaa.py
 ```
+1. Add to the textbox label ```Run tests under path``` add ```/wai-ara/``` for testing ARIA 1.1 implementation
 
 
 ## Updating a local copy of the test cases for ARIA 1.1
