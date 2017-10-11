@@ -380,14 +380,16 @@ class Atta(object):
                     value =  acc_elem.ia2_role
                 else:
                     value =  acc_elem.role
-            if property_name == 'name':
-                value =  acc_elem.name
-            if property_name == 'value':
-                value =  acc_elem.value
-            if property_name == 'description':
-                value =  acc_elem.description
+            if property_name == 'accName':
+                value =  acc_elem.accName
+            if property_name == 'accValue':
+                value =  acc_elem.accValue
+            if property_name == 'accDescription':
+                value =  acc_elem.accDescription
             if property_name == 'objectAttributes':
                 value =  acc_elem.objectAttributes
+            if property_name == 'textAttributes':
+                value =  acc_elem.textAttributes
             if property_name == 'states':
                 value =  acc_elem.states
             if property_name == 'relations':
@@ -406,6 +408,10 @@ class Atta(object):
                 value =  acc_elem.localizedExtendedRole
             if property_name == 'accKeyboardShortcut':
                 value =  acc_elem.accKeyboardShortcut
+            if property_name == 'columnExtent':
+                value =  acc_elem.columnExtent
+            if property_name == 'rowExtent':
+                value =  acc_elem.rowExtent
 
         except:
             self._print(self.LOG_ERROR, "[BASE][get_property_value][except]" + self._on_exception())

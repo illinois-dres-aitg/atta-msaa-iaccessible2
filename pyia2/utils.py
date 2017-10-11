@@ -58,21 +58,23 @@ IALib  = comtypesClient.GetModule('oleacc.dll').IAccessible
 class AccessibleElement:
 
   def __init__(self, ao):
-    self.test_id           = get_id(ao)
-    self.role              = get_role(ao)
-    self.ia2_role          = get_ia2_role(ao)
+    self.test_id               = get_id(ao)
+    self.role                  = get_role(ao)
+    self.ia2_role              = get_ia2_role(ao)
     self.localizedExtendedRole = get_extended_role(ao)
-    self.name              = get_name(ao)
-    self.value             = get_value(ao)
-    self.ia2_value         = get_ia2_value(ao)
-    self.description       = get_description(ao)
-    self.states            = get_state_set(ao)
-    self.objectAttributes  = get_ia2_attribute_set(ao)
-    self.textAttributes    = get_ia2_text_attribute_set(ao)
-    self.relations         = get_ia2_relation_set(ao)
-    self.interfaces        = get_interface_set(ao)
-    self.accKeyboardShortcut  = get_keyboard_shortcut(ao)
-    self.groupPosition     = get_ia2_group_position(ao)
+    self.accName               = get_name(ao)
+    self.accValue              = get_value(ao)
+    self.ia2_value             = get_ia2_value(ao)
+    self.accDescription        = get_description(ao)
+    self.states                = get_state_set(ao)
+    self.objectAttributes      = get_ia2_attribute_set(ao)
+    self.textAttributes        = get_ia2_text_attribute_set(ao)
+    self.relations             = get_ia2_relation_set(ao)
+    self.interfaces            = get_interface_set(ao)
+    self.accKeyboardShortcut   = get_keyboard_shortcut(ao)
+    self.groupPosition         = get_ia2_group_position(ao)
+    self.columnExtent          = get_column_extent(ao)
+    self.rowExtent             = get_row_extent(ao)
 
     if self.ia2_value:
       self.ia2_value_min     = str(self.ia2_value[0])
@@ -104,11 +106,11 @@ class AccessibleElement:
     if self.localizedExtendedRole:
         s += "  EXTENDED ROLE: " + str(self.localizedExtendedRole) + "\n"
 
-    if self.name:
-        s += "           NAME: " + self.name + "\n"
+    if self.accName:
+        s += "           NAME: " + self.accName + "\n"
 
-    if self.value:
-        s += "          VALUE: " + self.value + "\n"
+    if self.accValue:
+        s += "          VALUE: " + self.accValue + "\n"
 
     if self.ia2_value:
         s += "      IA2 VALUE_MIN: " + self.ia2_value_min     + "\n"
@@ -120,8 +122,8 @@ class AccessibleElement:
         s += "    KB SHORTCUT: " + self.accKeyboardShortcut + "\n"
 
 
-    if self.description:
-        s += "    DESCRIPTION: " + self.description + "\n"
+    if self.accDescription:
+        s += "    DESCRIPTION: " + self.accDescription + "\n"
 
     s += "        STATES: " + str(self.states) + "\n"
 
@@ -132,6 +134,12 @@ class AccessibleElement:
 
     if self.groupPosition:
         s += " GROUP POSITION: " + str(self.groupPosition) + "\n"
+
+    if self.rowExtent:
+        s += "     ROW EXTENT: " + self.rowExtent + "\n"
+
+    if self.columnExtent:
+        s += "  COLUMN EXTENT: " + self.columnExtent + "\n"
 
     return s
 
@@ -549,7 +557,6 @@ def get_ia2_text_attribute_set(pacc):
     if isinstance(pacc2, IA2Lib.IAccessibleText):
       # -1 means using the constant
       [startOffset, endOffset, attrs] =pacc2.attributes(IA2_TEXT_OFFSET_LENGTH)
-      print("TEXT ATTRIBUTES: " + str(attrs))
       if len(attrs) and attrs[-1] == ';':
         attrs = attrs[:-1]
       return attrs.split(';')
@@ -657,6 +664,50 @@ def get_ia2_value(pacc):
         return None
     else:
         return None
+
+def get_ia2_table_cell(pacc):
+
+    pacc2 = accessibleTableCellFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleTableCell):
+        try:
+            return pacc2
+
+        except Exception as e:
+            print "[get_ia2_table_cell] Exception cannot get IA2 IAccessibleTableCell:", str(e)
+
+        return None
+    else:
+        return None
+
+
+def get_column_extent(pacc):
+
+    pacc2 = accessibleTableCellFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleTableCell):
+        try:
+            return str(pacc2.columnExtent)
+
+        except Exception as e:
+            print "[get_column_extent] Exception cannot get IAccessibleTableCell::columnExtent", str(e)
+
+        return None
+    else:
+        return None
+
+def get_row_extent(pacc):
+
+    pacc2 = accessibleTableCellFromAccessible(pacc, CHILDID_SELF)
+    if isinstance(pacc2, IA2Lib.IAccessibleTableCell):
+        try:
+            return str(pacc2.rowExtent)
+
+        except Exception as e:
+            print "[get_column_extent] Exception cannot get IAccessibleTableCell::rowExtent", str(e)
+
+        return None
+    else:
+        return None
+
 
 
 
