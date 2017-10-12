@@ -445,7 +445,7 @@ def get_role(pacc):
     return str(pacc.accRoleName())
 
 def get_extended_role(pacc):
-    value = ""
+    value = ''
 
     pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
     try:
@@ -456,6 +456,7 @@ def get_extended_role(pacc):
 
     except Exception as e:
         print "ERROR cannot get IA2 extended role:", str(e)
+        return ''
 
     return value
 
@@ -557,9 +558,9 @@ def get_ia2_text_attribute_set(pacc):
     if isinstance(pacc2, IA2Lib.IAccessibleText):
       # -1 means using the constant
       [startOffset, endOffset, attrs] =pacc2.attributes(IA2_TEXT_OFFSET_LENGTH)
-      if len(attrs) and attrs[-1] == ';':
+      if attrs and len(attrs) and attrs[-1] == ';':
         attrs = attrs[:-1]
-      return attrs.split(';')
+        return attrs.split(';')
 
     return []
 
