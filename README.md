@@ -1,7 +1,7 @@
 # Assistive Technology Test Adapters (ATTA) for IAccessible (MSAA) and IAccessible2
 Assistive Technology Test Adapter (ATTA) for use in testing ARIA implementation using the [web platform test suite](http://w3c-test.org/tools/runner/index.html).
 
-This project contains ATTAs for IAccessible (MSAA) and IAccessible2 accessibility APIs for the Microsoft Windows operating system and are designed to support automated testing of W3C [Acessible Rich Internet Application 1.1](https://www.w3.org/TR/wai-aria-1.1/) and W3C [CORE Accessibility API Mapping](https://www.w3.org/TR/core-aam-1.1/) implementation in browsers implementing MSAA+IAccessible2.   
+This project contains ATTAs for IAccessible (MSAA) and IAccessible2 accessibility APIs for the Microsoft Windows operating system and are designed to support automated testing of W3C [Acessible Rich Internet Application 1.1](https://www.w3.org/TR/wai-aria-1.1/) and W3C [CORE Accessibility API Mapping](https://www.w3.org/TR/core-aam-1.1/) (CORE-AAM) implementation in browsers implementing MSAA+IAccessible2.   
 
 ## Python Requirements
 
@@ -63,7 +63,7 @@ For MSAA (or IAccessible) testing:
 ```
 python att_msaa.py
 ```
-1. To run the [CORE AMM test cases](https://www.w3.org/wiki/Core_AAM_1.1_Testable_Statements) use the same proceedure as for ARIA 1.1, but for the textbox labelled ```Run tests under path``` use ```/core-aam/```.
+1. To run the [CORE AAM test cases](https://www.w3.org/wiki/Core_AAM_1.1_Testable_Statements) use the same proceedure as for ARIA 1.1, but for the textbox labelled ```Run tests under path``` use ```/core-aam/```.
 
 
 ## Updating a local copy of the test cases for ARIA 1.1
