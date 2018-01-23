@@ -201,7 +201,6 @@ class AttaEventAssertion(AttaAssertion):
 
 class AttaPropertyAssertion(AttaAssertion):
 
-
     def __init__(self, acc_elem, assertion, atta):
 
         super(self.__class__, self).__init__(acc_elem, assertion, atta)

@@ -17,7 +17,6 @@ import traceback
 
 from BaseHTTPServer import BaseHTTPRequestHandler
 
-
 class AttaRequestHandler(BaseHTTPRequestHandler):
     """Optional request handler for python27 Accessible Technology Test Adapters."""
 
