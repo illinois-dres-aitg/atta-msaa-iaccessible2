@@ -99,25 +99,26 @@ class Atta(object):
 #             "states": pyia2.get_ia2_state_set,
 #         }
 
-        # self._log_level = log_level or self.LOG_DEBUG
+        self._log_level = log_level or self.LOG_DEBUG
         self._host = host
         self._port = int(port)
         self._ansi_formatting = True
 
-        # self._server = None
-        # self._server_thread = None
+        self._server = None
+        self._server_thread = None
         self._atta_name = name
         self._atta_version = version
         self._api_name = api
         self._api_version = ""
-        # self._enabled = True
-        # self._ready = False
-        # self._next_test = None, ""
+        self._enabled = True
+        self._ready = False
+        self._next_test = None, ""
 
-        # self._results = {}
-        # self._monitored_event_types = []
-        # self._event_history = []
-        # self._listeners = {}
+        self._results = {}
+        self._monitored_event_types = []
+        self._event_history = []
+        self._listeners = {}
+        self._accessible_element = []
 
         # Information from IAccessible
         # self._accessible_document = None
@@ -146,8 +147,8 @@ class Atta(object):
     def start(self, atta, **kwargs):
         """Starts this ATTA (i.e. before running a series of tests)."""
 
-        # if not self._enabled:
-        #     return
+        if not self._enabled:
+            return
 
 
         # 
@@ -162,18 +163,18 @@ class Atta(object):
         # self._register_listener(pyia2.IA2_EVENT_ACTIVE_DESCENDANT_CHANGED, atta._on_load_complete)
         # self._register_listener(pyia2.IA2_EVENT_OBJECT_ATTRIBUTE_CHANGED, atta._on_load_complete)
 
-        # self._print(self.LOG_INFO,"[WIN_UIA_BASE][start]")
+        self._print(self.LOG_INFO,"[WIN_UIA_BASE][start]")
 
-        # if not self._enabled:
-        #     self._print(self.LOG_ERROR, "Start failed because ATTA is not enabled.")
-        #     return
+        if not self._enabled:
+            self._print(self.LOG_ERROR, "Start failed because ATTA is not enabled.")
+            return
 
         # faulthandler.enable(all_threads=False)
         # signal.signal(signal.SIGINT, self.shutdown)
         # signal.signal(signal.SIGTERM, self.shutdown)
 
 
-        # self._print(self.LOG_INFO, "Starting server on http://%s:%s/" % (self._host, self._port))
+        self._print(self.LOG_INFO, "Starting server on http://%s:%s/" % (self._host, self._port))
         self._server = HTTPServer((self._host, self._port), AttaRequestHandler)
 
         AttaRequestHandler.set_atta(self)
@@ -183,22 +184,23 @@ class Atta(object):
             self._server_thread = threading.Thread(target=self._server.serve_forever)
             self._server_thread.start()
 
-        # self._print(self.LOG_INFO, "[WIN_ATTA_BASE][start]: " + str(self._server_thread))
+        self._print(self.LOG_INFO, "[WIN_ATTA_BASE][start]: " + str(self._server_thread))
+        # self.run_tests()
         print 'start was called'
 
     def get_info(self, **kwargs):
         """Returns a dict of details about this ATTA needed by the harness."""
 
-        # return {"ATTAname": self._atta_name,
-        #         "ATTAversion": self._atta_version,
-        #         "API": self._api_name,
-        #         "APIversion": self._api_version}
+        return {"ATTAname": self._atta_name,
+                 "ATTAversion": self._atta_version,
+                 "API": self._api_name,
+                 "APIversion": self._api_version}
         print 'get_info was called'
 
     def is_enabled(self, **kwargs):
         """Returns True if this ATTA is enabled."""
 
-        # return self._enabled
+        return self._enabled
         print 'is_enabled called'
 
     def is_ready(self, document=None, **kwargs):
@@ -223,6 +225,7 @@ class Atta(object):
         #     self._print(self.LOG_TEST_URI,  "%s" % test_uri)
 
         # return self._ready
+        return True
         print 'is_ready called'
 
     def start_test_run(self, name, url, **kwargs):
@@ -231,16 +234,16 @@ class Atta(object):
 
 #        self._print(self.LOG_INFO, "%s (%s)\n" % (name, url))
 
-        # self._next_test = name, url
-        # self._ready = False
+        self._next_test = name, url
+        self._ready = False
         print 'start_test_run called'
 
     def end_test_run(self, **kwargs):
         """Cleans up cached information at the end of a test run."""
 
-        # self._accessible_document = None
-        # self._next_test = None, ""
-        # self._ready = False
+        self._accessible_document = None
+        self._next_test = None, ""
+        self._ready = False
         print 'end_test_run'
 
 
@@ -248,29 +251,35 @@ class Atta(object):
         """Runs the assertions on the object with the specified id, returning
         a dict with the results, the status of the run, and any messages."""
 
-        # if not self.is_enabled():
-        #     return {"status": self.STATUS_ERROR,
-        #             "message": self.FAILURE_ATTA_NOT_ENABLED,
-        #             "results": []}
+        if not self.is_enabled():
+            return {"status": self.STATUS_ERROR,
+                    "message": self.FAILURE_ATTA_NOT_ENABLED,
+                    "results": []}
 
-        # if not self.is_ready():
-        #     return {"status": self.STATUS_ERROR,
-        #             "message": self.FAILURE_ATTA_NOT_READY,
-        #             "results": []}
+        if not self.is_ready():
+            return {"status": self.STATUS_ERROR,
+                    "message": self.FAILURE_ATTA_NOT_READY,
+                    "results": []}
 
-        # to_run = self._create_platform_assertions(assertions)
+        to_run = self._create_platform_assertions(assertions)
 
         # acc_elem = self._get_accessible_element_with_id(self._accessible_document, obj_id)
+        print 'right before mihirTest()'
+        self.mihirTest()
+        acc_elem = self._accessible_element
+        print '268 reached'
+        print self._accessible_element.ControlTypeName
+        print assertions
 
-        # if not acc_elem:
-        #     return {"status": self.STATUS_ERROR,
-        #             "message": self.FAILURE_ELEMENT_NOT_FOUND,
-        #             "results": []}
+        if not acc_elem:
+            return {"status": self.STATUS_ERROR,
+                    "message": self.FAILURE_ELEMENT_NOT_FOUND,
+                    "results": []}
 
-        # results = [self._run_test(acc_elem, a) for a in to_run]
+        results = [self._run_test(acc_elem, a) for a in to_run]
 
-        # return {"status": self.STATUS_OK,
-        #         "results": results}
+        return {"status": self.STATUS_OK,
+                "results": results}
         print 'run_tests called'
 
     def start_listen(self, event_types, **kwargs):
@@ -392,9 +401,15 @@ class Atta(object):
         # if not acc_elem and property_name != "accessible":
         #     raise AttributeError("Object not found")
 
+        # remember to remove self._elem_details data structure and all its assignments!
+
         try:
             if property_name == 'ControlType':
-                value = self._elem_details['ControlType']
+                value = acc_elem.ControlTypeName[:-7]
+
+            if property_name == acc_elem.ControlTypeName[:-7]+'.ColumnCount':
+                value = acc_elem.CurrentColumnCount()
+                # value = acc_elem.ControlTypeName
             # if property_name == 'role':
             #     if self._api_name == 'IAccessible2':
             #         value =  acc_elem.ia2_role
@@ -550,88 +565,90 @@ class Atta(object):
 
     def _get_assertion_test_class(self, assertion, **kwargs):
         """Returns the appropriate Assertion class for assertion."""
-        # return AttaAssertion.get_test_class(assertion)
         print '_get_assertion_test_class called'
+        return AttaAssertion.get_test_class(assertion)
+        
 
     def _create_platform_assertions(self, assertions, **kwargs):
         """Performs platform-specific changes needed to harness assertions."""
 
-        # is_event = lambda x: x and x[0] == "event"
-        # event_assertions = list(filter(is_event, assertions))
-        # # We don't need these event assertions so always return assertions
-        # return assertions
+        is_event = lambda x: x and x[0] == "event"
+        event_assertions = list(filter(is_event, assertions))
+        # We don't need these event assertions so always return assertions
+        return assertions
 
-        # if not event_assertions:
-        #     return assertions
+        if not event_assertions:
+            return assertions
 
-        # platform_assertions = list(filter(lambda x: x not in event_assertions, assertions))
+        platform_assertions = list(filter(lambda x: x not in event_assertions, assertions))
 
-        # # The properties associated with accessible events are currently given to
-        # # us as individual subtests. Unlike other assertions, event properties are
-        # # not independent of one another. Because these should be tested as an all-
-        # # or-nothing assertion, we'll combine the subtest values into a dictionary
-        # # passed along with each subtest.
-        # properties = {}
-        # for test, name, verb, value in event_assertions:
-        #     properties[name] = value
+        # The properties associated with accessible events are currently given to
+        # us as individual subtests. Unlike other assertions, event properties are
+        # not independent of one another. Because these should be tested as an all-
+        # or-nothing assertion, we'll combine the subtest values into a dictionary
+        # passed along with each subtest.
+        properties = {}
+        for test, name, verb, value in event_assertions:
+            properties[name] = value
 
-        # combined_event_assertions = ["event", "event", "contains", properties]
-        # platform_assertions.append(combined_event_assertions)
-        # return platform_assertions
-        print '_create_platform_assertions called'
+        combined_event_assertions = ["event", "event", "contains", properties]
+        platform_assertions.append(combined_event_assertions)
+        print 'printing platform_assertions: '
+        print platform_assertions
+        return platform_assertions
 
     def _run_test(self, acc_elem, assertion, **kwargs):
         """Runs a single assertion on accessible element object, returning a results dict."""
 
-        # bug = ""
-        # test_class = self._get_assertion_test_class(assertion)
+        bug = ""
+        test_class = self._get_assertion_test_class(assertion)
 
-        # if test_class is None:
-        #     result = AttaAssertion.STATUS_FAIL
-        #     message = "ERROR: %s is not a valid assertion" % assertion
-        #     log = message
-        # else:
-        #     test = test_class(acc_elem, assertion, self)
-        #     result, message, log = test.run()
-        #     if result == AttaAssertion.STATUS_FAIL:
-        #         bug = test.get_bug()
+        if test_class is None:
+            result = AttaAssertion.STATUS_FAIL
+            message = "ERROR: %s is not a valid assertion" % assertion
+            log = message
+        else:
+            test = test_class(acc_elem, assertion, self)
+            result, message, log = test.run()
+            if result == AttaAssertion.STATUS_FAIL:
+                bug = test.get_bug()
 
-        # test_file = urlparse(self._next_test[1]).path
+        test_file = urlparse(self._next_test[1]).path
 
-        # status_results = self._results.get(bug or result, {})
+        status_results = self._results.get(bug or result, {})
 
-        # file_results = status_results.get(test_file, [])
+        file_results = status_results.get(test_file, [])
 
-        # file_results.append(" ".join(map(str, assertion)))
+        file_results.append(" ".join(map(str, assertion)))
 
-        # status_results[test_file] = file_results
+        status_results[test_file] = file_results
 
-        # self._results[bug or result] = status_results
+        self._results[bug or result] = status_results
 
-        # if not self._ansi_formatting:
-        #     formatting = self.FORMAT_NONE
-        # elif result == AttaAssertion.STATUS_PASS:
-        #     formatting = self.FORMAT_GOOD
-        # elif not test_class:
-        #     formatting = self.FORMAT_BAD
-        # elif result == AttaAssertion.STATUS_FAIL:
-        #     if bug:
-        #         formatting = self.FORMAT_WARNING
-        #     else:
-        #         formatting = self.FORMAT_BAD
-        # else:
-        #     formatting = self.FORMAT_WARNING
+        if not self._ansi_formatting:
+            formatting = self.FORMAT_NONE
+        elif result == AttaAssertion.STATUS_PASS:
+            formatting = self.FORMAT_GOOD
+        elif not test_class:
+            formatting = self.FORMAT_BAD
+        elif result == AttaAssertion.STATUS_FAIL:
+            if bug:
+                formatting = self.FORMAT_WARNING
+            else:
+                formatting = self.FORMAT_BAD
+        else:
+            formatting = self.FORMAT_WARNING
 
-        # string = " ".join(map(str, assertion))
-        # if message:
-        #     string = "%s %s" % (string, message)
+        string = " ".join(map(str, assertion))
+        if message:
+            string = "%s %s" % (string, message)
 
-        # if result == AttaAssertion.STATUS_PASS:
-        #     self._print(self.LOG_RESULT_PASS, "%s" % string)
-        # else:
-        #     self._print(self.LOG_RESULT_FAIL, "%s" % string)
+        if result == AttaAssertion.STATUS_PASS:
+            self._print(self.LOG_RESULT_PASS, "%s" % string)
+        else:
+            self._print(self.LOG_RESULT_FAIL, "%s" % string)
 
-        # return {"result": result, "message": message, "log": log}
+        return {"result": result, "message": message, "log": log}
 
 
 
@@ -698,6 +715,7 @@ class Atta(object):
         showAllName: bool
         showMore: bool
         """
+
         for c, d in self.mihirWalkControl(control, True, maxDepth):
             self.mihirLogControl(c, d, showAllName, showMore)
 
@@ -749,108 +767,86 @@ class Atta(object):
             name = name[:30] + '...'
         indent = ' ' * depth * 4
 
+        self._accessible_element = control
+        
         Logger.Write('{0}ControlType: '.format(indent))
         Logger.Write(control.ControlTypeName, ConsoleColor.DarkGreen)
-        self._elem_details['ControlType'] = control.ControlTypeName
 
         Logger.Write('    ClassName: ')
         Logger.Write(control.ClassName, ConsoleColor.DarkGreen)
-        self._elem_details['ClassName'] = control.ClassName
 
         Logger.Write('    AutomationId: ')
         Logger.Write(control.AutomationId, ConsoleColor.DarkGreen)
-        self._elem_details['AutomationId'] = control.AutomationId
 
         Logger.Write('    Rect: ')
         left, top, right, bottom = control.BoundingRectangle
         Logger.Write(str(control.BoundingRectangle), ConsoleColor.DarkGreen)
-        self._elem_details['Rect'] = str(control.BoundingRectangle)
 
         Logger.Write('    Name: ')
         Logger.Write(name, ConsoleColor.DarkGreen)
-        self._elem_details['Name'] = name
 
         Logger.Write('    Handle: ')
         Logger.Write('0x{0:X}({0})'.format(control.Handle), ConsoleColor.DarkGreen)
-        self._elem_details['Handle'] = '0x{0:X}({0})'.format(control.Handle)
 
         Logger.Write('    Depth: ')
         Logger.Write(str(depth), ConsoleColor.DarkGreen)
-        self._elem_details['Depth'] = str(depth)
 
         if ((isinstance(control, ValuePattern) and control.IsValuePatternAvailable())):
             Logger.Write('    Value: ')
             Logger.Write(control.CurrentValue(), ConsoleColor.DarkGreen)
-            self._elem_details['Value'] = control.CurrentValue()
 
         if ((isinstance(control, RangeValuePattern) and control.IsRangeValuePatternAvailable())):
             Logger.Write('    RangeValue: ')
             Logger.Write(str(control.RangeValuePatternCurrentValue()), ConsoleColor.DarkGreen)
-            self._elem_details['RangeValue'] = str(control.RangeValuePatternCurrentValue())
 
         if isinstance(control, TogglePattern) and control.IsTogglePatternAvailable():
             Logger.Write('    CurrentToggleState: ')
             Logger.Write('ToggleState.' + getKeyName(ToggleState.__dict__, control.CurrentToggleState()), ConsoleColor.DarkGreen)
-            self._elem_details['CurrentToggleState'] = 'ToggleState.' + getKeyName(ToggleState.__dict__, control.CurrentToggleState())
 
         if isinstance(control, SelectionItemPattern) and control.IsSelectionItemPatternAvailable():
             Logger.Write('    CurrentIsSelected: ')
             Logger.Write(str(control.CurrentIsSelected()), ConsoleColor.DarkGreen)
-            self._elem_details['CurrentIsSelected'] = str(control.CurrentIsSelected())
 
         if isinstance(control, ExpandCollapsePattern) and control.IsExpandCollapsePatternAvailable():
             Logger.Write('    CurrentExpandCollapseState: ')
             Logger.Write('ExpandCollapseState.' + getKeyName(ExpandCollapseState.__dict__, control.CurrentExpandCollapseState()), ConsoleColor.DarkGreen)
-            self._elem_details['CurrentExpandCollapseState'] = 'ExpandCollapseState.' + getKeyName(ExpandCollapseState.__dict__, control.CurrentExpandCollapseState())
 
         if isinstance(control, ScrollPattern) and control.IsScrollPatternAvailable():
             Logger.Write('    CurrentHorizontalViewSize: ')
             Logger.Write(str(control.CurrentHorizontalViewSize()), ConsoleColor.DarkGreen)
-            self._elem_details['CurrentHorizontalViewSize'] = str(control.CurrentHorizontalViewSize())
 
             Logger.Write('    CurrentVerticalViewSize: ')
             Logger.Write(str(control.CurrentVerticalViewSize()), ConsoleColor.DarkGreen)
-            self._elem_details['CurrentVerticalViewSize'] = str(control.CurrentVerticalViewSize())
 
             Logger.Write('    CurrentHorizontalScrollPercent: ')
             Logger.Write(str(control.CurrentHorizontalScrollPercent()), ConsoleColor.DarkGreen)
-            self._elem_details['CurrentHorizontalScrollPercent'] = str(control.CurrentHorizontalScrollPercent())
 
             Logger.Write('    CurrentVerticalScrollPercent: ')
             Logger.Write(str(control.CurrentVerticalScrollPercent()), ConsoleColor.DarkGreen)
-            self._elem_details['CurrentVerticalScrollPercent'] = str(control.CurrentVerticalScrollPercent())
 
         if isinstance(control, GridPattern) and control.IsGridPatternAvailable():
             Logger.Write('    RowCount: ')
             Logger.Write(str(control.CurrentRowCount()), ConsoleColor.DarkGreen)
-            self._elem_details['RowCount'] = str(control.CurrentRowCount())
 
             Logger.Write('    ColumnCount: ')
             Logger.Write(str(control.CurrentColumnCount()), ConsoleColor.DarkGreen)
-            self._elem_details['ColumnCount'] = str(control.CurrentColumnCount())
 
         if isinstance(control, GridItemPattern) and control.IsGridItemPatternAvailable():
             Logger.Write('    Row: ')
             Logger.Write(str(control.CurrentRow()), ConsoleColor.DarkGreen)
-            self._elem_details['Row'] = str(control.CurrentRow())
 
             Logger.Write('    Column: ')
             Logger.Write(str(control.CurrentColumn()), ConsoleColor.DarkGreen)
-            self._elem_details['Column'] = str(control.CurrentColumn())
 
         if showMore:
             Logger.Write('    SupportedPattern:')
-            self._elem_details_temp = array()
             for key in PatternDict:
                 pattern = _AutomationClient.instance().dll.GetElementPattern(control.Element, key)
                 if pattern:
                     _AutomationClient.instance().dll.ReleasePattern(pattern)
                     Logger.Write(' ' + PatternDict[key], ConsoleColor.DarkGreen)
-                    self._elem_details_temp.append(PatternDict[key])
-            self._elem_details['SupportedPattern'] = self._elem_details_temp
 
         Logger.Write(Logger.LineSep)
-
 
     def mihirTest(self):
         ancestor = False

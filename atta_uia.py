@@ -44,8 +44,11 @@ if __name__ == "__main__":
     #     print("ia2_atta is not enabled.")
     #     sys.exit(1)
     # ia2_atta.start(ia2_atta)
+    uia_atta.start(uia_atta)
     # pyia2.Registry.start()
-    uia_atta.mihirTest()
+    
+    # uia_atta.mihirTest()
+    
     # print("Shutting down...")
     # ia2_atta.shutdown(ia2_atta, signal.SIGTERM)
     # sys.exit(1)
