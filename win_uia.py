@@ -32,7 +32,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 class Atta(object):
     """Optional base class for python27 Accessible Technology Test Adapters."""
-    
+
     STATUS_ERROR = "ERROR"
     STATUS_OK = "OK"
 
@@ -75,7 +75,7 @@ class Atta(object):
         try:
             #Atspi.get_desktop(0)
             # TODO: IA2 get_desktop?
-            print("need get desktop?")
+            print 'need to get desktop?'
         except:
             self._print(self.LOG_ERROR, "Could not get desktop from UIA.")
             self._enabled = False
@@ -136,8 +136,6 @@ class Atta(object):
 
     def _print(self, level, string, **kwargs):
         """Prints the string, typically to stdout."""
-
-        print "Print on line 138 called"
         # if level >= self._log_level:
         #     print("%s: %s" % (self.LOG_LEVELS.get(level), string))
 
@@ -151,7 +149,7 @@ class Atta(object):
             return
 
 
-        # 
+        #
         # self._register_listener(pyia2.EVENT_OBJECT_FOCUS, atta._on_load_complete)
         # self._register_listener(pyia2.EVENT_OBJECT_STATECHANGE, atta._on_load_complete)
         # self._register_listener(pyia2.EVENT_OBJECT_SELECTION, atta._on_load_complete)
@@ -264,12 +262,9 @@ class Atta(object):
         to_run = self._create_platform_assertions(assertions)
 
         # acc_elem = self._get_accessible_element_with_id(self._accessible_document, obj_id)
-        print 'right before mihirTest()'
-        self.mihirTest()
-        acc_elem = self._accessible_element
-        print '268 reached'
-        print self._accessible_element.ControlTypeName
+        self.mihirTest(assertions)
         print assertions
+        acc_elem = self._accessible_element
 
         if not acc_elem:
             return {"status": self.STATUS_ERROR,
@@ -402,14 +397,43 @@ class Atta(object):
         #     raise AttributeError("Object not found")
 
         # remember to remove self._elem_details data structure and all its assignments!
+        value = str()
+        print 'property_name: ' + property_name
 
         try:
             if property_name == 'ControlType':
                 value = acc_elem.ControlTypeName[:-7]
 
-            if property_name == acc_elem.ControlTypeName[:-7]+'.ColumnCount':
-                value = acc_elem.CurrentColumnCount()
-                # value = acc_elem.ControlTypeName
+            elif property_name == acc_elem.ControlTypeName[:-7] + '.ColumnCount':
+                value = str(acc_elem.CurrentColumnCount())
+
+            elif property_name == acc_elem.ControlTypeName[:-7] + '.RowCount':
+                value = str(acc_elem.CurrentRowCount())
+
+            elif property_name == acc_elem.ControlTypeName[:-7] + '.Row':
+                value = str(acc_elem.CurrentRow())
+
+            elif property_name == acc_elem.ControlTypeName[:-7] + '.Column':
+                value = str(acc_elem.CurrentColumn())
+
+            elif property_name == acc_elem.ControlTypeName[:-7] + '.ColumnSpan':
+                value = str(acc_elem.CurrentColumnSpan())
+
+            elif property_name == acc_elem.ControlTypeName[:-7] + '.RowSpan':
+                value = str(acc_elem.CurrentRowSpan())
+
+            elif property_name == 'IUIAutomationElement.Orientation':
+                print 'IUIAutomationElement.Orientation: '
+                print type(acc_elem.GetCurrentSelection())
+                value = str(acc_elem.GetCurrentSelection())
+
+            elif property_name == 'Value.IsReadOnly':
+                try:
+                    value = str(acc_elem.CurrentIsReadOnly())
+                except:
+                    # value = acc_elem.CurrentIsReadOnly()
+                    print "Can't get acc_elem.CurrentIsReadOnly()"
+
             # if property_name == 'role':
             #     if self._api_name == 'IAccessible2':
             #         value =  acc_elem.ia2_role
@@ -449,11 +473,12 @@ class Atta(object):
             #     value =  acc_elem.rowExtent
 
         except:
+            print 'entered except line 457'
             self._print(self.LOG_ERROR, "[BASE][get_property_value][except]" + self._on_exception())
             value = []
 
-#        self._print(self.LOG_INFO, "[BASE][get_property_value][" + property_name + "]: " + str(value))
-        print 'Value in get_property_value = ' + str(value)
+        #self._print(self.LOG_INFO, "[BASE][get_property_value][" + property_name + "]: " + str(value))
+        print 'Value: ' + value
         return value
 
     def get_bug(self, assertion_string, expected_result, actual_result, **kwargs):
@@ -567,7 +592,7 @@ class Atta(object):
         """Returns the appropriate Assertion class for assertion."""
         print '_get_assertion_test_class called'
         return AttaAssertion.get_test_class(assertion)
-        
+
 
     def _create_platform_assertions(self, assertions, **kwargs):
         """Performs platform-specific changes needed to harness assertions."""
@@ -708,7 +733,7 @@ class Atta(object):
     # Mihir Kumar 1/10/18
     # Helper functions
 
-    def mihirEnumAndLogControl(self, control, maxDepth = 0xFFFFFFFF, showAllName = True, showMore = False):
+    def mihirEnumAndLogControl(self, control, assertions, maxDepth = 0xFFFFFFFF, showAllName = True, showMore = False):
         """
         control: Control
         maxDepth: integer
@@ -717,7 +742,7 @@ class Atta(object):
         """
 
         for c, d in self.mihirWalkControl(control, True, maxDepth):
-            self.mihirLogControl(c, d, showAllName, showMore)
+            self.mihirLogControl(c, assertions, d, showAllName, showMore)
 
     def mihirWalkControl(self, control, includeTop = False, maxDepth = 0xFFFFFFFF):
         """
@@ -747,7 +772,7 @@ class Atta(object):
                 del controlList[depth]
                 depth -= 1
 
-    def mihirLogControl(self, control, depth = 0, showAllName = True, showMore = False):
+    def mihirLogControl(self, control, assertions, depth = 0, showAllName = True, showMore = False):
         """
         control: Control
         depth: integer
@@ -755,7 +780,12 @@ class Atta(object):
         showMore: bool
         """
 
-        if control.AutomationId != 'test':
+        # print 'control.AutomationId: ' + control.AutomationId
+        # print 'control.ControlTypeName: ' + control.ControlTypeName
+
+        # AutomationIds can be: 'cell', 'test'
+
+        if control.AutomationId != 'test' and control.AutomationId != 'cell':
             return
 
         def getKeyName(theDict, theValue):
@@ -768,7 +798,7 @@ class Atta(object):
         indent = ' ' * depth * 4
 
         self._accessible_element = control
-        
+
         Logger.Write('{0}ControlType: '.format(indent))
         Logger.Write(control.ControlTypeName, ConsoleColor.DarkGreen)
 
@@ -848,7 +878,7 @@ class Atta(object):
 
         Logger.Write(Logger.LineSep)
 
-    def mihirTest(self):
+    def mihirTest(self, assertions):
         ancestor = False
         showAllName = False
         showMore = False
@@ -858,7 +888,7 @@ class Atta(object):
         edgeWindow = WindowControl(searchDepth = 1, ClassName = 'ApplicationFrameWindow')
 
         control = edgeWindow
-        
+
         if WaitForExist(edgeWindow, wait_time_in_seconds):
             Logger.WriteLine("There is an Edge window open :D", ConsoleColor.Green)
         else:
@@ -874,8 +904,8 @@ class Atta(object):
         else:
             control = controlList[1]
 
-        self.mihirEnumAndLogControl(control, depth, showAllName, showMore)
-        
+        self.mihirEnumAndLogControl(control, assertions, depth, showAllName, showMore)
+
         Logger.Log('Ends\n')
 
 

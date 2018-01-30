@@ -242,3 +242,342 @@ There is an Edge window open :D
                                 ControlType: DataGridControl    ClassName:     AutomationId: test    Rect: (7, 123, 1529, 140)    Name:     Handle: 0x0(0)    Depth: 8    RowCount: 1    ColumnCount: 0
 2018-01-29 18:14:01.339 Function: mihirTest, Line: 879 -> Ends
 
+There is an Edge window open :D
+                                        ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (10, 162, 72, 183)    Name: test cell    Handle: 0x0(0)    Depth: 10
+2018-01-29 22:16:48.758 Function: mihirTest, Line: 879 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 22:17:22.005 Function: mihirTest, Line: 879 -> Ends
+
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+2018-01-29 22:17:29.518 Function: mihirTest, Line: 879 -> Ends
+
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+2018-01-29 22:17:29.732 Function: mihirTest, Line: 879 -> Ends
+
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+2018-01-29 22:27:21.767 Function: mihirTest, Line: 880 -> Ends
+
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+2018-01-29 22:27:49.984 Function: mihirTest, Line: 880 -> Ends
+
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+2018-01-29 22:27:50.318 Function: mihirTest, Line: 880 -> Ends
+
+There is an Edge window open :D
+There is an Edge window open :D
+There is an Edge window open :D
+There is an Edge window open :D
+There is an Edge window open :D
+There is an Edge window open :D
+There is an Edge window open :D
+There is an Edge window open :D
+There is an Edge window open :D
+There is an Edge window open :D
+There is an Edge window open :D
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+2018-01-29 22:46:21.682 Function: mihirTest, Line: 879 -> Ends
+
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+2018-01-29 22:46:22.185 Function: mihirTest, Line: 879 -> Ends
+
+There is an Edge window open :D
+2018-01-29 22:50:39.621 Function: mihirTest, Line: 881 -> Ends
+
+There is an Edge window open :D
+2018-01-29 22:51:02.684 Function: mihirTest, Line: 881 -> Ends
+
+There is an Edge window open :D
+2018-01-29 22:51:02.825 Function: mihirTest, Line: 881 -> Ends
+
+There is an Edge window open :D
+2018-01-29 22:51:33.221 Function: mihirTest, Line: 881 -> Ends
+
+There is an Edge window open :D
+2018-01-29 22:51:33.338 Function: mihirTest, Line: 881 -> Ends
+
+There is an Edge window open :D
+2018-01-29 22:51:52.465 Function: mihirTest, Line: 881 -> Ends
+
+There is an Edge window open :D
+2018-01-29 22:51:52.592 Function: mihirTest, Line: 881 -> Ends
+
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+                                            ControlType: DataItemControl    ClassName:     AutomationId: cell    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 0    Column: 0
+2018-01-29 22:52:50.273 Function: mihirTest, Line: 881 -> Ends
+
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+                                            ControlType: DataItemControl    ClassName:     AutomationId: cell    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 0    Column: 0
+2018-01-29 22:52:50.632 Function: mihirTest, Line: 881 -> Ends
+
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+                                            ControlType: DataItemControl    ClassName:     AutomationId: cell    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 0    Column: 0
+2018-01-29 22:56:57.303 Function: mihirTest, Line: 884 -> Ends
+
+There is an Edge window open :D
+                                        ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 10
+                                            ControlType: DataItemControl    ClassName:     AutomationId: cell    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 0    Column: 0
+2018-01-29 22:56:57.646 Function: mihirTest, Line: 884 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: DataGridControl    ClassName:     AutomationId: test    Rect: (8, 205, 1912, 224)    Name:     Handle: 0x0(0)    Depth: 9    RowCount: 3    ColumnCount: 2
+2018-01-29 23:10:16.073 Function: mihirTest, Line: 884 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: DataGridControl    ClassName:     AutomationId: test    Rect: (8, 205, 1912, 224)    Name:     Handle: 0x0(0)    Depth: 9    RowCount: 3    ColumnCount: 2
+2018-01-29 23:11:21.284 Function: mihirTest, Line: 882 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: DataGridControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name:     Handle: 0x0(0)    Depth: 9    RowCount: 3    ColumnCount: 2
+2018-01-29 23:12:38.586 Function: mihirTest, Line: 882 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:13:35.530 Function: mihirTest, Line: 882 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:13:48.005 Function: mihirTest, Line: 882 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:23:43.994 Function: mihirTest, Line: 885 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:26:41.138 Function: mihirTest, Line: 885 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:29:17.719 Function: mihirTest, Line: 885 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:30:22.712 Function: mihirTest, Line: 888 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:32:59.262 Function: mihirTest, Line: 889 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:34:00.271 Function: mihirTest, Line: 887 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:34:23.943 Function: mihirTest, Line: 887 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:36:27.526 Function: mihirTest, Line: 886 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:37:24.837 Function: mihirTest, Line: 887 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:38:14.582 Function: mihirTest, Line: 887 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:56:33.875 Function: mihirTest, Line: 889 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:57:30.315 Function: mihirTest, Line: 890 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-29 23:57:55.929 Function: mihirTest, Line: 890 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:03:05.555 Function: mihirTest, Line: 889 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:06:23.031 Function: mihirTest, Line: 889 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:08:41.511 Function: mihirTest, Line: 890 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:10:04.660 Function: mihirTest, Line: 891 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:10:43.024 Function: mihirTest, Line: 891 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:13:56.778 Function: mihirTest, Line: 891 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:17:16.674 Function: mihirTest, Line: 891 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:20:47.075 Function: mihirTest, Line: 893 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:21:32.810 Function: mihirTest, Line: 892 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:22:04.306 Function: mihirTest, Line: 892 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:23:37.911 Function: mihirTest, Line: 892 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:24:32.209 Function: mihirTest, Line: 892 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:24:55.501 Function: mihirTest, Line: 892 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:26:01.623 Function: mihirTest, Line: 892 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:26:07.908 Function: mihirTest, Line: 892 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:26:58.881 Function: mihirTest, Line: 892 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: DataGridControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 182)    Name:     Handle: 0x0(0)    Depth: 9    RowCount: 3    ColumnCount: 2
+2018-01-30 00:27:03.157 Function: mihirTest, Line: 892 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: DataGridControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 182)    Name:     Handle: 0x0(0)    Depth: 9    RowCount: 3    ColumnCount: 2
+2018-01-30 00:27:45.618 Function: mihirTest, Line: 894 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: DataGridControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 182)    Name:     Handle: 0x0(0)    Depth: 9    RowCount: 3    ColumnCount: 2
+2018-01-30 00:29:57.694 Function: mihirTest, Line: 894 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: DataGridControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 182)    Name:     Handle: 0x0(0)    Depth: 9    RowCount: 3    ColumnCount: 2
+2018-01-30 00:30:14.366 Function: mihirTest, Line: 894 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: DataGridControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 182)    Name:     Handle: 0x0(0)    Depth: 9    RowCount: 3    ColumnCount: 2
+2018-01-30 00:31:08.307 Function: mihirTest, Line: 894 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:31:21.182 Function: mihirTest, Line: 894 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:31:34.182 Function: mihirTest, Line: 894 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:32:00.064 Function: mihirTest, Line: 895 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: DataItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 0    Column: 0
+2018-01-30 00:32:17.671 Function: mihirTest, Line: 895 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: DataItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 0    Column: 0
+2018-01-30 00:35:54.138 Function: mihirTest, Line: 898 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: DataItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 0    Column: 0
+2018-01-30 00:36:32.299 Function: mihirTest, Line: 898 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:37:44.781 Function: mihirTest, Line: 898 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: HeaderItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11
+2018-01-30 00:37:51.528 Function: mihirTest, Line: 898 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: DataItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 0    Column: 0
+2018-01-30 00:38:00.897 Function: mihirTest, Line: 898 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: DataItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 0    Column: 0
+2018-01-30 00:39:20.079 Function: mihirTest, Line: 901 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: DataItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 0    Column: 4
+2018-01-30 00:40:38.228 Function: mihirTest, Line: 904 -> Ends
+
+There is an Edge window open :D
+                                            ControlType: DataItemControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: test cell    Handle: 0x0(0)    Depth: 11    CurrentIsSelected: False    Row: 4    Column: 0
+2018-01-30 00:41:18.180 Function: mihirTest, Line: 904 -> Ends
+
+There is an Edge window open :D
+2018-01-30 00:41:28.307 Function: mihirTest, Line: 904 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: GroupControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name:     Handle: 0x0(0)    Depth: 9
+2018-01-30 00:42:37.554 Function: mihirTest, Line: 904 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: TextControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 179)    Name: Go Fish    Handle: 0x0(0)    Depth: 9
+2018-01-30 00:43:03.141 Function: mihirTest, Line: 904 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: ButtonControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 197)    Name: Submit Running, 0 complete, 1 ...    Handle: 0x0(0)    Depth: 9
+2018-01-30 00:43:41.509 Function: mihirTest, Line: 904 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: ListControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 197)    Name:     Handle: 0x0(0)    Depth: 9
+2018-01-30 00:44:09.488 Function: mihirTest, Line: 904 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: ListControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 197)    Name:     Handle: 0x0(0)    Depth: 9
+2018-01-30 00:44:32.197 Function: mihirTest, Line: 904 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: ListControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 216)    Name:     Handle: 0x0(0)    Depth: 9
+2018-01-30 00:48:51.689 Function: mihirTest, Line: 909 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: ListControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 216)    Name:     Handle: 0x0(0)    Depth: 9
+2018-01-30 00:49:26.329 Function: mihirTest, Line: 908 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: ListControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 216)    Name:     Handle: 0x0(0)    Depth: 9
+2018-01-30 00:50:07.411 Function: mihirTest, Line: 909 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: ListControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 216)    Name:     Handle: 0x0(0)    Depth: 9
+2018-01-30 00:51:13.208 Function: mihirTest, Line: 910 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: ListControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 216)    Name:     Handle: 0x0(0)    Depth: 9
+2018-01-30 00:51:53.224 Function: mihirTest, Line: 910 -> Ends
+
+There is an Edge window open :D
+                                    ControlType: ListControl    ClassName:     AutomationId: test    Rect: (8, 160, 1912, 216)    Name:     Handle: 0x0(0)    Depth: 9
+2018-01-30 00:51:58.878 Function: mihirTest, Line: 910 -> Ends
+
