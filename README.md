@@ -26,7 +26,7 @@ There is a file in the "IAccessible2Proxy.dll" is in the "pyia2" directory that 
 From the Windows Command prompt type the following command:
 
 ```
-regsvr32 IAccessible2Proxy.dll
+regsvr32 c:\**[path]**\atta-msaa-iaccessible2\pyia2\IAccessible2Proxy.dll
 ```
 
 NOTE: You need to run the command prompt as an administrator to register DLLs.
