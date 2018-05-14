@@ -1,5 +1,5 @@
 '''
-Creates functions at import time that are mixed into the 
+Creates functions at import time that are mixed into the
 IAccessible base class to make it more Pythonic.
 
 Inspired by pyatspi:
@@ -47,7 +47,7 @@ def _makeExceptionHandler(func):
     '''
     Builds a function calling the one it wraps in try/except statements catching
     COMError exceptions.
-  
+
     @return: Function calling the method being wrapped
     @rtype: function
     '''
@@ -61,9 +61,9 @@ def _makeExceptionHandler(func):
 
 def _mixExceptions(cls):
     '''
-    Wraps all methods and properties in a class with handlers for CORBA 
+    Wraps all methods and properties in a class with handlers for CORBA
     exceptions.
-    
+
     @param cls: Class to mix interface methods into
     @type cls: class
     '''
@@ -102,14 +102,14 @@ def _mixExceptions(cls):
 def _mixClass(cls, new_cls, ignore=[]):
     '''
     Adds the methods in new_cls to cls. After mixing, all instances of cls will
-    have the new methods. If there is a method name clash, the method already 
-    in cls will be prefixed with '_mix_' before the new method of the same 
+    have the new methods. If there is a method name clash, the method already
+    in cls will be prefixed with '_mix_' before the new method of the same
     name is mixed in.
-    
-    @note: _ is not the prefix because if you wind up with __ in front of a 
-    variable, it becomes private and mangled when an instance is created. 
+
+    @note: _ is not the prefix because if you wind up with __ in front of a
+    variable, it becomes private and mangled when an instance is created.
     Difficult to invoke from the mixin class.
-    
+
     @param cls: Existing class to mix features into
     @type cls: class
     @param new_cls: Class containing features to add
@@ -123,10 +123,10 @@ def _mixClass(cls, new_cls, ignore=[]):
             continue
         if isinstance(func, types.FunctionType):
             # build a new function that is a clone of the one from new_cls
-            method = new.function(func.func_code, func.func_globals, name, 
+            method = new.function(func.func_code, func.func_globals, name,
                                   func.func_defaults, func.func_closure)
             try:
-                # check if a method of the same name already exists in the 
+                # check if a method of the same name already exists in the
                 # target
                 old_method = getattr(cls, name)
             except AttributeError:
@@ -138,7 +138,7 @@ def _mixClass(cls, new_cls, ignore=[]):
             setattr(cls, name, method)
         elif isinstance(func, staticmethod):
             try:
-                # check if a method of the same name already exists 
+                # check if a method of the same name already exists
                 # in the target
                 old_method = getattr(cls, name)
             except AttributeError:
@@ -149,18 +149,18 @@ def _mixClass(cls, new_cls, ignore=[]):
             setattr(cls, name, func)
         elif isinstance(func, property):
             try:
-                # check if a method of the same name already exists 
+                # check if a method of the same name already exists
                 # in the target
                 old_prop = getattr(cls, name)
             except AttributeError:
                 pass
             else:
-                # IMPORTANT: We save the old property before overwriting it, 
-                # even though we never end up calling the old prop from our 
-                # mixin class If we don't save the old one, we seem to 
-                # introduce a Python ref count problem where the property 
-                # get/set methods disappear before we can use them at a later 
-                # time. This is a minor waste of memory because a property is 
+                # IMPORTANT: We save the old property before overwriting it,
+                # even though we never end up calling the old prop from our
+                # mixin class If we don't save the old one, we seem to
+                # introduce a Python ref count problem where the property
+                # get/set methods disappear before we can use them at a later
+                # time. This is a minor waste of memory because a property is
                 # a class object and we only overwrite a few of them.
                 setattr(cls, '_mix_'+name, old_prop)
             setattr(cls, name, func)
@@ -179,12 +179,15 @@ class _IAccessibleMixin(object):
         raise IndexError
 
     def __iter__(self):
+        if not isinstance(self.accChildCount, int):
+            return
+
         accChildCount = self.accChildCount
         VariantArrayType = VARIANT * accChildCount
         rgvarChildren = VariantArrayType()
         pcObtained = c_long()
         try:
-            oledll.oleacc.AccessibleChildren(self, 0, accChildCount, 
+            oledll.oleacc.AccessibleChildren(self, 0, accChildCount,
                                              rgvarChildren, byref(pcObtained))
         except:
             pcObtained = c_long(0)
@@ -197,7 +200,7 @@ class _IAccessibleMixin(object):
 
     def __str__(self):
         try:
-            return u'[%s | %s]' % (self.accRoleName(), 
+            return u'[%s | %s]' % (self.accRoleName(),
                                    self.accName(CHILDID_SELF) or '')
         except:
             raise
@@ -234,7 +237,7 @@ class _IAccessibleMixin(object):
             return buf.value
         else:
             return ''
-        
+
     def accRoleName(self, child_id=CHILDID_SELF):
         role = self.accRole(child_id)
         if not isinstance(role, int):
@@ -265,10 +268,10 @@ class _ChildMethodWrapper(object):
 
 class ManagedChildAccessible(object):
     _managed_funcs = [
-        'accDefaultAction', 'accDescription', 'accDoDefaultAction', 
-        'accFocus', 'accHelp', 'accHelpTopic', 'accKeyboardShortcut', 
-        'accLocation', 'accName', 'accNavigate', 'accParent', 
-        'accRole', 'accRoleName', 'accSelect', 'accState', 
+        'accDefaultAction', 'accDescription', 'accDoDefaultAction',
+        'accFocus', 'accHelp', 'accHelpTopic', 'accKeyboardShortcut',
+        'accLocation', 'accName', 'accNavigate', 'accParent',
+        'accRole', 'accRoleName', 'accSelect', 'accState',
         'accStateSet', 'accValue']
 
     def __init__(self, parent, child_id):
@@ -283,10 +286,10 @@ class ManagedChildAccessible(object):
 
     def __nonzero__(self):
         return True
-    
+
     def __str__(self):
         try:
-            return u'[%s | %s]' % (self.accRoleName(), 
+            return u'[%s | %s]' % (self.accRoleName(),
                                    self.accName() or '')
         except:
             return u'[DEAD]'

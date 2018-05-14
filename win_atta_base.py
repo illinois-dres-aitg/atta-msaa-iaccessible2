@@ -245,7 +245,7 @@ class Atta(object):
 
         if not self.is_ready():
             return {"status": self.STATUS_ERROR,
-                    "message": self.FAILURE_ATTA_NOT_READY,
+                    "message": self.QURE_ATTA_NOT_READY,
                     "results": []}
 
         to_run = self._create_platform_assertions(assertions)

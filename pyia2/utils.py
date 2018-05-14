@@ -32,6 +32,8 @@ import traceback
 
 import constants
 
+import collections
+
 import ctypes
 from ctypes import windll, oledll, POINTER, byref, c_int
 from comtypes.automation import VARIANT
@@ -57,9 +59,37 @@ IALib  = comtypesClient.GetModule('oleacc.dll').IAccessible
 
 class AccessibleElement:
 
+  test_id               = ''
+  role                  = ''
+  ia2_role              = ''
+  localizedExtendedRole = ''
+  accName               = ''
+  accValue              = ''
+  ia2_value             = ''
+  accDescription        = ''
+  states                = []
+  objectAttributes      = []
+  textAttributes        = []
+  relations             = []
+  interfaces            = []
+  accKeyboardShortcut   = ''
+  groupPosition         = ''
+  columnExtent          = ''
+  rowExtent             = ''
+
+  ia2_value             = ['0','0','0']
+  ia2_value_min         = '0'
+  ia2_value_current     = '0'
+  ia2_value_max         = '0'
+
+
   def __init__(self, ao):
     self.test_id               = get_id(ao)
+    if len(self.test_id) == 0:
+        return
     self.role                  = get_role(ao)
+    if len(self.role) == 0:
+        return
     self.ia2_role              = get_ia2_role(ao)
     self.localizedExtendedRole = get_extended_role(ao)
     self.accName               = get_name(ao)
@@ -191,6 +221,12 @@ class AccessibleDocument:
 
 
 
+def cleanString(s):
+  try:
+    return s.encode('ascii', 'ignore').decode("utf-8")
+  except:
+    return s
+
 def getDesktop():
   desktop_hwnd = windll.user32.GetDesktopWindow()
   desktop_window = accessibleObjectFromWindow(desktop_hwnd)
@@ -225,6 +261,7 @@ def accessibleObjectFromEvent(event):
     return None
 
 def accessible2FromAccessible(pacc, child_id):
+    debug = ""
 
     if not isinstance(pacc, IAccessible):
         try:
@@ -235,7 +272,9 @@ def accessible2FromAccessible(pacc, child_id):
     if child_id==0 and not isinstance(pacc,IA2Lib.IAccessible2):
         try:
             s=pacc.QueryInterface(IServiceProvider)
+            debug += "Got IServiceProvider"
             pacc2=s.QueryService(IALib._iid_, IA2Lib.IAccessible2)
+            debug += "Got IA2Lib.IAccessible2"
             if not pacc2:
                 raise ValueError
             else:
@@ -433,19 +472,35 @@ def get_children(pacc):
     return children
 
 def get_description(pacc):
-    return str(pacc.accDescription(CHILDID_SELF))
+    return cleanString(pacc.accDescription(CHILDID_SELF))
 
 def get_name(pacc):
     return pacc.accName(CHILDID_SELF)
 
 def get_keyboard_shortcut(pacc):
-    return pacc.accKeyboardShortcut(CHILDID_SELF)
+
+    value = ''
+
+    try:
+        value =  pacc.accKeyboardShortcut(CHILDID_SELF)
+    except Exception as e:
+        print "ERROR cannot get keyboard shortcut:", str(e)
+
+    return value
+
 
 def get_role(pacc):
-    return str(pacc.accRoleName())
+
+    value = ''
+
+    try:
+        value = str(pacc.accRoleName())
+    except Exception as e:
+        print "ERROR cannot get IA2 extended role:", str(e)
+
+    return value
 
 def get_extended_role(pacc):
-    value = ''
 
     pacc2 = accessible2FromAccessible(pacc, CHILDID_SELF)
     try:
@@ -556,11 +611,14 @@ def get_ia2_attribute_set(pacc):
 def get_ia2_text_attribute_set(pacc):
     pacc2 = accessibleTextFromAccessible(pacc, CHILDID_SELF)
     if isinstance(pacc2, IA2Lib.IAccessibleText):
-      # -1 means using the constant
-      [startOffset, endOffset, attrs] =pacc2.attributes(IA2_TEXT_OFFSET_LENGTH)
-      if attrs and len(attrs) and attrs[-1] == ';':
-        attrs = attrs[:-1]
-        return attrs.split(';')
+        # -1 means using the constant
+        try:
+            [startOffset, endOffset, attrs] = pacc2.attributes(IA2_TEXT_OFFSET_LENGTH)
+            if attrs and len(attrs) and attrs[-1] == ';':
+                attrs = attrs[:-1]
+                return attrs.split(';')
+        except:
+            pass
 
     return []
 
@@ -851,12 +909,16 @@ def _findAllDescendants(acc, pred, matches):
   Internal method for collecting all descendants. Reuses the same matches
   list so a new one does not need to be built on each recursive step.
   '''
-  for child in acc:
-    try:
-      if pred(child): matches.append(child)
-    except Exception:
-      pass
-    _findAllDescendants(child, pred, matches)
+
+  try:
+      for child in acc:
+        try:
+          if pred(child): matches.append(child)
+        except Exception:
+          pass
+        _findAllDescendants(child, pred, matches)
+  except:
+    pass
 
 def findAncestor(acc, pred):
     if acc is None:
