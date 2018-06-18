@@ -1,7 +1,14 @@
 # Assistive Technology Test Adapters (ATTA) for IAccessible (MSAA) and IAccessible2
-[Assistive Technology Test Adapter](https://spec-ops.github.io/atta-api/index.html) (ATTA) for use in testing ARIA implementation using the [web platform test suite](http://w3c-test.org/tools/runner/index.html).
+[Assistive Technology Test Adapter](https://spec-ops.github.io/atta-api/index.html) (ATTA) for use in testing ARIA implementation using the [web platform test suite](http://w3c-test.org/tools/runner/index.html).  
 
 This project contains ATTAs for IAccessible (MSAA) and IAccessible2 accessibility APIs for the Microsoft Windows operating system and are designed to support automated testing of W3C [Acessible Rich Internet Application 1.1](https://www.w3.org/TR/wai-aria-1.1/) and W3C [CORE Accessibility API Mapping](https://www.w3.org/TR/core-aam-1.1/) (CORE-AAM) implementation in browsers implementing MSAA+IAccessible2.   
+
+## Suporting Rsources
+* [Assistive Technology Test Adapter](https://spec-ops.github.io/atta-api/index.html)
+* [web platform test suite](http://w3c-test.org/tools/runner/index.html)
+* [Python Comtypes Library](https://pypi.org/project/comtypes/)
+
+
 
 ## Python Requirements
 
