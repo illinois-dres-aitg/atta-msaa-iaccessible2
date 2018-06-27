@@ -13,8 +13,7 @@ This project contains ATTAs for IAccessible (MSAA) and IAccessible2 accessibilit
 ## Python Requirements
 
 * Install Python version 2.7.x
-* Set environment variable to include python path information
-  * typically `c:\python27\scripts\`
+* Set environment variable to include python path information, typically adding the path `c:\python27\scripts\`
 * Setup a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) for python
 * Requirements file for virtual environment:
 
