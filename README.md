@@ -15,14 +15,15 @@ This project contains ATTAs for IAccessible (MSAA) and IAccessible2 accessibilit
 * Install Python version 2.7.x
 * Set environment variable to include python path information, typically adding the path `c:\python27\scripts\`
 * Setup a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) for python
-* Activate the virtual environment using the `Scripts\activate.bat`
+* Activate the virtual environment using the `Scripts\activate.bat` in the directory where you created the virtual environment
+* Clone this repository
+* Change direcotry to the ATTA repository and install the required packages using `pip install - requirements.txt` 
 * Requirements file for virtual environment:
 
 ```
   appdirs==1.4.3
   comtypes==1.1.3.post2
   faulthandler==2.6
-  gi==1.2
   packaging==16.8
   pyparsing==2.2.0
   requests==2.13.0
