@@ -121,13 +121,19 @@ class AttaAssertion(object):
     def _get_result(self):
         value = self._get_value()
 
+        self._actual_value_trimmed = False
+
         if self._expectation == self.EXPECTATION_IS_TYPE:
             self._actual_value = self._atta.type_to_string(value)
         else:
             self._actual_value = value
+            if type(value) is unicode and value[-1:] == ' ':
+                self._actual_value_trimmed = value.strip()
 
         if self._expectation == self.EXPECTATION_IS:
             result = self._compare(self._actual_value, self._expected_value) == 0
+            if self._actual_value_trimmed:
+              result = result or self._compare(self._actual_value_trimmed, self._expected_value) == 0
         elif self._expectation == self.EXPECTATION_IS_NOT:
             result = self._compare(self._actual_value, self._expected_value) != 0
         elif self._expectation == self.EXPECTATION_IS_LESS_THAN:

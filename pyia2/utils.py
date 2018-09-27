@@ -222,10 +222,13 @@ class AccessibleDocument:
 
 
 def cleanString(s):
-  try:
-    return s.encode('ascii', 'ignore').decode("utf-8")
-  except:
-    return s
+  if s is not None:
+    try:
+      return s.encode('ascii', 'ignore').decode("utf-8")
+    except:
+      return s
+  else:
+    return ""
 
 def getDesktop():
   desktop_hwnd = windll.user32.GetDesktopWindow()
@@ -475,7 +478,13 @@ def get_description(pacc):
     return cleanString(pacc.accDescription(CHILDID_SELF))
 
 def get_name(pacc):
-    return pacc.accName(CHILDID_SELF)
+    name = pacc.accName(CHILDID_SELF)
+
+    if not name:
+      name = ""
+    return name
+
+
 
 def get_keyboard_shortcut(pacc):
 
