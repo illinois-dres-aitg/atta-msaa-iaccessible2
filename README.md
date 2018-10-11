@@ -9,10 +9,16 @@ This project contains ATTAs for IAccessible (MSAA) and IAccessible2 accessibilit
 * [Python Comtypes Library](https://pypi.org/project/comtypes/)
 
 
+## Current Working Environment
+* Windows 7, I have had it working in windows 10, but updated to windows 10 has made those installations non-functioning, may have to do with security enhancements for the IAccessible2.dll.  I am currently using a 64 bit versoin of Windows 7, so I assume the 32 bit version of Windows 7 will also work.
+* 32 bit version of Python 2.7.15 for windows (no luck with 64 bit version)
+* 32 bit version of Chrome Canary
+* 32 bit version of Firefox Nightly 
+
 
 ## Python Requirements
 
-* Install Python version 2.7.x
+* Install Python version 2.7.x (32 bit version)
 * Set environment variable to include python path information, typically adding the path `c:\python27\scripts\`
 * Setup a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) for python
 * Activate the virtual environment using the `Scripts\activate.bat` in the directory where you created the virtual environment
