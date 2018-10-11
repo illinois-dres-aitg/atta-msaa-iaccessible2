@@ -10,7 +10,7 @@ This project contains ATTAs for IAccessible (MSAA) and IAccessible2 accessibilit
 
 
 ## Current Working Environment
-* Windows 7, I have had it working in windows 10, but updated to windows 10 has made those installations non-functioning, may have to do with security enhancements for the IAccessible2.dll.  I am currently using a 64 bit versoin of Windows 7, so I assume the 32 bit version of Windows 7 will also work.
+* Windows 7: I have had it working in Windows 10, but updates to Windows 10 has made those installations non-functioning (can't get interface to IAccessible2 objects), may have to do with security enhancements for DLL which would affect access to the IAccessible2Proxy.dll.  I am currently using a 64 bit version of Windows 7, so I assume the 32 bit version of Windows 7 will also work.
 * 32 bit version of Python 2.7.15 for windows (no luck with 64 bit version)
 * 32 bit version of Chrome Canary
 * 32 bit version of Firefox Nightly 
